@@ -1,0 +1,202 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a8cedb277e.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'CS50_News/style.css' %}">
+    <title>CS50_News</title>
+</head>
+<body id="body" style="overflow-x: hidden;">
+    <header>
+        <div id="main-header">
+            <div id="main-header_content">
+                <a class="navbar-brand" id="brand" href="{% url 'index' %}" style="font-family: 'Pirata One', system-ui;">CS50 News</a>
+                <div id="navbar-content">
+                    <div id="navbar-mood-div">
+                        <a id="toggle-button">
+                            <i class="fa-solid fa-circle-half-stroke fa-rotate-180"></i>
+                        </a>
+                    </div>
+                    <form action="" id="navbar-form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="search">
+                            <button class="btn btn-outline-secondary" type="button" id="search-button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                    <button class="navbar-toggler" id="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon" id="navbar-toggler-icon"><i class="fa-solid fa-bars fa-xl"></i></span>
+                    </button>
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                        <div class="offcanvas-header" data-bs-theme="dark">
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item list-group-item-action main-section-item">
+                                    <div class="drop-down-div">
+                                        <button class="main-section-button">Main</button>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action main-section-item selected" data-section-name="News" id="News">
+                                    <div class="drop-down-div">
+                                        <button class="main-section-button">News</button>
+                                        <button class="main-section-button">
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                                <li class="list-group-item drop-down-item d-none" id="News-drop-down">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">News</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">Israel-Gaza War</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">War in Ukraine</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">Iraq</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">US & Canada</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">Middle East</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">Europe</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">Asia</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">Africa</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">Australia</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">Latin America</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="News">Asia</li>
+                                    
+                                    </ul>
+                                </li>
+                                <li class="list-group-item list-group-item-action main-section-item" data-section-name="Sport" id="Sport">
+                                    <div class="drop-down-div">
+                                        <button class="main-section-button">Sport</button>
+                                        <button class="main-section-button">
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                                <li class="list-group-item drop-down-item d-none" id="Sport-drop-down">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">Sport</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">Martial arts</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">Football</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">Tennis</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">Cricket</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">Golf</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">Cycling</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">Formula 1</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">American Football</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">Athlatics</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Sport">Olympic Games</li>
+                                    </ul>
+                                </li>
+                                <li class="list-group-item list-group-item-action main-section-item">
+                                    <div class="drop-down-div">
+                                        <button class="main-section-button">Business</button>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action main-section-item" data-section-name="Innovation" id="Innovation">
+                                    <div class="drop-down-div">
+                                        <button class="main-section-button">Innovation</button>
+                                        <button class="main-section-button">
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                                <li class="list-group-item drop-down-item d-none" id="Innovation-drop-down">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Innovation">Innovation</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Innovation">Technology</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Innovation">Health</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Innovation">Science</li>
+                                        <li class="list-group-item list-group-item-action sub-item" data-target="Innovation">AI</li>
+                                    </ul>
+                                </li>
+                                <li class="list-group-item list-group-item-action main-section-item" data-section-name="Culture" id="Culture">
+                                    <div class="drop-down-div">
+                                        <button class="main-section-button">Culture</button>
+                                        <button class="main-section-button">
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                                <li class="list-group-item drop-down-item d-none" id="Culture-drop-down">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item  list-group-item-action sub-item" data-target="Culture">Culture</li>
+                                        <li class="list-group-item  list-group-item-action sub-item" data-target="Culture">Books</li>
+                                        <li class="list-group-item  list-group-item-action sub-item" data-target="Culture">Art & Design</li>
+                                        <li class="list-group-item  list-group-item-action sub-item" data-target="Culture">Style</li>
+                                        <li class="list-group-item  list-group-item-action sub-item" data-target="Culture">Entertainment</li>
+                                        <li class="list-group-item  list-group-item-action sub-item" data-target="Culture">Film & TV</li>
+                                        <li class="list-group-item  list-group-item-action sub-item" data-target="Culture">Music</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="m-0">
+        <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
+            <div>
+            <ul class="navbar-nav mr-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link"><strong>{{user.username}}</strong></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"><strong>Log Out</strong></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Health</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Sport</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Politics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Technology</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Culture</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Science</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Articles</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}"><strong>Log In</strong></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}"><strong>Register</strong></a> 
+                    </li>
+                {% endif %}
+                {% if request.user.is_superuser %}
+                    <li class="nav-item" >
+                        <a class="nav-link" href="{% url 'add' %}">Add</a>
+                    </li>
+                {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="content">
+    {% block body %}
+    {% endblock %}
+    </div>
+    <script src="{% static 'CS50_News/index.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{% extends 'CS50_News/layout.html' %}
+
+{% block body %}
+    <form action="{% url 'add' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+        <input type="text" name="headline" placeholder="headline" class="form-control" required>
+        </div>
+        <div class="input-group mb-3">
+            <input type="file" name="image" class="form-control">
+        </div>          
+        <div class="form-group mb-3">
+        <textarea name="content" rows="20" id="content-textarea" class="form-control form-control-lg" placeholder="body" required></textarea>
+        </div>
+        <div class="form-group mb-3">
+        <select name="category" id="category-select" class="form-control" required>
+            <option selected disabled>category</option>
+            <option value="Sport">sport</option>
+            <option value="Technology">technology</option>
+            <option value="Politics">politics</option>
+            <option value="Health">health</option>
+            <option value="Science">science</option>
+            <option value="Culture">culture</option>
+        </select>
+        </div>
+        <input type="submit" class="btn btn-outline-primary">
+    </form>
+{% endblock %}

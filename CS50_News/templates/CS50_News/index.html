@@ -1,0 +1,102 @@
+{% extends "CS50_News/layout.html" %}
+
+{% block body %}
+    <div id="main-container">
+        <div id="carousel-container">
+            <div id="carouselmain" class="carousel" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselmain" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselmain" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselmain" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselmain" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="7000">
+                        <img src="{{news.0.image}}" class="d-block w-100" alt="{{news.0.headline}}">
+                        <div class="carousel-caption d-block">
+                            <h5>{{news.0.headline}}</h5>
+                            <p>Some representative placeholder content for the first slide.</p>
+                        </div>
+                    </div>
+                    {% for new in carousel %}
+                        <div class="carousel-item" data-bs-interval="7000">
+                            <img src="{{new.image}}" class="d-block w-100" alt="{{new.headline}}">
+                            <div class="carousel-caption d-block">
+                                <h5>{{new.headline}}</h5>
+                                <p>Some representative placeholder content for the second slide.</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselmain" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselmain" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        {% for new in carousel_side_top %}
+            <div id="secondary-container">
+                <div id="secondary-container-div" class="grid-container">
+                    <div id="top-new" class="card p-3" style="border: none; height: min-content;" >
+                        <div>
+                            <img src="{{new.image}}" class="card-img-top" alt="{{new.headline}}">
+                        </div>
+                        <div>
+                            <strong class="card-text">{{new.headline}}</strong>
+                            <div class="postSecondaryInfo">
+                                <div class="timestampDiv secondaryText">
+                                    {{new.timestamp}}
+                                </div>
+                                <div class="categoryDiv secondaryText">
+                                    {{new.category}}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    {% for min_new in carousel_side %}
+                    <div>
+                        <div class="min-new-img-div">
+                            <img src="{{min_new.image}}" alt="" class="min-new-img">
+                        </div>
+                        <div class="">
+                            <div class="mainText">{{min_new.headline}}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        <hr>
+    </div>
+
+    <div class="container-md text-center">
+        <div class="row">
+            {% for new in news %}
+            <div class="col col-lg-3">
+                <div class="card p-4" style="border: none; height: 100%;" >
+                    <div class="overflow-hidden" style="height: 8rem;">
+                        <img src="{{new.image}}" class="card-img-top" alt="{{new.headline}}">
+                    </div>
+                    <div class="card-body">
+                        <strong class="card-text">{{new.headline}}</strong>
+                        <div class="postSecondaryInfo">
+                            <div class="timestampDiv secondaryText">
+                                {{new.timestamp}}
+                            </div>
+                            <div class="categoryDiv secondaryText">
+                                {{new.category}}
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
