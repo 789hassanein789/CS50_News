@@ -145,7 +145,17 @@
   background: none;
 }
 
+.item-a {
+  text-decoration: none;
+}
 
+.list-group-flush > a > .list-group-item {
+  border-width: 0 0 var(--bs-list-group-border-width);
+}
+
+.list-group-flush > a:last-child > .list-group-item{
+  border-bottom-width: 0 ;
+}
 
 .selected::before {
     background-color: rgb(184, 0, 0);

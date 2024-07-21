@@ -1,9 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django import forms
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 
 from .models import User, New
@@ -12,17 +13,16 @@ class NewForm(forms.Form):
     image = forms.ImageField()
 
 # Create your views here.
-def index(request):
-    news = New.objects.all().order_by("-timestamp")
-    carousel = [news[1:4]]
-    carousel_side = [news[4]]
-    carousel_side_top =[news[5:7]]
+def index(request, cat="Main"):
+    if cat == "Main":
+        news = New.objects.all().order_by("-timestamp")
+    elif cat in ["News", "Sport", "Business", "Innovation"]:
+        news = New.objects.filter(category=cat).order_by("-timestamp")
+    else:
+        news = New.objects.filter(sub_category=cat).order_by("-timestamp")
     return render(request, "CS50_News/index.html", {
-            "news": news,
-            "carousel": carousel,
-            "carousel_side": carousel_side,
-            "carousel_side_top": carousel_side_top,
-        })
+        "news" : news
+    })
 
 def login_view(request):
     if request.method == "POST":

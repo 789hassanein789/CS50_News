@@ -36,16 +36,19 @@ mainItems.forEach(item => {
         })
 })
 
+let category = sessionStorage.getItem('categorySelected')
+if (category == null) {
+    category = "Main"
+}
+let selected = document.querySelector(`#${category}`)
+selected.classList.add('fw-bolder')
+document.querySelector(`#${selected.dataset.target}`).classList.add('selected')
+
 // clicking on a sub-item event 
 const subItems = document.querySelectorAll('.sub-item');
 
 subItems.forEach(item => {
-    let itemTarget = item.getAttribute('data-target');
     item.addEventListener('click', () => {
-        document.querySelectorAll('.fw-bold').forEach(bold => bold.classList.remove('fw-bold'));
-        document.querySelectorAll('.selected').forEach(selected => selected.classList.remove('selected'));
-        let target = document.querySelector(`#${itemTarget}`);
-        item.classList.add('fw-bold');
-        target.classList.add('selected');
+        sessionStorage.setItem('categorySelected', `${item.id}`)
     })
 })
