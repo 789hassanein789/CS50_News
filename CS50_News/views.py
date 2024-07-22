@@ -24,6 +24,17 @@ def index(request, cat="Main"):
         "news" : news
     })
 
+def search(request):
+    if request.method == "POST":
+        searchInput = request.POST.get("search")
+        print(searchInput)
+        searchInput = searchInput.capitalize().strip()
+        news = New.objects.filter(headline__contains=searchInput)
+        return render(request, "CS50_News/search.html", {
+            "news":news
+        })
+    return
+
 def login_view(request):
     if request.method == "POST":
         user = authenticate(request, username=request.POST["username"], password=request.POST["password"])
