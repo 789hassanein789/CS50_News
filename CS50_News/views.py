@@ -6,6 +6,8 @@ from django import forms
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
+from django.core.paginator import Paginator
+from django.template.defaulttags import register
 
 from .models import User, New
 
@@ -24,16 +26,22 @@ def index(request, cat="Main"):
         "news" : news
     })
 
+@register.filter
+def get_range(value):
+    return range(value)
+
 def search(request):
-    if request.method == "POST":
-        searchInput = request.POST.get("search")
-        print(searchInput)
-        searchInput = searchInput.capitalize().strip()
-        news = New.objects.filter(headline__contains=searchInput)
-        return render(request, "CS50_News/search.html", {
-            "news":news
-        })
-    return
+    q = request.GET.get("q")
+    q = q.capitalize().strip()
+    news = New.objects.filter(headline__contains=q)
+    Paginators = Paginator(news, 10)
+    pagenumber = request.GET.get("p")
+    all_news = Paginators.get_page(pagenumber)
+    return render(request, "CS50_News/search.html", {
+        "news": all_news,
+        "input": q,
+    })
+    
 
 def login_view(request):
     if request.method == "POST":

@@ -4,6 +4,7 @@
     --page-text: #121212;
     --icon-color: #000;
     --bg-hover: #dedbdb;
+    --opacity: 0.8;
 }
 .dark-mode {
     --page-background: #272727;
@@ -11,6 +12,7 @@
     --page-text: #dee2e6;
     --icon-color: #727272;
     --bg-hover: #393939;
+    --opacity: 0.5;
 }
 
 #body {
@@ -193,8 +195,13 @@
 .timestampDiv {
     border-right: solid 1.5px black;
     width: max-content;
-    padding-right: 10px;
-    margin-right: 10px;
+    display: inline;
+    padding-right: 6px;
+    margin-right: 4px;
+}
+
+.categoryDiv {
+  display: inline;
 }
 
 .mainText {
@@ -259,6 +266,80 @@
 .min-new-img-div {
   aspect-ratio: 1 / 1;
   height: 100%;
+}
+
+.main-search-div {
+  display: flex;
+  justify-content: center;
+  vertical-align: baseline;
+}
+
+.sub-main-search-div {
+  width: 80%;
+  padding: 40px 0 48px;
+  display: grid;
+  gap: 24px;
+  vertical-align: baseline;
+}
+
+.h-card {
+  text-decoration: none;
+  color: unset;
+  border-bottom: 1px solid var(--bg-hover);  
+  min-height: 190px;
+  position: relative;
+  display: block;
+}
+
+.h-card:hover {
+  cursor: pointer;
+}
+
+.h-card:hover h4 {
+  text-decoration: underline;
+}
+
+.h-card:hover img {
+  opacity: var(--opacity);
+}
+
+.sub-headline {
+  text-decoration: none;
+}
+
+.h-card-content {
+
+}
+
+.h-card-main-image-div {
+  position: relative;
+  float: right;
+  margin-left: 16px;
+  margin-bottom: 16px;
+  width: 300px;
+}
+
+.h-card-image-div {
+  height: 100%;
+  width: 100%;
+}
+
+.h-card-image {
+  object-fit: cover;
+  width: 100%;
+}
+
+.sub-headline-div {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: 0px;
+  color: var(--page-text);
+  margin-bottom: 56px;
+}
+
+.pagination {
+  justify-content: center
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap");
