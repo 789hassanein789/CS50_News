@@ -35,20 +35,47 @@ mainItems.forEach(item => {
             document.querySelector(`#${sectionName}-drop-down`).classList.toggle('d-none'); 
         })
 })
-
 let category = sessionStorage.getItem('categorySelected')
 if (category == null) {
-    category = "Main"
+    category = 'Main'
+    sessionStorage.setItem('categorySelected', 'Main')
 }
+console.log(category)
 let selected = document.querySelector(`#${category}`)
+let t = selected.getAttribute('data-target');
+console.log(t)
 selected.classList.add('fw-bolder')
-document.querySelector(`#${selected.dataset.target}`).classList.add('selected')
+document.querySelector(`#${t}`).classList.add('selected')
+document.querySelector(`#nav-${t}`).classList.add('clicked')
 
 // clicking on a sub-item event 
 const subItems = document.querySelectorAll('.sub-item');
 
 subItems.forEach(item => {
     item.addEventListener('click', () => {
-        sessionStorage.setItem('categorySelected', `${item.id}`)
+        sessionStorage.setItem('categorySelected', `${item.id}`);
     })
 })
+
+const ddItems = document.querySelectorAll('.nav-dd-item');
+
+ddItems.forEach(item => {
+    let target = item.getAttribute('data-target')
+        item.addEventListener('click', () => {
+        let subItem = document.querySelector(`#${target}`)
+        sessionStorage.setItem('categorySelected', `${subItem.id}`)
+    })
+})
+
+const dropDowns = document.querySelectorAll('.drop-down');
+
+dropDowns.forEach(dropDown => {
+    let icon = dropDown.querySelector(':scope > .nav-link > .fa-caret-down');
+    dropDown.addEventListener('mouseenter', () => {
+        icon.classList.replace('fa-caret-down', 'fa-caret-up')
+    })
+    dropDown.addEventListener('mouseleave', () => {
+        icon.classList.replace('fa-caret-up', 'fa-caret-down')
+    })
+})
+

@@ -26,10 +26,6 @@ def index(request, cat="Main"):
         "news" : news
     })
 
-@register.filter
-def get_range(value):
-    return range(value)
-
 def search(request):
     q = request.GET.get("q")
     q = q.capitalize().strip()
