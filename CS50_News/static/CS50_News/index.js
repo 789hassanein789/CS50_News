@@ -1,6 +1,8 @@
 // implementing the dark/light mode switch
 let darkMode = localStorage.getItem('darkmode');
 const toggleBtn = document.querySelector('#toggle-button');
+const mainHeader = document.querySelector('#main-header_content')
+const mainSearch = document.querySelector('.main-header_search')
 
 function enableDarkMode() {
     document.body.classList.add('dark-mode');
@@ -78,4 +80,15 @@ dropDowns.forEach(dropDown => {
         icon.classList.replace('fa-caret-up', 'fa-caret-down')
     })
 })
+
+function toggleSearch() {
+    mainHeader.classList.toggle('d-none')
+    mainSearch.classList.toggle('d-none')
+}
+
+const searchBtn = document.querySelector('#min-search-btn');
+const backBtn = document.querySelector('#backBtn')
+
+searchBtn.addEventListener('click', toggleSearch)
+backBtn.addEventListener('click', toggleSearch)
 
