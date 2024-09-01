@@ -1,6 +1,7 @@
 :root {
     --page-background: #fff;
     --elements-background:#fff;
+    --pg-border: #e5e5e5;
     --page-text: #121212;
     --icon-color: #000;
     --bg-hover: #dedbdb;
@@ -8,7 +9,8 @@
 }
 .dark-mode {
     --page-background: #272727;
-    --elements-background:#424242 ;
+    --elements-background:#424242;
+    --pg-border: hsla(0, 0%, 100%, 0.1);
     --page-text: #dee2e6;
     --icon-color: #727272;
     --bg-hover: #393939;
@@ -25,13 +27,21 @@
   margin: 0;
 }
 
+header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
 
 #main-header {
     display: flex;
-    padding: 1rem 0;
+    padding: 0.5rem 0;
     align-items: center;
     justify-content: space-between;
     position: relative;
+    border-bottom: 1px var(--pg-border) solid;
+    background-color: var(--page-background);
 }
 
 .main-header_search {
@@ -110,9 +120,8 @@
   align-items: center;
 }
 
-#navbar-toggler {
-  display: flex;
-  align-items: center;
+#navbar-toggler:hover {
+  background: none;
 }
 
 #navbar-toggler-icon {
@@ -137,6 +146,10 @@
 
 #search-button {
   background-color: var(--elements-background);
+}
+
+#search-button:hover {
+  color: var(--page-text);
 }
 
 .drop-down-div {
@@ -420,7 +433,6 @@
 }
 
 .h-card-image {
-  object-fit: cover;
   width: 100%;
 }
 
@@ -481,7 +493,7 @@
   margin: 16px auto;
   cursor: pointer;
 }
-img {
+.img {
   display: block;
   max-width: 100%;
 }
@@ -529,11 +541,20 @@ input[type="number"] {
   display: none;
 }
 
+@media screen and (max-width: 1024px) {
+  #navbar {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 600px) {
   #min-search-btn {
     display: flex;
   }
   #navbar-form {
     display: none;
+  }
+  #offcanvasNavbar {
+    width: 100%;
   }
 }

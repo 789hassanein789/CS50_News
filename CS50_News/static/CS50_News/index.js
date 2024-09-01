@@ -6,16 +6,19 @@ const mainSearch = document.querySelector('.main-header_search')
 
 function enableDarkMode() {
     document.body.classList.add('dark-mode');
+    document.body.setAttribute('data-bs-theme', 'dark')
     localStorage.setItem('darkmode', 'enabled');
 }
 
 function disableDarkMode() {
     document.body.classList.remove('dark-mode');
+    document.body.removeAttribute('data-bs-theme')
     localStorage.setItem('darkmode', null);
 }
 
 if (darkMode === 'enabled') {
     document.body.classList.add('dark-mode');
+    document.body.setAttribute('data-bs-theme', 'dark')
 }
 
 toggleBtn.addEventListener('click', () => {

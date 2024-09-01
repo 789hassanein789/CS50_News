@@ -13,5 +13,5 @@ class New(models.Model):
     content = models.CharField(max_length=10000)
     category = models.CharField(max_length=50)
     sub_category = models.CharField(max_length=50, default="", blank=True, null=True)
-    auther = models.ForeignKey(User, on_delete=models.CASCADE, related_name="publishes")
+    auther = models.ForeignKey(User, on_delete=models.PROTECT, related_name="publishes")
     timestamp = models.DateTimeField(auto_now_add=True)
