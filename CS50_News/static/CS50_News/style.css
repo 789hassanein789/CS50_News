@@ -217,6 +217,65 @@ header {
   font-weight: 700;
 }
 
+.account-div {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 1rem;
+}
+
+.account-btn {
+  width: 45%;
+  height: 50px;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.signin-btn {
+  background: transparent;
+  border: 3px var(--page-text) solid;
+  transition: 0.3s ease-in-out;
+}
+
+.signin-btn:hover {
+  background-color: var(--page-text);
+  color: var(--page-background);
+}
+
+.signup-btn {
+   background-color: var(--page-text);
+   color: var(--page-background);
+   border: 3px var(--page-text) solid;
+}
+
+
+.account-drop-down {
+  display: flex;
+  justify-content: left;
+  align-content: center;
+  margin: 1rem 0;
+}
+
+.a-dp-btn {
+  background: none;
+  border: none;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  justify-items: start;
+  display: grid;
+  padding: 12px 13px;
+  gap: 8px;
+  width: 160px;
+}
+
+.a-dp-btn:hover {
+  background-color: var(--page-text);
+  color: var(--page-background);
+}
+
+.a-dp-content {
+  
+}
+
 #navbar {
   background-color: var(--page-background);
   color: var(--page-text);

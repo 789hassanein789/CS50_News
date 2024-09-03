@@ -17,11 +17,11 @@ class NewForm(forms.Form):
 # Create your views here.
 def index(request, cat="Main"):
     if cat == "Main":
-        news = New.objects.all().order_by("-timestamp")
+        news = New.objects.all()
     elif cat in ["News", "Sport", "Business", "Innovation"]:
-        news = New.objects.filter(category=cat).order_by("-timestamp")
+        news = New.objects.filter(category=cat)
     else:
-        news = New.objects.filter(sub_category=cat).order_by("-timestamp")
+        news = New.objects.filter(sub_category=cat)
     return render(request, "CS50_News/index.html", {
         "news" : news
     })

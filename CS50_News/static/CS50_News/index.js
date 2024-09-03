@@ -95,3 +95,9 @@ const backBtn = document.querySelector('#backBtn')
 searchBtn.addEventListener('click', toggleSearch)
 backBtn.addEventListener('click', toggleSearch)
 
+const accountDP = document.querySelector('#a-dp-btn');
+const accountDPContent = document.querySelector('.a-dp-content')
+
+accountDP.addEventListener('click', () => {
+    accountDPContent.classList.toggle('d-none')
+})
