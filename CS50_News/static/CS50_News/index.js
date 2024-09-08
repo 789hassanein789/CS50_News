@@ -101,3 +101,16 @@ const accountDPContent = document.querySelector('.a-dp-content')
 accountDP.addEventListener('click', () => {
     accountDPContent.classList.toggle('d-none')
 })
+
+function settings() {
+    document.body.classList.toggle('overflow-hidden')
+    document.querySelector('.overlay').classList.toggle('d-none')
+    document.querySelector('.close-offcanvas').click()
+    if (!accountDPContent.classList.contains('d-none')) {
+        accountDPContent.classList.add('d-none')
+    }
+}
+
+const settingsBtn = document.querySelectorAll('.setting-btn');
+
+settingsBtn.forEach(button => button.addEventListener('click', settings))
