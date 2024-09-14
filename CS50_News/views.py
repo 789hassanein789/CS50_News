@@ -3,11 +3,13 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django import forms
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from django.core.paginator import Paginator
 from django.template.defaulttags import register
+from django.core import serializers
+import json
 
 from .models import User, New
 
@@ -89,6 +91,24 @@ def add_new(request):
         N.save()
         return HttpResponseRedirect(reverse("index"))
     return render(request, "CS50_News/add.html")
+
+def passwordCheck(request):
+    data = json.loads(request.body)
+    user = User.objects.get(id=request.user.id)
+    if user.check_password(data.get("password")):
+        return JsonResponse({"email":user.email, "first":user.first_name, "last":user.last_name, "status": 200}, status = 200)
+    return HttpResponse(status = 404)
+
+def Delete(request):
+    if request.method == "POST":
+        try:
+            user = User.objects.get(id=request.user.id)
+            user.delete()
+            return redirect("/")
+        except User.DoesNotExist:
+            return HttpResponse({"error":"There is no such account, please reload the page and try again"}, status=500)
+    else:
+        return HttpResponse({"error":"bad request method"}, status=400)
 
 def crop(request):
     return render(request, "CS50_News/crop.html")

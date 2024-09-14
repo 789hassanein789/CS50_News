@@ -239,13 +239,13 @@ header {
   height: 100%;
 }
 
-.signin-btn {
+.signin-btn, #back-btn {
   background: transparent;
   border: 3px var(--page-text) solid;
   transition: 0.3s ease-in-out;
 }
 
-.signin-btn:hover {
+.signin-btn:hover, #back-btn:hover {
   background-color: var(--page-text);
   color: var(--page-background);
 }
@@ -528,8 +528,8 @@ header {
   position: relative;
   background-color: var(--page-background);
   margin: 80px auto; /* Centered horizontally and vertically */
-  padding: 56px 72px;
-  width: 580px; /* Adjust as needed */
+  padding: 52px 72px;
+  width: 548px; /* Adjust as needed */
   border-radius: 28px;
 }
 
@@ -571,6 +571,13 @@ header {
 
 .popup-input:focus {
   background-image: linear-gradient(to bottom, transparent, transparent 58px, var(--page-text) 58px, var(--page-text));
+}
+
+.popup-input.is-invalid {
+  background-image: linear-gradient(to bottom, transparent, transparent 58px, #f95252 58px, #f95252);
+}
+
+.popup-input:focus, .popup-input:not(:placeholder-shown) {
   padding-top: 1.625rem;
   padding-bottom: .625rem;
 }
@@ -591,7 +598,7 @@ header {
   transition: .1s ease-in-out;
 }
 
-.popup-input:focus~.popup-label {
+.popup-input:focus~.popup-label, .popup-input:not(:placeholder-shown)~label {
   transform: scale(.8571) translateY(-.5rem) translateX(.15rem);
 }
 
@@ -614,11 +621,59 @@ header {
   color: white;
 }
 
+#done-btn, #delete-btn {
+  background-color: #30f;
+  color: white;
+}
+
+#done-btn:hover, #delete-btn:hover {
+  background-color: #2b00d9;
+}
+
 .erorr-p {
   color: #d40909;
   font-size: .75rem;
   margin-top: -1.5rem;
   font-weight: 300
+}
+
+.ai-input {
+  display: flex;
+  align-items: center;
+  padding: 1.3rem 0;
+  border-bottom: 1px solid var(--page-text);
+  align-self: stretch;
+}
+
+.ai-input:hover > .icon-btn {
+  background-color: var(--bg-hover);
+}
+
+.field {
+  flex: 1;
+}
+
+.field_title {
+  font-size: .875rem;
+  line-height: 1.5rem;
+}
+
+.min-font {
+  margin: 0;
+  font-size: .8rem;
+  line-height: 1.5rem
+}
+
+.focus-link {
+  text-decoration: none;
+  color: #a6b8ff;
+  width: min-content;
+  white-space: nowrap;
+}
+
+.focus-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap");
