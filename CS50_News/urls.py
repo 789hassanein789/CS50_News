@@ -15,6 +15,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("category/<str:cat>", views.index, name="cat_index"),
     path("check", views.passwordCheck, name="check"),
-    path("delete", views.Delete, name="delete")
+    path("delete", views.Delete, name="delete"),
+    path("account", views.accountEdit, name="account")
 ]
 

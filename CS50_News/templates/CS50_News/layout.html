@@ -422,11 +422,10 @@
                 <p class="erorr-p d-none">
                     The password is incorrect. Reminder: passwords are case sensitive.
                 </p>
-                <button class="popup-btn" id="continue-btn">
+                <button class="popup-btn" onclick="validate()" type="button" id="continue-btn">
                     Continue
                 </button>
             </form>
-            
         </div>
     </div>
     {% csrf_token %}

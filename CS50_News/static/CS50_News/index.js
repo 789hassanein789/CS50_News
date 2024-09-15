@@ -11,14 +11,12 @@ const backBtn = document.querySelector('#backBtn');
 const accountDP = document.querySelector('#a-dp-btn');
 const accountDPContent = document.querySelector('.a-dp-content');
 const settingsBtn = document.querySelectorAll('.setting-btn');
-const passwordInput = document.querySelector('#validation-password');
-const continueBtn = document.querySelector('#continue-btn');
 const deleteLink = document.querySelector('#delete-link');
 const deleteBackBtn = document.querySelector('#back-btn');
 const popupForms = document.querySelectorAll('.popup-form');
 const subItems = document.querySelectorAll('.sub-item');
 const popup = document.querySelector('.popup');
-const popupContent = popup.textContent;
+const popupContent = popup.innerHTML;
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
 if (darkMode === 'enabled') {
@@ -95,12 +93,6 @@ accountDP.addEventListener('click', () => {
 
 settingsBtn.forEach(button => button.addEventListener('click', settings))
 
-continueBtn.addEventListener('click', validate)
-
-//deleteLink.addEventListener('click', show('delete-form'))
-
-//deleteBackBtn.addEventListener('click', show('settings-form'))
-
 function enableDarkMode() {
     document.body.classList.add('dark-mode');
     document.body.setAttribute('data-bs-theme', 'dark')
@@ -133,18 +125,18 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function validate(event) {
-    event.preventDefault()
+function validate() {
+    const passwordInput = document.querySelector('#validation-password');
+    const continueBtn = document.querySelector('#continue-btn');
     continueBtn.innerHTML = '<div class="spinner-border" role="status"></div>'
+    let form = new FormData(document.querySelector('#validation-form'));
     fetch('/check', {
          method: 'POST',
          headers: {
             'X-CSRFToken': getCookie('csrftoken'),
          },
          credentials: "same-origin",
-         body: JSON.stringify({
-            password: passwordInput.value
-         })
+         body: form
     })
     .then((res) => res.json())
     .then((result) => {
@@ -154,7 +146,7 @@ function validate(event) {
             passwordInput.value = ''
             popup.innerHTML = `
             <form class="popup-form" id="settings-form">
-                <button type="button" class="btn-close setting-btn" aria-label="Close"></button>
+                <button type="button" class="btn-close setting-btn" onclick="closeSettings()" aria-label="Close"></button>
                 <p class="popup-brand">CS50 News</a>
                 <div class="g-0">
                     <p class="fs-4 fw-bold m-0">Account Info</p>
@@ -186,14 +178,13 @@ function validate(event) {
                     <input type="text" name="last-name" class="popup-input" placeholder="" id="last-name" value="${result.last}">
                     <label for="last-name" class="popup-label">Last Name</label>
                 </div>
-                <button class="popup-btn" id="done-btn">
+                <button class="popup-btn" type="button" id="done-btn" onclick="accountEdit()">
                     Done
                 </button>
                 <p class="fs-4 fw-bold m-0">Delete Account</p>
                 <p class="min-font">By deleting your account, you may be unable to access certain CS50 News services.</p>
                 <a class="focus-link" id="delete-link" onclick="show('delete-form')">Delete Account</a>
                 <p class="min-font">CS50 News treats this information with care and respect. For details, review our <a href="" class="focus-link min-font">Privacy Policy.</a></p>
-                
             </form>
             <form action="/delete" method="post" class="popup-form d-none" id="delete-form">
                 <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">                <p class="fs-4 fw-bold m-0">Are you sure?</p>
@@ -221,4 +212,26 @@ function show(form) {
         f.classList.add('d-none')
     })
     document.querySelector(`#${form}`).classList.remove('d-none')
+}
+
+function closeSettings() {
+    popup.innerHTML = popupContent;
+    settings()
+}
+
+function accountEdit() {
+    document.querySelector('#done-btn').innerHTML = '<div class="spinner-border" role="status"></div>'
+    let form = new FormData(document.querySelector('#settings-form'))
+    fetch('/account', {
+        method: 'POST',
+        headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+        },
+        credentials: "same-origin",
+        body: form
+    })
+    .then((res) => {
+    document.querySelector('#done-btn').textContent = 'Done'
+    closeSettings()
+    })
 }

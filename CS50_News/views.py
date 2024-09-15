@@ -93,9 +93,8 @@ def add_new(request):
     return render(request, "CS50_News/add.html")
 
 def passwordCheck(request):
-    data = json.loads(request.body)
     user = User.objects.get(id=request.user.id)
-    if user.check_password(data.get("password")):
+    if user.check_password(request.POST.get("password")):
         return JsonResponse({"email":user.email, "first":user.first_name, "last":user.last_name, "status": 200}, status = 200)
     return HttpResponse(status = 404)
 
@@ -109,6 +108,15 @@ def Delete(request):
             return HttpResponse({"error":"There is no such account, please reload the page and try again"}, status=500)
     else:
         return HttpResponse({"error":"bad request method"}, status=400)
+
+def accountEdit(request):
+    if request.method == "POST":
+        user = User.objects.get(id=request.user.id)
+        user.first_name = request.POST.get("first-name")
+        user.last_name = request.POST.get("last-name")
+        user.save()
+        return HttpResponse(status=200)
+    return HttpResponse(status=403)
 
 def crop(request):
     return render(request, "CS50_News/crop.html")
