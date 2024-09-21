@@ -1,8 +1,11 @@
+from typing import Iterable
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
 class User(AbstractUser):
+    validation_date = models.DateTimeField(null=True, blank=True)
+    otp_date = models.DateTimeField(null=True, blank=True)
     def __str__(self):
         return f"{self.username}"
     

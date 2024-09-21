@@ -130,13 +130,13 @@ header {
   align-items: center;
 }
 
-#body .form-control {
+#main-header .form-control {
   background: none;
   color: var(--page-text);
   caret-color: var(--page-text);
 }
 
-#body .form-control:focus {
+#main-header .form-control:focus {
   box-shadow: none;
 }
 
@@ -630,6 +630,18 @@ header {
   background-color: #2b00d9;
 }
 
+#cancel-btn {
+  background-color: transparent;
+  border: 3px solid var(--page-text);
+  color: var(--page-text);
+  margin-top: -.75rem;
+}
+
+#cancel-btn:hover {
+  background-color: var(--page-text);
+  color: var(--page-background);
+}
+
 .erorr-p {
   color: #d40909;
   font-size: .75rem;
@@ -674,6 +686,40 @@ header {
 .focus-link:hover {
   text-decoration: underline;
   cursor: pointer;
+}
+
+.otp-div {
+  padding: .75rem 0;
+  display: grid;
+  gap: .5rem;
+  grid-template-columns: repeat(6, minmax(40px, 1fr));
+  justify-content: space-between;
+  align-items: center;
+}
+
+.otp-div>.otp-input {
+  aspect-ratio: 91/100;
+  border-radius: .25rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+  border: none;
+  box-shadow: none;
+  background: var(--bg-hover);
+  color: var(--page-text);
+  min-height: 72px;
+  padding: 0;
+}
+
+.otp-input:focus {
+  outline: 0;
+  background-image: linear-gradient(to right, transparent, transparent), linear-gradient(to right, var(--page-text), var(--page-text));
+  background-size: 100% 3px, 100% 3px;
+  background-position: bottom, bottom;
+  border: 2px solid var(--page-text);
+  background-repeat: no-repeat;
+  background-color: var(--bg-hover);
+  color: var(--page-text);
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap");

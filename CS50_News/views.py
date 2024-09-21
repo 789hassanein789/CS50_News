@@ -9,9 +9,12 @@ from datetime import datetime
 from django.core.paginator import Paginator
 from django.template.defaulttags import register
 from django.core import serializers
+from datetime import datetime, timezone, timedelta
+import pyotp
 import json
 
 from .models import User, New
+from .utils import send_otp
 
 class NewForm(forms.Form):
     image = forms.ImageField()
@@ -95,8 +98,29 @@ def add_new(request):
 def passwordCheck(request):
     user = User.objects.get(id=request.user.id)
     if user.check_password(request.POST.get("password")):
-        return JsonResponse({"email":user.email, "first":user.first_name, "last":user.last_name, "status": 200}, status = 200)
+        user.validation_date = datetime.now(timezone.utc)
+        user.save()
+        return JsonResponse({"email":user.email, "first":user.first_name, "last":user.last_name }, status = 200)
     return HttpResponse(status = 404)
+
+def otp_view(request):
+    if request.method == "POST":
+        otp = request.POST.get("otp")
+        otp_secret_key = request.session["otp_secret_key"]
+        otp_valid_util = request.session["otp_valid_until"]
+        if otp_secret_key and otp_secret_key:
+            valid_until = datetime.fromisoformat(otp_valid_util)
+            if valid_until > datetime.now():
+                totp = pyotp.TOTP(otp_secret_key, interval=360)
+                if totp.now() == otp:
+                    user = User.objects.get(id=request.user.id)
+                    user.otp_date = datetime.now(timezone.utc)
+                    return HttpResponse(status=200)
+                return HttpResponse(status=401)
+            return HttpResponse(status=408)
+        return HttpResponse(status=500)
+    send_otp(request)
+    return HttpResponse(status=200)
 
 def Delete(request):
     if request.method == "POST":
@@ -112,10 +136,13 @@ def Delete(request):
 def accountEdit(request):
     if request.method == "POST":
         user = User.objects.get(id=request.user.id)
-        user.first_name = request.POST.get("first-name")
-        user.last_name = request.POST.get("last-name")
-        user.save()
-        return HttpResponse(status=200)
+        current = datetime.now(timezone.utc)
+        if current - user.validation_date < timedelta(minutes=15):
+            user.first_name = request.POST.get("first-name")
+            user.last_name = request.POST.get("last-name")
+            user.save()
+            return HttpResponse(status=200)
+        return HttpResponse(status=400)
     return HttpResponse(status=403)
 
 def crop(request):

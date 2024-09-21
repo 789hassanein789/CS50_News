@@ -16,6 +16,7 @@ urlpatterns = [
     path("category/<str:cat>", views.index, name="cat_index"),
     path("check", views.passwordCheck, name="check"),
     path("delete", views.Delete, name="delete"),
-    path("account", views.accountEdit, name="account")
+    path("account", views.accountEdit, name="account"),
+    path("OTP", views.otp_view, name="otp")
 ]
 

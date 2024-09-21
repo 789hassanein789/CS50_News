@@ -408,15 +408,15 @@
     {% block body %}
     {% endblock %}
     </div>
-    <div class="overlay d-none">
+    <div class="overlay">
         <div class="popup">
             <form class="popup-form" id="validation-form">
-                <button type="button" class="btn-close setting-btn" aria-label="Close"></button>
+                <button type="button" class="btn-close setting-btn" onclick="settings()" aria-label="Close"></button>
                 <p class="popup-brand">CS50 News</a>
                 <p class="fs-4 fw-bold m-0">Enter your password to continue</p>
                 <p class="m-0">Please re-enter the password you used to sign in.</p>
                 <div class="popup-input-div">
-                    <input type="password" name="password" class="popup-input" placeholder="" id="validation-password">
+                    <input type="password" name="password" class="popup-input" placeholder="" oninput="removeError(this)" id="validation-password">
                     <label for="validation-password" class="popup-label">Password</label>
                 </div>
                 <p class="erorr-p d-none">
