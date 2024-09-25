@@ -1,4 +1,5 @@
 {% load static %}
+{% load socialaccount %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -410,24 +411,63 @@
     </div>
     <div class="overlay">
         <div class="popup">
-            <form class="popup-form" id="validation-form">
-                <button type="button" class="btn-close setting-btn" onclick="settings()" aria-label="Close"></button>
+            {% if is_authenticated %}
+                <form class="popup-form" id="validation-form">
+                    <button type="button" class="btn-close setting-btn" onclick="settings()" aria-label="Close"></button>
+                    <p class="popup-brand">CS50 News</p>
+                    <p class="fs-4 fw-bold m-0">Enter your password to continue</p>
+                    <p class="m-0">Please re-enter the password you used to sign in.</p>
+                    <div class="popup-input-div">
+                        <input type="password" name="password" class="popup-input" placeholder="" oninput="removeError(this)" id="validation-password">
+                        <label for="validation-password" class="popup-label">Password</label>
+                    </div>
+                    <p class="erorr-p d-none">
+                        The password is incorrect. Reminder: passwords are case sensitive.
+                    </p>
+                    <button class="popup-btn" onclick="validate()" type="button" id="continue-btn">
+                        Continue
+                    </button>
+                </form>
+            {% else %}
+            <form class="popup-form" action="">
                 <p class="popup-brand">CS50 News</a>
-                <p class="fs-4 fw-bold m-0">Enter your password to continue</p>
-                <p class="m-0">Please re-enter the password you used to sign in.</p>
+                <p class="fs-4 fw-bold m-0">log in</p>
                 <div class="popup-input-div">
-                    <input type="password" name="password" class="popup-input" placeholder="" oninput="removeError(this)" id="validation-password">
-                    <label for="validation-password" class="popup-label">Password</label>
+                    <input type="text" name="email" class="popup-input" placeholder="" oninput="removeError(this)" id="email-input">
+                    <label for="email-input" class="popup-label">email</label>
                 </div>
-                <p class="erorr-p d-none">
-                    The password is incorrect. Reminder: passwords are case sensitive.
-                </p>
-                <button class="popup-btn" onclick="validate()" type="button" id="continue-btn">
-                    Continue
-                </button>
+                <div class="popup-input-div">
+                    <input type="text" name="password" class="popup-input" placeholder="" oninput="removeError(this)" id="password-login-input">
+                    <label for="password-input" class="popup-label">password</label>
+                </div>
             </form>
+            <div >
+                <div class="separator-div">
+                    <span class="separator"></span>
+                    <span class="or-separator">OR</span>
+                    <span class="separator"></span>
+                </div>
+                <div class="socialaccount-div w-100">
+                    <form action="{% provider_login_url 'google' %}?next=/" method="post">
+                        {% csrf_token %}
+                        <button class="google-login">
+                            <span class="google-G-logo"></span>
+                            <span>Log in with Google</span>
+                        </button>
+                    </form>
+                    <form action="{% provider_login_url 'github' %}?next=/" method="post">
+                        {% csrf_token %}
+                        <button class="google-login">
+                            <span class="google-G-logo"></span>
+                            <span>Log in with github</span>
+                        </button>
+                    </form>
+                    <a href="{% provider_login_url 'github' %}?next=/">log in with github</a>
+                </div>
+            </div>
+            {% endif %}
         </div>
-    </div>
+    </div>  
     {% csrf_token %}
     <script src="{% static 'CS50_News/index.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

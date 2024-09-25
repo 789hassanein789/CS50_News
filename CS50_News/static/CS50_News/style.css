@@ -722,6 +722,69 @@ header {
   color: var(--page-text);
 }
 
+
+
+.separator-div {
+  display: flex;
+  align-items: center;
+  height: 4rem;
+  justify-content: center;
+}
+
+.separator {
+  background-color: var(--bg-hover);
+  flex-grow: 1;
+  height: .1rem;
+}
+
+.or-separator {
+  color: var(--page-secondary);
+  font-size: 1.25rem;
+  padding: 0 1.5rem;
+}
+
+.google-login {
+  background-color: #fff;
+  color: #262421;
+  padding: 0 1.5rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: .5rem;
+  font-size: 1.25;
+  font-weight: 600;
+  text-decoration: none;
+  justify-content: center;
+  width: 90%;
+  position: relative;
+  min-height: 3rem;
+}
+
+.google-login:hover {
+  background-color: #f1f1f1;
+}
+
+.google-G-logo {
+  height: 2.2rem;
+  left: 1.5rem;
+  position: absolute;
+  width: 2.2rem;
+
+}
+
+.google-G-logo::before {
+  background-image: url(/static/CS50_News/bundles/G.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+}
+
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap");
 * {
   padding: 0;
