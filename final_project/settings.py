@@ -54,7 +54,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.github'
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.facebook'
+
 ]
 
 SOCIALACCOUNT_PROVIDERS= {
@@ -66,14 +68,30 @@ SOCIALACCOUNT_PROVIDERS= {
         'AUTH_PARAMS': {'access_type': 'online'}
     },
     'github' : {
-        "APPS": [
-            {
-                "client_id": "Ov23li4iOklHORMN8OHJ",
-                "secret": "6fa3682dbb6adf6010626450cb50b738098dcfe2",
-                "key": ""
-            },
-        ]
-    }
+        'SCOPE': [
+            'user'
+        ],
+    },
+    'facebook':
+       {'METHOD': 'oauth2',
+        'SCOPE': ['email','public_profile'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time'],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': lambda request: 'kr_KR',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v2.4'}
 }
 
 MIDDLEWARE = [
@@ -108,6 +126,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'final_project.wsgi.application'
+
+
+ALLOWED_HOSTS = ['localhost']
 
 
 # Database

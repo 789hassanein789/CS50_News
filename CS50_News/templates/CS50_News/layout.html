@@ -450,19 +450,25 @@
                 <div class="socialaccount-div w-100">
                     <form action="{% provider_login_url 'google' %}?next=/" method="post">
                         {% csrf_token %}
-                        <button class="google-login">
-                            <span class="google-G-logo"></span>
+                        <button class="social-login Google-login">
+                            <span class="social-login-logo G-logo"></span>
                             <span>Log in with Google</span>
                         </button>
                     </form>
                     <form action="{% provider_login_url 'github' %}?next=/" method="post">
                         {% csrf_token %}
-                        <button class="google-login">
-                            <span class="google-G-logo"></span>
+                        <button class="social-login Github-login">
+                            <span class="Cat-logo social-login-logo"></span>
                             <span>Log in with github</span>
                         </button>
                     </form>
-                    <a href="{% provider_login_url 'github' %}?next=/">log in with github</a>
+                    <form action="{% provider_login_url 'facebook' %}?next=/" method="post">
+                        {% csrf_token %}
+                        <button class="social-login Facebook-login">
+                            <span class="F-logo social-login-logo"></span>
+                            <span>Log in with facebook</span>
+                        </button>
+                    </form>
                 </div>
             </div>
             {% endif %}

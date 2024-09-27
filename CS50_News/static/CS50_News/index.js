@@ -85,13 +85,14 @@ searchBtn.addEventListener('click', toggleSearch)
 backBtn.addEventListener('click', toggleSearch)
 
 
-
-accountDP.addEventListener('click', () => {
-    accountDPContent.classList.toggle('d-none')
-})
-
-settingBtn.addEventListener('click', settings)
-
+if (accountDP) {
+    accountDP.addEventListener('click', () => {
+        accountDPContent.classList.toggle('d-none')
+    })
+}
+if (settingBtn) {
+    settingBtn.addEventListener('click', settings)
+}
 function enableDarkMode() {
     document.body.classList.add('dark-mode');
     document.body.setAttribute('data-bs-theme', 'dark')
