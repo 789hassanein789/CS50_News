@@ -15,6 +15,7 @@ import environ
 import os
 from dotenv import load_dotenv, find_dotenv
 
+ACCOUNT_RATE_LIMITS = False
 
 load_dotenv()
 
@@ -25,8 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = ''
 MEDIA_URL = ''
 
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'webappexample', 'templates')
-
+#TEMPLATE_DIR = os.path.join(BASE_DIR, 'webappexample', 'templates')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -52,12 +52,19 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'allauth.headless',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.facebook'
 
 ]
+
+HEADLESS_FRONTEND_URLS = {
+    "account_confirm_email": "https://app.project.org/account/verify-email/{key}",
+    "account_reset_password_from_key": "https://app.org/account/password/reset/key/{key}",
+    "account_signup": "https://app.org/account/signup",
+}
 
 SOCIALACCOUNT_PROVIDERS= {
     'google': {
@@ -111,7 +118,7 @@ ROOT_URLCONF = 'final_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,15 +128,11 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
-        'DIRS': [TEMPLATE_DIR],
+        #'DIRS': [TEMPLATE_DIR],
     },
 ]
 
 WSGI_APPLICATION = 'final_project.wsgi.application'
-
-
-ALLOWED_HOSTS = ['localhost']
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -196,5 +199,13 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
+ACCOUNT_FORMS = {'signup': 'CS50_News.forms.signupForm'}
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
+ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_USERNAME_REQUIRED = False

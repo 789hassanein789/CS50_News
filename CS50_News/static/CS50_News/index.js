@@ -90,9 +90,7 @@ if (accountDP) {
         accountDPContent.classList.toggle('d-none')
     })
 }
-if (settingBtn) {
-    settingBtn.addEventListener('click', settings)
-}
+
 function enableDarkMode() {
     document.body.classList.add('dark-mode');
     document.body.setAttribute('data-bs-theme', 'dark')
@@ -114,8 +112,10 @@ function settings() {
     document.body.classList.toggle('overflow-hidden')
     document.querySelector('.overlay').classList.toggle('d-none')
     document.querySelector('.close-offcanvas').click()
-    document.querySelector('#validation-password').value = ''
-    if (!accountDPContent.classList.contains('d-none')) {
+    if (document.querySelector('#validation-password')) {
+        document.querySelector('#validation-password').value = ''
+    }
+    if (accountDPContent && !accountDPContent.classList.contains('d-none')) {
         accountDPContent.classList.add('d-none')
     }
 }
@@ -145,78 +145,84 @@ function validate() {
         passwordInput.classList.remove('is-invalid');
         passwordInput.value = ''
         popup.innerHTML = `
-        <form class="popup-form" id="settings-form">
-            <button type="button" class="btn-close setting-btn" onclick="closeSettings()" aria-label="Close"></button>
-            <p class="popup-brand">CS50 News</a>
-            <div class="g-0">
-                <p class="fs-4 fw-bold m-0">Account Info</p>
-                <div class="ai-input" id="email" onclick="otp()">
-                    <div class="field">
-                        <div class="field_title">Email</div>
-                        <div class="fw-bold">${result.email}</div>
+        <div class="popup-block" id="settings-block">
+            <form class="popup-form">
+                <button type="button" class="btn-close setting-btn" onclick="closeSettings()" aria-label="Close"></button>
+                <p class="popup-brand">CS50 News</a>
+                <div class="g-0">
+                    <p class="fs-4 fw-bold m-0">Account Info</p>
+                    <div class="ai-input" id="email" onclick="otp()">
+                        <div class="field">
+                            <div class="field_title">Email</div>
+                            <div class="fw-bold">${result.email}</div>
+                        </div>
+                        <button class="icon-btn" type="button">
+                            <i class="fa-solid fa-chevron-right fa-lg"></i>
+                        </button>
                     </div>
-                    <button class="icon-btn" type="button">
-                        <i class="fa-solid fa-chevron-right fa-lg"></i>
-                    </button>
-                </div>
-                <div class="ai-input" id="password" onclick="otp()">
-                    <div class="field">
-                        <div class="field_title">Password</div>
-                        <div class="fw-bold">**********</div>
+                    <div class="ai-input" id="password" onclick="otp()">
+                        <div class="field">
+                            <div class="field_title">Password</div>
+                            <div class="fw-bold">**********</div>
+                        </div>
+                        <button class="icon-btn" type="button">
+                            <i class="fa-solid fa-chevron-right fa-lg"></i>
+                        </button>
                     </div>
-                    <button class="icon-btn" type="button">
-                        <i class="fa-solid fa-chevron-right fa-lg"></i>
-                    </button>
                 </div>
-            </div>
-            <p class="fs-4 fw-bold m-0">Personal Info</p>
-            <div class="popup-input-div">
-                <input type="text" name="first-name" class="popup-input" placeholder="" id="first-name" value="${result.first}">
-                <label for="first-name" class="popup-label">First Name</label>
-            </div>
-            <div class="popup-input-div">
-                <input type="text" name="last-name" class="popup-input" placeholder="" id="last-name" value="${result.last}">
-                <label for="last-name" class="popup-label">Last Name</label>
-            </div>
-            <button class="popup-btn" type="button" id="done-btn" onclick="accountEdit()">
-                Done
-            </button>
-            <p class="fs-4 fw-bold m-0">Delete Account</p>
-            <p class="min-font">By deleting your account, you may be unable to access certain CS50 News services.</p>
-            <a class="focus-link" id="delete-link" onclick="show('delete-form')">Delete Account</a>
-            <p class="min-font">CS50 News treats this information with care and respect. For details, review our <a href="" class="focus-link min-font">Privacy Policy.</a></p>
-        </form>
-        <form action="/delete" method="post" class="popup-form d-none" id="delete-form">
-            <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">                <p class="fs-4 fw-bold m-0">Are you sure?</p>
-            <p>By deleting your account, you will no longer be able to log in to websites, mobile apps, or other online services, and you will not be able to use your account to access any associated purchases, credits, points, rewards, plans, content or other benefits you may have associated with it.</p>
-            <button class="popup-btn" id="delete-btn">
-                Yes, delete this account
-            </button>
-            <button class="popup-btn" id="back-btn" onclick="show('settings-form')" type="button">
-                No, I'll keep it
-            </button>
-        </form>
-        <form action="" class="popup-form d-none" id="otp-form">
-            <p class="fs-3 fw-bold m-0">Check your email inbox</p>
-            <p class="m-0">We'll need you to verify your email address. We’ve sent a 6-digit code to your email address. The code expires in 15 minutes. Please enter it below.</p>
-            <div>
-                <div class="otp-div">
-                    <input type="tel" class="otp-input form-control" id="otp-0" autofocus>
-                    <input type="tel" class="otp-input form-control" id="otp-1">
-                    <input type="tel" class="otp-input form-control" id="otp-2">
-                    <input type="tel" class="otp-input form-control" id="otp-3">
-                    <input type="tel" class="otp-input form-control" id="otp-4">
-                    <input type="tel" class="otp-input form-control" id="otp-5">
+                <p class="fs-4 fw-bold m-0">Personal Info</p>
+                <div class="popup-input-div">
+                    <input type="text" name="first-name" class="popup-input" placeholder="" id="first-name" value="${result.first}">
+                    <label for="first-name" class="popup-label">First Name</label>
                 </div>
-            </div>
-            <button class="popup-btn" onclick="verifyOtp()" type="button" id="continue-btn">
-                Continue
-            </button>
-            <button class="popup-btn" onclick="show('settings-form')" type="button" id="cancel-btn">
-                Cancel
-            </button>
-            <p class="m-0 min-font">Didn’t receive the email? <a href="">Resend</a></p>
-        </form>
+                <div class="popup-input-div">
+                    <input type="text" name="last-name" class="popup-input" placeholder="" id="last-name" value="${result.last}">
+                    <label for="last-name" class="popup-label">Last Name</label>
+                </div>
+                <button class="popup-btn" type="button" id="done-btn" onclick="accountEdit()">
+                    Done
+                </button>
+                <p class="fs-4 fw-bold m-0">Delete Account</p>
+                <p class="min-font">By deleting your account, you may be unable to access certain CS50 News services.</p>
+                <a class="focus-link" id="delete-link" onclick="show('delete')">Delete Account</a>
+                <p class="min-font">CS50 News treats this information with care and respect. For details, review our <a href="" class="focus-link min-font">Privacy Policy.</a></p>
+            </form>
+        </div>
+        <div class="popup-block" id="delete-block d-none">
+            <form action="/delete" method="post" class="popup-form" >
+                <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">                <p class="fs-4 fw-bold m-0">Are you sure?</p>
+                <p>By deleting your account, you will no longer be able to log in to websites, mobile apps, or other online services, and you will not be able to use your account to access any associated purchases, credits, points, rewards, plans, content or other benefits you may have associated with it.</p>
+                <button class="popup-btn" id="delete-btn">
+                    Yes, delete this account
+                </button>
+                <button class="popup-btn" id="back-btn" onclick="show('settings')" type="button">
+                    No, I'll keep it
+                </button>
+            </form>
+        </div>
+        <div class="popup-block d-none" id="otp-block">
+            <form class="popup-form">
+                <p class="fs-3 fw-bold m-0">Check your email inbox</p>
+                <p class="m-0">We'll need you to verify your email address. We’ve sent a 6-digit code to your email address. The code expires in 15 minutes. Please enter it below.</p>
+                <div>
+                    <div class="otp-div">
+                        <input type="tel" class="otp-input form-control" id="otp-0" autofocus>
+                        <input type="tel" class="otp-input form-control" id="otp-1">
+                        <input type="tel" class="otp-input form-control" id="otp-2">
+                        <input type="tel" class="otp-input form-control" id="otp-3">
+                        <input type="tel" class="otp-input form-control" id="otp-4">
+                        <input type="tel" class="otp-input form-control" id="otp-5">
+                    </div>
+                </div>
+                <button class="popup-btn" onclick="verifyOtp()" type="button" id="continue-btn">
+                    Continue
+                </button>
+                <button class="popup-btn" onclick="show('settings')" type="button" id="cancel-btn">
+                    Cancel
+                </button>
+                <p class="m-0 min-font">Didn’t receive the email? <a href="">Resend</a></p>
+            </form>
+        </div>
         `
         aiInputs = document.querySelectorAll('.ai-input');
         aiInputs.forEach(input => {
@@ -253,7 +259,7 @@ function validate() {
         }
     })  
     .catch(() => {
-        document.querySelector('#validation-form > .erorr-p').classList.remove('d-none');
+        document.querySelector('#validation-form > .error-p').classList.remove('d-none');
         passwordInput.classList.add('is-invalid');
         passwordInput.value = ''
         continueBtn.textContent = 'Continue'
@@ -262,17 +268,21 @@ function validate() {
 
 
 
-function show(form) {
-    document.querySelectorAll('.popup-form').forEach(f => {
-        f.classList.add('d-none')
+function show(block) {
+    document.querySelectorAll('.popup-block').forEach(b => {
+        b.classList.add('d-none')
     })
-    document.querySelector(`#${form}`).classList.remove('d-none')
+    document.querySelector(`#${block}-block`).classList.remove('d-none')
 }
 
 function removeError(input) {
-    if (input.value !== '') {
-        document.querySelector('#validation-form > .erorr-p').classList.add('d-none');
-        input.classList.remove('is-invalid');
+    if (input.value !== '' && input.classList.contains('is-invalid')) {
+        document.querySelectorAll('.error-p').forEach(p => {
+            p.classList.add('d-none');
+        })
+        document.querySelectorAll('.popup-input').forEach(field => {
+            field.classList.remove('is-invalid');
+        })
     }
 }
 
@@ -317,7 +327,7 @@ function backward(input)   {
 }
 
 function otp() {
-    show('otp-form');
+    show('otp');
     fetch('/OTP')
 }
 
@@ -337,4 +347,41 @@ function verifyOtp() {
         credentials: 'same-origin',
         body: form
     });
+}
+
+function inputError(name) {
+    document.querySelector(`#${name}-input`).classList.add('is-invalid');
+    const errorPar = document.querySelector(`#${name}-input-error-p`);
+    errorPar.classList.remove('d-none');
+}
+
+function signup() {
+    const form = new FormData(document.querySelector('#signup-form'))
+    let empty = false
+    for (const value of form.entries()) {
+        if (value[1] == '') {
+            inputError(value[0])
+            empty = true
+        }
+    }
+    if (empty) {
+        return
+    }
+    fetch('/signup', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        credentials: "same-origin",
+        body: form
+    })
+    .then(res => res.json())
+    .then(result => {
+        if (result.status == 200) {
+            console.log('ok')
+        }
+        else {
+            console.log(result.error)
+        }
+    })
 }

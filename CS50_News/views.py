@@ -16,8 +16,6 @@ import json
 from .models import User, New
 from .utils import send_otp
 
-class NewForm(forms.Form):
-    image = forms.ImageField()
 
 # Create your views here.
 def index(request, cat="Main"):
@@ -63,25 +61,22 @@ def logout_view(request):
 
 def register(request):
     if request.method == "POST":
-        username = request.POST.get("username")
+        first_name = request.POST.get("first")
+        last_name = request.POST.get("last")
+        username = first_name + " " + last_name
         email = request.POST.get("email")
         password = request.POST.get("password")
         confirmation = request.POST.get("confirmation")
         if password != confirmation:
-            return render(request, "CS50_News/register.html", {
-                "message": "the password dosen't match the confirmation"
-            })
+            return JsonResponse({"error": "the passwords does not match"}, status=400)
         try:
-            user = User.objects.create_user(username, email, password)
+            user = User(username = username, first_name = first_name, last_name = last_name, email = email, password = password)
             user.save()
         except IntegrityError:
-            return render(request, "CS50_News/register.html", {
-                "message": "the username is already taken"
-            })
+            return JsonResponse({"error": "the account already exist"}, status=409)
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "CS50_News/register.html")
+        return JsonResponse({"status": 200}, status=200)
+    return JsonResponse({"error": "bad request method"}, status=405)
 
 def add_new(request):
     if request.method == "POST":

@@ -378,7 +378,7 @@
                         Your Account
                     </button>
                     <div class="a-dp-content d-none">
-                        <button class="a-dp-btn setting-btn">
+                        <button class="a-dp-btn setting-btn" onclick="settings()">
                             <i class="fa-solid fa-gear fa-lg"></i>
                             Settings
                         </button>
@@ -395,11 +395,11 @@
                 </div>
             {% else %}
                 <div class="account-div">
-                    <form action="{% url 'login' %}" class="account-form">
-                        <button class="account-btn signin-btn">sign in</button>
+                    <form class="account-form">
+                        <button type="button" class="account-btn signin-btn" onclick="settings()">log in</button>
                     </form>
-                    <form action="{% url 'register' %}" class="account-form">
-                        <button class="account-btn signup-btn">sign up</button>
+                    <form class="account-form">
+                        <button type="button" class="account-btn signup-btn" onclick="show('signup'); settings()">sign up</button>
                     </form>
                 </div>    
             {% endif %}
@@ -409,9 +409,9 @@
     {% block body %}
     {% endblock %}
     </div>
-    <div class="overlay">
+    <div class="overlay d-none">
         <div class="popup">
-            {% if is_authenticated %}
+            {% if user.is_authenticated %}
                 <form class="popup-form" id="validation-form">
                     <button type="button" class="btn-close setting-btn" onclick="settings()" aria-label="Close"></button>
                     <p class="popup-brand">CS50 News</p>
@@ -421,7 +421,7 @@
                         <input type="password" name="password" class="popup-input" placeholder="" oninput="removeError(this)" id="validation-password">
                         <label for="validation-password" class="popup-label">Password</label>
                     </div>
-                    <p class="erorr-p d-none">
+                    <p class="error-p d-none">
                         The password is incorrect. Reminder: passwords are case sensitive.
                     </p>
                     <button class="popup-btn" onclick="validate()" type="button" id="continue-btn">
@@ -429,48 +429,118 @@
                     </button>
                 </form>
             {% else %}
-            <form class="popup-form" action="">
-                <p class="popup-brand">CS50 News</a>
-                <p class="fs-4 fw-bold m-0">log in</p>
-                <div class="popup-input-div">
-                    <input type="text" name="email" class="popup-input" placeholder="" oninput="removeError(this)" id="email-input">
-                    <label for="email-input" class="popup-label">email</label>
-                </div>
-                <div class="popup-input-div">
-                    <input type="text" name="password" class="popup-input" placeholder="" oninput="removeError(this)" id="password-login-input">
-                    <label for="password-input" class="popup-label">password</label>
-                </div>
-            </form>
-            <div >
-                <div class="separator-div">
-                    <span class="separator"></span>
-                    <span class="or-separator">OR</span>
-                    <span class="separator"></span>
-                </div>
-                <div class="socialaccount-div w-100">
-                    <form action="{% provider_login_url 'google' %}?next=/" method="post">
+                <div class="popup-block" id="login-block">
+                    <form actions="{% url 'account_login' %}" method="post" class="popup-form">
                         {% csrf_token %}
-                        <button class="social-login Google-login">
-                            <span class="social-login-logo G-logo"></span>
-                            <span>Log in with Google</span>
+                        <button type="button" class="btn-close setting-btn" onclick="settings()" aria-label="Close"></button>
+                        <p class="popup-brand">CS50 News</a>
+                        <p class="fs-4 fw-bold m-0">log in</p>
+                        <div class="popup-input-div">
+                            <input type="email" name="login" class="popup-input" placeholder="" oninput="removeError(this)" id="email-login-input">
+                            <label for="email-input" class="popup-label">email</label>
+                        </div>
+                        <div class="popup-input-div">
+                            <input type="password" name="password" class="popup-input" placeholder="" oninput="removeError(this)" id="password-login-input">
+                            <label for="password-input" class="popup-label">password</label>
+                        </div>
+                        <button class="popup-btn" id="continue-btn">
+                            Continue
                         </button>
                     </form>
-                    <form action="{% provider_login_url 'github' %}?next=/" method="post">
-                        {% csrf_token %}
-                        <button class="social-login Github-login">
-                            <span class="Cat-logo social-login-logo"></span>
-                            <span>Log in with github</span>
-                        </button>
-                    </form>
-                    <form action="{% provider_login_url 'facebook' %}?next=/" method="post">
-                        {% csrf_token %}
-                        <button class="social-login Facebook-login">
-                            <span class="F-logo social-login-logo"></span>
-                            <span>Log in with facebook</span>
-                        </button>
-                    </form>
+                    <div>
+                        <div class="separator-div">
+                            <span class="separator"></span>
+                            <span class="or-separator">OR</span>
+                            <span class="separator"></span>
+                        </div>
+                        <div class="socialaccount-div w-100">
+                            <form action="{% provider_login_url 'google' %}?next=/" method="post">
+                                {% csrf_token %}
+                                <button class="social-login Google-login">
+                                    <span class="G-logo"></span>
+                                    <span>Log in with Google</span>
+                                </button>
+                            </form>
+                            <form action="{% provider_login_url 'github' %}?next=/" method="post"> 
+                                {% csrf_token %}
+                                <button class="social-login Github-login">
+                                    <span class="Cat-logo social-login-logo">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="880" width="1320" viewBox="-6.39108 -10.38875 55.38936 62.3325">
+                                            <g fill="#fff">
+                                                <path d="M21.3035 0C9.5395 0 0 9.5373 0 21.3035c0 9.4122 6.1041 17.3976 14.5687 20.2146 1.0646.1972 1.4555-.4622 1.4555-1.0249 0-.5076-.0198-2.1861-.0289-3.9662-5.9266 1.2887-7.1772-2.5136-7.1772-2.5136-.9691-2.462-2.3654-3.1171-2.3654-3.1171-1.9329-1.3222.1457-1.295.1457-1.295 2.1392.1502 3.2656 2.1956 3.2656 2.1956 1.9001 3.2565 4.9837 2.315 6.1994 1.7706.1916-1.3765.7433-2.3167 1.3526-2.8487-4.7319-.5383-9.706-2.3653-9.706-10.5283 0-2.3255.8322-4.2259 2.195-5.7178-.2212-.537-.9504-2.7037.2067-5.638 0 0 1.789-.5723 5.8596 2.184 1.6994-.472 3.5218-.7088 5.3323-.7172 1.8104.008 3.6343.2451 5.3368.7172 4.0661-2.7563 5.8526-2.184 5.8526-2.184 1.1596 2.9343.4304 5.101.2092 5.638 1.366 1.4919 2.1921 3.3923 2.1921 5.7178 0 8.1827-4.9837 9.984-9.7275 10.5114.7642.6611 1.445 1.9576 1.445 3.9451 0 2.8505-.0243 5.1446-.0243 5.8462 0 .5673.3831 1.2316 1.463 1.0224 8.4603-2.8201 14.5566-10.8028 14.5566-20.212C42.6071 9.5372 33.0691 0 21.3036 0" fill-rule="evenodd"/>
+                                                <path d="M8.0689 30.587c-.047.1061-.2135.1379-.3651.0649-.155-.0695-.2413-.2138-.1913-.32.046-.1087.2124-.139.367-.0663.1545.0695.2426.2152.1894.3214m.863.9625c-.1016.0942-.3006.0504-.435-.0984-.1397-.1485-.1655-.3475-.0624-.4427.1048-.0942.2974-.0501.4367.0984.1397.1503.1669.3475.0607.4427m.8399 1.2268c-.1305.091-.3443.006-.4763-.1834-.1305-.1898-.1305-.417.003-.508.132-.091.3426-.009.4763.1788.1302.1926.1302.4198-.003.5126m1.1506 1.1855c-.1167.1287-.3654.0942-.5475-.0815-.1862-.1718-.238-.4156-.1213-.5444.1185-.129.3686-.0928.552.0815.185.1715.241.417.1168.5444m1.5876.6882c-.052.167-.291.2424-.5324.1715-.241-.073-.3986-.268-.35-.4367.0502-.1683.2908-.247.5338-.1711.2406.0727.3987.2667.3486.4364m1.7435.1275c.006.1757-.1986.3214-.4519.3245-.2547.006-.461-.1365-.4639-.3094 0-.1774.2004-.3213.4547-.326.2533-.005.4611.1366.4611.3109m1.6223-.276c.0303.171-.1457.3471-.3972.394-.2473.0455-.4763-.0607-.5077-.2303-.0307-.1757.1482-.3517.3955-.3972.2519-.0437.4773.0593.5094.2335"/>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span>Log in with github</span>
+                                </button>
+                            </form>
+                            <form action="{% provider_login_url 'facebook' %}?next=/" method="post">
+                                {% csrf_token %}
+                                <button class="social-login Facebook-login">
+                                    <span class="social-login-logo">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="880" width="1320" viewBox="-204.79995 -339.26 1774.9329 2035.56">
+                                            <path d="M1365.333 682.667C1365.333 305.64 1059.693 0 682.667 0 305.64 0 0 305.64 0 682.667c0 340.738 249.641 623.16 576 674.373V880H402.667V682.667H576v-150.4c0-171.094 101.917-265.6 257.853-265.6 74.69 0 152.814 13.333 152.814 13.333v168h-86.083c-84.804 0-111.25 52.623-111.25 106.61v128.057h189.333L948.4 880H789.333v477.04c326.359-51.213 576-333.635 576-674.373" fill="#fff"/>
+                                        </svg>
+                                    </span>
+                                    <span>Log in with facebook</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="popup-block d-none" id="signup-block">
+                    <form action="{% url 'account_signup' %}" method="post" class="popup-form" id="signup-form">
+                        {% csrf_token %}
+                        <button type="button" class="btn-close setting-btn" onclick="show('login'); settings();" aria-label="Close"></button>
+                        <p class="fs-4 fw-bold m-0">Create an account</p>
+                        <p class="m-0">by creating an account you can log in CS50 News, access a lot of the CS50 News services and enjoy the community</p>
+                        <div class="popup-input-div">
+                            <input type="email" name="email" class="popup-input" placeholder="" oninput="removeError(this)" id="email-input">
+                            <label for="email-input" class="popup-label">Email</label>
+                        </div>
+                        <p class="error-p d-none" id="email-input-error-p">please enter your email</p>
+                        <div class="popup-input-div">
+                            <input type="text" name="first_name" class="popup-input" placeholder="" oninput="removeError(this)" id="first-input">
+                            <label for="first-input" class="popup-label">First name</label>
+                        </div>
+                        <p class="error-p d-none" id="first-input-error-p">please enter your first name</p>
+                        <div class="popup-input-div">
+                            <input type="text" name="last_name" class="popup-input" placeholder="" oninput="removeError(this)" id="last-input">
+                            <label for="last-input" class="popup-label">last name</label>
+                        </div>
+                        <p class="error-p d-none" id="last-input-error-p">please enter your last name</p>
+                        <div class="popup-input-div">
+                            <input type="password" name="password1" class="popup-input" placeholder="" oninput="removeError(this)" id="password-input">
+                            <label for="password-input" class="popup-label">Create a password</label>
+                        </div>
+                        <p class="error-p d-none" id="password-input-error-p">please enter a password</p>
+                        <div class="popup-input-div">
+                            <input type="password" name="password2" class="popup-input" placeholder="" oninput="removeError(this)" id="confirmation-input">
+                            <label for="confirmation-input" class="popup-label">confirm the password</label>
+                        </div>
+                        <p class="error-p d-none" id="confirmation-input-error-p">please confirm the password</p>
+                        <button class="popup-btn" id="continue-btn">
+                            Agree & Continue
+                        </button>
+                    </form>
+                    <div>
+                        <div class="separator-div">
+                            <span class="separator"></span>
+                            <span class="or-separator">OR</span>
+                            <span class="separator"></span>
+                        </div>
+                        <div class="socialaccount-div w-100">
+                            <form action="{% provider_login_url 'google' %}?next=/" method="post">
+                                {% csrf_token %}
+                                <button class="social-login Google-login">
+                                    <span class="G-logo"></span>
+                                    <span>continue with Google</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
         </div>
     </div>  

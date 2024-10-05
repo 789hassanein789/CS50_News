@@ -256,7 +256,6 @@ header {
    border: 3px var(--page-text) solid;
 }
 
-
 .account-drop-down {
   display: flex;
   justify-content: left;
@@ -641,10 +640,11 @@ header {
   color: var(--page-background);
 }
 
-.erorr-p {
+.error-p {
   color: #d40909;
   font-size: .75rem;
-  margin-top: -1.5rem;
+  height: min-content;
+  margin: -1.5rem 0;
   font-weight: 300
 }
 
@@ -721,8 +721,6 @@ header {
   color: var(--page-text);
 }
 
-
-
 .separator-div {
   display: flex;
   align-items: center;
@@ -742,6 +740,12 @@ header {
   padding: 0 1.5rem;
 }
 
+.socialaccount-div {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
 .social-login {
   padding: 0 1.5rem;
   margin: 0 auto;
@@ -753,7 +757,7 @@ header {
   font-weight: 600;
   text-decoration: none;
   justify-content: center;
-  width: 90%;
+  width: 100%;
   position: relative;
   min-height: 3rem;
 }
@@ -763,19 +767,29 @@ header {
   color: #262421;
 }
 
-.Github-login {
-
-}
-
-.Facebook-login {
-  
-}
-
 .Google-login:hover {
   background-color: #f1f1f1;
 }
 
-.social-login-logo {
+.Github-login {
+  background-color: #000;
+  color:  white;
+}
+
+.Github-login:hover {
+  background-color: #151515;
+}
+
+.Facebook-login {
+  background-color: #1778f2;
+  color: white;
+}
+
+.Facebook-login:hover {
+  background-color: #096bd6;
+}
+
+.G-logo {
   height: 2.2rem;
   left: 1.5rem;
   position: absolute;
@@ -783,7 +797,8 @@ header {
 
 }
 
-.social-login-logo::before {
+.G-logo::before {
+  background-image: url(/static/CS50_News/bundles/G.png); 
   background-repeat: no-repeat;
   background-size: contain;
   content: "";
@@ -793,15 +808,28 @@ header {
   width: 100%;
 }
 
-.G-logo {
-  background-image: url(/static/CS50_News/bundles/G.png);
+.social-login-logo {
+  height: 2.2rem;
+  left: 1.5rem;
+  position: absolute;
+  width: 2.2rem;
 }
 
-.F-logo {
-  background-image: url(/static/CS50_News/bundles/F.png);
+.social-login-logo>svg{
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }
 
-.Cat-logo {
+.F-logo::before {
+  background-image: url(/static/CS50_News/bundles/F.svg);
+}
+
+.Cat-logo::before {
   background-image: url(/static/CS50_News/bundles/Cat.png);
 }
 
