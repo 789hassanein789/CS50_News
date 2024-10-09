@@ -571,8 +571,10 @@ header {
   background-image: linear-gradient(to bottom, transparent, transparent 58px, var(--page-text) 58px, var(--page-text));
 }
 
-.popup-input.is-invalid {
-  background-image: linear-gradient(to bottom, transparent, transparent 58px, #f95252 58px, #f95252);
+.popup-input.is-invalid, #body .form-control.is-invalid, #body .form-control.is-invalid:focus {
+  background-image: linear-gradient(to bottom, transparent, transparent 97%, #f95252 97%, #f95252);
+  border-color: #f95252;
+  box-shadow: none;
 }
 
 .popup-input:focus, .popup-input:not(:placeholder-shown) {
@@ -641,11 +643,10 @@ header {
 }
 
 .error-p {
-  color: #d40909;
-  font-size: .75rem;
+  color: #cf3939;
+  font-size: .85rem;
   height: min-content;
-  margin: -1.5rem 0;
-  font-weight: 300
+  margin: -1rem 0;
 }
 
 .ai-input {

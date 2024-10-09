@@ -10,13 +10,11 @@ urlpatterns = [
     path("add", views.add_new, name="add"),
     path("crop", views.crop, name="crop"),
     path("saerch", views.search, name="search"),
-    path("signup", views.register, name="signup"),
-    path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("category/<str:cat>", views.index, name="cat_index"),
     path("check", views.passwordCheck, name="check"),
     path("delete", views.Delete, name="delete"),
-    path("account", views.accountEdit, name="account"),
-    path("OTP", views.otp_view, name="otp")
+    path("edit", views.accountEdit, name="edit"),
+    path("OTP", views.otp_view, name="otp"),
 ]
 

@@ -142,3 +142,4 @@ def accountEdit(request):
 
 def crop(request):
     return render(request, "CS50_News/crop.html")
+

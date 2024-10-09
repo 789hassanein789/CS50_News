@@ -1,4 +1,3 @@
-// implementing the dark/light mode switch
 let darkMode = localStorage.getItem('darkmode');
 const toggleBtn = document.querySelector('#toggle-button');
 const mainHeader = document.querySelector('#main-header_content')
@@ -16,6 +15,7 @@ const deleteBackBtn = document.querySelector('#back-btn');
 const popupForms = document.querySelectorAll('.popup-form');
 const subItems = document.querySelectorAll('.sub-item');
 const popup = document.querySelector('.popup');
+const inputs = document.querySelectorAll('.otp-input');
 const popupContent = popup.innerHTML;
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
@@ -79,7 +79,10 @@ dropDowns.forEach(dropDown => {
     })
 })
 
-
+inputs.forEach((input) => {
+    input.addEventListener('input', userInput)
+    input.addEventListener('keydown', userKeyDown)
+})
 
 searchBtn.addEventListener('click', toggleSearch)
 backBtn.addEventListener('click', toggleSearch)
@@ -90,6 +93,7 @@ if (accountDP) {
         accountDPContent.classList.toggle('d-none')
     })
 }
+
 
 function enableDarkMode() {
     document.body.classList.add('dark-mode');
@@ -144,119 +148,7 @@ function validate() {
         document.querySelector('#validation-form > .erorr-p').classList.add('d-none');
         passwordInput.classList.remove('is-invalid');
         passwordInput.value = ''
-        popup.innerHTML = `
-        <div class="popup-block" id="settings-block">
-            <form class="popup-form">
-                <button type="button" class="btn-close setting-btn" onclick="closeSettings()" aria-label="Close"></button>
-                <p class="popup-brand">CS50 News</a>
-                <div class="g-0">
-                    <p class="fs-4 fw-bold m-0">Account Info</p>
-                    <div class="ai-input" id="email" onclick="otp()">
-                        <div class="field">
-                            <div class="field_title">Email</div>
-                            <div class="fw-bold">${result.email}</div>
-                        </div>
-                        <button class="icon-btn" type="button">
-                            <i class="fa-solid fa-chevron-right fa-lg"></i>
-                        </button>
-                    </div>
-                    <div class="ai-input" id="password" onclick="otp()">
-                        <div class="field">
-                            <div class="field_title">Password</div>
-                            <div class="fw-bold">**********</div>
-                        </div>
-                        <button class="icon-btn" type="button">
-                            <i class="fa-solid fa-chevron-right fa-lg"></i>
-                        </button>
-                    </div>
-                </div>
-                <p class="fs-4 fw-bold m-0">Personal Info</p>
-                <div class="popup-input-div">
-                    <input type="text" name="first-name" class="popup-input" placeholder="" id="first-name" value="${result.first}">
-                    <label for="first-name" class="popup-label">First Name</label>
-                </div>
-                <div class="popup-input-div">
-                    <input type="text" name="last-name" class="popup-input" placeholder="" id="last-name" value="${result.last}">
-                    <label for="last-name" class="popup-label">Last Name</label>
-                </div>
-                <button class="popup-btn" type="button" id="done-btn" onclick="accountEdit()">
-                    Done
-                </button>
-                <p class="fs-4 fw-bold m-0">Delete Account</p>
-                <p class="min-font">By deleting your account, you may be unable to access certain CS50 News services.</p>
-                <a class="focus-link" id="delete-link" onclick="show('delete')">Delete Account</a>
-                <p class="min-font">CS50 News treats this information with care and respect. For details, review our <a href="" class="focus-link min-font">Privacy Policy.</a></p>
-            </form>
-        </div>
-        <div class="popup-block" id="delete-block d-none">
-            <form action="/delete" method="post" class="popup-form" >
-                <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">                <p class="fs-4 fw-bold m-0">Are you sure?</p>
-                <p>By deleting your account, you will no longer be able to log in to websites, mobile apps, or other online services, and you will not be able to use your account to access any associated purchases, credits, points, rewards, plans, content or other benefits you may have associated with it.</p>
-                <button class="popup-btn" id="delete-btn">
-                    Yes, delete this account
-                </button>
-                <button class="popup-btn" id="back-btn" onclick="show('settings')" type="button">
-                    No, I'll keep it
-                </button>
-            </form>
-        </div>
-        <div class="popup-block d-none" id="otp-block">
-            <form class="popup-form">
-                <p class="fs-3 fw-bold m-0">Check your email inbox</p>
-                <p class="m-0">We'll need you to verify your email address. We’ve sent a 6-digit code to your email address. The code expires in 15 minutes. Please enter it below.</p>
-                <div>
-                    <div class="otp-div">
-                        <input type="tel" class="otp-input form-control" id="otp-0" autofocus>
-                        <input type="tel" class="otp-input form-control" id="otp-1">
-                        <input type="tel" class="otp-input form-control" id="otp-2">
-                        <input type="tel" class="otp-input form-control" id="otp-3">
-                        <input type="tel" class="otp-input form-control" id="otp-4">
-                        <input type="tel" class="otp-input form-control" id="otp-5">
-                    </div>
-                </div>
-                <button class="popup-btn" onclick="verifyOtp()" type="button" id="continue-btn">
-                    Continue
-                </button>
-                <button class="popup-btn" onclick="show('settings')" type="button" id="cancel-btn">
-                    Cancel
-                </button>
-                <p class="m-0 min-font">Didn’t receive the email? <a href="">Resend</a></p>
-            </form>
-        </div>
-        `
-        aiInputs = document.querySelectorAll('.ai-input');
-        aiInputs.forEach(input => {
-            input.addEventListener('click', () => {
-                
-            })
-        })
-
-        let inputs = document.querySelectorAll('.otp-input');
-        inputs.forEach((input) => {
-            input.addEventListener('input', userInput)
-            input.addEventListener('keydown', (event) => {
-                if (event.keyCode === 8) {
-                    input.value = '';
-                    backward(input)
-                    event.preventDefault()
-                }
-                else if (event.keyCode === 37) {
-                    event.preventDefault()
-                    backward(input)
-                }
-                else if (event.keyCode === 39) {
-                    event.preventDefault()
-                    forward(input)
-                }
-            })
-        })
-        function userInput(e) {
-            e.target.value = e.target.value.replace(/[^0-9]/g,'')
-            if (e.target.value.length > 0) {
-                e.target.value = e.target.value.slice(-1)
-                forward(e.target)
-            }
-        }
+        show('settings')
     })  
     .catch(() => {
         document.querySelector('#validation-form > .error-p').classList.remove('d-none');
@@ -266,7 +158,28 @@ function validate() {
     })
 }
 
+function userKeyDown(event) {
+    if (event.keyCode === 8) {
+        self.value = '';
+        backward(self)
+        event.preventDefault()
+    }
+    else if (event.keyCode === 37) {
+        event.preventDefault()
+        backward(self)
+    }
+    else if (event.keyCode === 39) {
+        event.preventDefault()
+        forward(self)
+    }
+}
 
+function userInput(e) {
+     if (e.target.value.length > 0) {
+        e.target.value = e.target.value.slice(-1)
+        forward(e.target)
+    }
+}
 
 function show(block) {
     document.querySelectorAll('.popup-block').forEach(b => {
@@ -280,21 +193,16 @@ function removeError(input) {
         document.querySelectorAll('.error-p').forEach(p => {
             p.classList.add('d-none');
         })
-        document.querySelectorAll('.popup-input').forEach(field => {
+        document.querySelectorAll('.is-invalid').forEach(field => {
             field.classList.remove('is-invalid');
         })
     }
 }
 
-function closeSettings() {
-    popup.innerHTML = popupContent;
-    settings()
-}
-
 function accountEdit() {
     document.querySelector('#done-btn').innerHTML = '<div class="spinner-border" role="status"></div>'
     let form = new FormData(document.querySelector('#settings-form'))
-    fetch('/account', {
+    fetch('/edit', {
         method: 'POST',
         headers: {
         'X-CSRFToken': getCookie('csrftoken'),
@@ -304,7 +212,7 @@ function accountEdit() {
     })
     .then((res) => {
     document.querySelector('#done-btn').textContent = 'Done'
-    closeSettings()
+    settings()
     })
 }
 
@@ -332,11 +240,7 @@ function otp() {
 }
 
 function verifyOtp() {
-    let otpCode = '';
-    const inputs = document.querySelectorAll('.otp-input');
-    inputs.forEach(input => {
-        otpCode += input.value.slice(-1);
-    })
+    
     let form = new FormData();
     form.append('otp', otpCode);
     fetch('/OTP', {
@@ -367,21 +271,166 @@ function signup() {
     if (empty) {
         return
     }
-    fetch('/signup', {
+    const continueBtn = document.querySelector('.signup-form-btn')
+    continueBtn.innerHTML = '<div class="spinner-border" role="status"></div>'
+    fetch('/_allauth/browser/v1/auth/signup', {
         method: 'POST',
         headers: {
             'X-CSRFToken': getCookie('csrftoken')
         },
         credentials: "same-origin",
-        body: form
+        body: JSON.stringify({
+            'email': form.get('email'),
+            'username': form.get('username'),
+            'password': form.get('password')
+        })
+    })
+    .then(res => res.json())
+    .then(result => {
+        if (result.status == 401) {
+            show('otp');
+        }
+        else {
+            throw result
+        }
+    })
+    .catch((error) => {
+        continueBtn.textContent = 'Agree & Continue';
+        if (error.status == 400) {
+            const input = document.querySelector(`#${error.errors[0].param}-input`);
+            input.value = '';
+            input.classList.add('is-invalid')
+            const errorPar = document.querySelector(`#${error.errors[0].param}-input-error-p`);
+            errorPar.textContent = error.errors[0].message;
+            errorPar.classList.remove('d-none')
+        }
+        else {
+            console.log(error)
+        }
+    })
+}
+
+function login() {
+    const form = new FormData(document.querySelector('#login-form'))
+    let empty = false
+    for (const value of form.entries()) {
+        if (value[1] == '') {
+            inputError(value[0])
+            empty = true
+        }
+    }
+    if (empty) {
+        return
+    }
+    const continueBtn = document.querySelector('#login-form > .popup-btn');
+    continueBtn.innerHTML = '<div class="spinner-border" role="status"></div>'
+    fetch('/_allauth/browser/v1/auth/login', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        credentials: "same-origin",
+        body: JSON.stringify({
+            'email': form.get('email-login'),
+            'password': form.get('password-login')
+        })
     })
     .then(res => res.json())
     .then(result => {
         if (result.status == 200) {
-            console.log('ok')
+            location.reload()
         }
         else {
-            console.log(result.error)
+            throw result
         }
     })
+    .catch(error => {
+        if (error.status == 400) {
+            const input = document.querySelector(`#${error.errors[0].param}-login-input`);
+            input.value = '';
+            input.classList.add('is-invalid')
+            const errorPar = document.querySelector(`#${error.errors[0].param}-login-input-error-p`);
+            errorPar.textContent = error.errors[0].message;
+            errorPar.classList.remove('d-none')
+        }
+        else {
+            document.querySelector('#conflict-login').classList.remove('d-none');
+        }
+        continueBtn.textContent = 'Continue'
+
+    })
+}
+
+function provider() {
+    fetch("/_allauth/browser/v1/auth/provider/redirect", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            'provider': 'google',
+            'callback_url': 'http://127.0.0.1:8000/accounts/google/login/callback/',
+            'process': 'login'
+        })
+    })
+}
+
+function passwordRequest() {
+    fetch('_allauth/browser/v1/auth/password/request', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        credentials: "same-origin", 
+        body: JSON.stringify({
+            'email': ''
+        })
+    })
+}
+
+function verifyEmail() {
+    let key = '';
+    let errorPar = document.querySelector('#otp-input-error-p');
+    inputs.forEach(input => {
+        key += input.value.slice(-1);
+    })
+    if (key.length < 6) {
+        errorPar.textContent = 'please enter your one time password'
+        errorPar.classList.remove('d-none');
+        inputs.forEach(input => {
+            input.classList.add('is-invalid')
+        })
+        return
+    }
+    fetch('/_allauth/browser/v1/auth/email/verify', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        credentials: "same-origin", 
+        body: JSON.stringify({
+            'key': key
+        })
+    })
+    .then(res => res.json())
+    .then(result => {
+        if (!result.errors) {
+            console.log(result);
+            location.reload();
+        }
+        else {
+            throw result
+        }
+    })
+    .catch(error => {
+        console.log('error')
+        console.log(error);
+        console.log(error.errors[0].message);
+        errorPar.textContent = error.errors[0].message
+        errorPar.classList.remove('d-none');
+        inputs.forEach(input => {
+            input.classList.add('is-invalid')
+        })
+    })
+
 }

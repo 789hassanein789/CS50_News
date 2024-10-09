@@ -396,10 +396,14 @@
             {% else %}
                 <div class="account-div">
                     <form class="account-form">
-                        <button type="button" class="account-btn signin-btn" onclick="settings()">log in</button>
+                        <button type="button" class="account-btn signin-btn" onclick="show('login'); settings()">log in</button>
                     </form>
                     <form class="account-form">
                         <button type="button" class="account-btn signup-btn" onclick="show('signup'); settings()">sign up</button>
+                    </form>
+                    <form class="account-form" action="{% url 'delete' %}" method="post">
+                        {% csrf_token %}
+                        <button class="account-btn">delete</button>
                     </form>
                 </div>    
             {% endif %}
@@ -428,22 +432,79 @@
                         Continue
                     </button>
                 </form>
+                <div class="popup-block" id="settings-block">
+                    <form class="popup-form">
+                        <button type="button" class="btn-close setting-btn" onclick="closeSettings()" aria-label="Close"></button>
+                        <p class="popup-brand">CS50 News</a>
+                        <div class="g-0">
+                            <p class="fs-4 fw-bold m-0">Account Info</p>
+                            <div class="ai-input" id="email" onclick="otp()">
+                                <div class="field">
+                                    <div class="field_title">Email</div>
+                                    <div class="fw-bold">${result.email}</div>
+                                </div>
+                                <button class="icon-btn" type="button">
+                                    <i class="fa-solid fa-chevron-right fa-lg"></i>
+                                </button>
+                            </div>
+                            <div class="ai-input" id="password" onclick="otp()">
+                                <div class="field">
+                                    <div class="field_title">Password</div>
+                                    <div class="fw-bold">**********</div>
+                                </div>
+                                <button class="icon-btn" type="button">
+                                    <i class="fa-solid fa-chevron-right fa-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="fs-4 fw-bold m-0">Personal Info</p>
+                        <div class="popup-input-div">
+                            <input type="text" name="first-name" class="popup-input" placeholder="" id="first-name" value="${result.first}">
+                            <label for="first-name" class="popup-label">First Name</label>
+                        </div>
+                        <div class="popup-input-div">
+                            <input type="text" name="last-name" class="popup-input" placeholder="" id="last-name" value="${result.last}">
+                            <label for="last-name" class="popup-label">Last Name</label>
+                        </div>
+                        <button class="popup-btn" type="button" id="done-btn" onclick="accountEdit()">
+                            Done
+                        </button>
+                        <p class="fs-4 fw-bold m-0">Delete Account</p>
+                        <p class="min-font">By deleting your account, you may be unable to access certain CS50 News services.</p>
+                        <a class="focus-link" id="delete-link" onclick="show('delete')">Delete Account</a>
+                        <p class="min-font">CS50 News treats this information with care and respect. For details, review our <a href="" class="focus-link min-font">Privacy Policy.</a></p>
+                    </form>
+                </div>
+                <div class="popup-block" id="delete-block d-none">
+                    <form action="/delete" method="post" class="popup-form" >
+                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">                <p class="fs-4 fw-bold m-0">Are you sure?</p>
+                        <p>By deleting your account, you will no longer be able to log in to websites, mobile apps, or other online services, and you will not be able to use your account to access any associated purchases, credits, points, rewards, plans, content or other benefits you may have associated with it.</p>
+                        <button class="popup-btn" id="delete-btn">
+                            Yes, delete this account
+                        </button>
+                        <button class="popup-btn" id="back-btn" onclick="show('settings')" type="button">
+                            No, I'll keep it
+                        </button>
+                    </form>
+                </div>
             {% else %}
                 <div class="popup-block" id="login-block">
-                    <form actions="{% url 'account_login' %}" method="post" class="popup-form">
-                        {% csrf_token %}
+                    <form class="popup-form" id="login-form">
                         <button type="button" class="btn-close setting-btn" onclick="settings()" aria-label="Close"></button>
                         <p class="popup-brand">CS50 News</a>
                         <p class="fs-4 fw-bold m-0">log in</p>
+                        <p class="error-p d-none" id="conflict-login">the user is allready loged in, try to refresh the page</p>
                         <div class="popup-input-div">
-                            <input type="email" name="login" class="popup-input" placeholder="" oninput="removeError(this)" id="email-login-input">
-                            <label for="email-input" class="popup-label">email</label>
+                            <input type="email" name="email-login" class="popup-input" placeholder="" oninput="removeError(this)" id="email-login-input">
+                            <label for="email-login-input" class="popup-label">email</label>
                         </div>
+                        <p class="error-p d-none" id="email-login-input-error-p">please enter your email</p>
                         <div class="popup-input-div">
-                            <input type="password" name="password" class="popup-input" placeholder="" oninput="removeError(this)" id="password-login-input">
-                            <label for="password-input" class="popup-label">password</label>
+                            <input type="password" name="password-login" class="popup-input" placeholder="" oninput="removeError(this)" id="password-login-input">
+                            <label for="password-login-input" class="popup-label">password</label>
                         </div>
-                        <button class="popup-btn" id="continue-btn">
+                        <p class="error-p d-none" id="password-login-input-error-p">please enter your password</p>
+                        <button class="popup-btn" type="button" onclick="login()" id="continue-btn">
                             Continue
                         </button>
                     </form>
@@ -454,9 +515,9 @@
                             <span class="separator"></span>
                         </div>
                         <div class="socialaccount-div w-100">
-                            <form action="{% provider_login_url 'google' %}?next=/" method="post">
+                            <form>
                                 {% csrf_token %}
-                                <button class="social-login Google-login">
+                                <button class="social-login Google-login" type="button" onclick="provider()">
                                     <span class="G-logo"></span>
                                     <span>Log in with Google</span>
                                 </button>
@@ -490,9 +551,8 @@
                     </div>
                 </div>
                 <div class="popup-block d-none" id="signup-block">
-                    <form action="{% url 'account_signup' %}" method="post" class="popup-form" id="signup-form">
-                        {% csrf_token %}
-                        <button type="button" class="btn-close setting-btn" onclick="show('login'); settings();" aria-label="Close"></button>
+                    <form class="popup-form" id="signup-form">
+                        <button type="button" class="btn-close setting-btn" onclick="settings();" aria-label="Close"></button>
                         <p class="fs-4 fw-bold m-0">Create an account</p>
                         <p class="m-0">by creating an account you can log in CS50 News, access a lot of the CS50 News services and enjoy the community</p>
                         <div class="popup-input-div">
@@ -501,26 +561,31 @@
                         </div>
                         <p class="error-p d-none" id="email-input-error-p">please enter your email</p>
                         <div class="popup-input-div">
-                            <input type="text" name="first_name" class="popup-input" placeholder="" oninput="removeError(this)" id="first-input">
-                            <label for="first-input" class="popup-label">First name</label>
+                            <input type="text" name="username" class="popup-input" placeholder="" oninput="removeError(this)" id="username-input">
+                            <label for="username-input" class="popup-label">username</label>
                         </div>
                         <p class="error-p d-none" id="first-input-error-p">please enter your first name</p>
+                        <!--
                         <div class="popup-input-div">
                             <input type="text" name="last_name" class="popup-input" placeholder="" oninput="removeError(this)" id="last-input">
                             <label for="last-input" class="popup-label">last name</label>
                         </div>
                         <p class="error-p d-none" id="last-input-error-p">please enter your last name</p>
+                        -->
                         <div class="popup-input-div">
-                            <input type="password" name="password1" class="popup-input" placeholder="" oninput="removeError(this)" id="password-input">
-                            <label for="password-input" class="popup-label">Create a password</label>
+                            <input type="password" name="password" class="popup-input" placeholder="" oninput="removeError(this)" id="password-input">
+                            <label for="password-input" class="popup-label">Password</label>
                         </div>
                         <p class="error-p d-none" id="password-input-error-p">please enter a password</p>
+                        
+                        <!--
                         <div class="popup-input-div">
                             <input type="password" name="password2" class="popup-input" placeholder="" oninput="removeError(this)" id="confirmation-input">
                             <label for="confirmation-input" class="popup-label">confirm the password</label>
                         </div>
                         <p class="error-p d-none" id="confirmation-input-error-p">please confirm the password</p>
-                        <button class="popup-btn" id="continue-btn">
+                    -->
+                        <button class="popup-btn signup-form-btn" type="button" id="continue-btn" onclick="signup()">
                             Agree & Continue
                         </button>
                     </form>
@@ -542,6 +607,30 @@
                     </div>
                 </div>
             {% endif %}
+            <div class="popup-block d-none" id="otp-block">
+                <form class="popup-form">
+                    <p class="fs-3 fw-bold m-0">Check your email inbox</p>
+                    <p class="m-0">We'll need you to verify your email address. We’ve sent a 6-digit code to your email address. The code expires in 15 minutes. Please enter it below.</p>
+                    <div>
+                        <div class="otp-div">
+                            <input type="tel" class="otp-input form-control" oninput="removeError(this)" id="otp-0" autofocus>
+                            <input type="tel" class="otp-input form-control" oninput="removeError(this)" id="otp-1">
+                            <input type="tel" class="otp-input form-control" oninput="removeError(this)" id="otp-2">
+                            <input type="tel" class="otp-input form-control" oninput="removeError(this)" id="otp-3">
+                            <input type="tel" class="otp-input form-control" oninput="removeError(this)" id="otp-4">
+                            <input type="tel" class="otp-input form-control" oninput="removeError(this)" id="otp-5">
+                        </div>
+                    </div>
+                    <p class="error-p d-none" id="otp-input-error-p"></p>
+                    <button class="popup-btn" onclick="verifyEmail()" type="button" id="continue-btn">
+                        Continue
+                    </button>
+                    <button class="popup-btn" onclick="settings()" type="button" id="cancel-btn">
+                        Cancel
+                    </button>
+                    <p class="m-0 min-font">Didn't receive the email? <a href="">Resend</a></p>
+                </form>
+            </div>
         </div>
     </div>  
     {% csrf_token %}
