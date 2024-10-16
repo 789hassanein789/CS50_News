@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from django.template.defaulttags import register
 from django.core import serializers
 from datetime import datetime, timezone, timedelta
+from allauth.account.decorators import reauthentication_required
 import pyotp
 import json
 
@@ -41,42 +42,9 @@ def search(request):
         "input": q,
     })
     
-
-def login_view(request):
-    if request.method == "POST":
-        user = authenticate(request, username=request.POST["username"], password=request.POST["password"])
-        if user:
-            login(request, user)
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(request, "CS50_News/login.html", {
-                "message": "invalid username and/or password"
-            })
-    else:
-        return render(request, "CS50_News/login.html")
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
-def register(request):
-    if request.method == "POST":
-        first_name = request.POST.get("first")
-        last_name = request.POST.get("last")
-        username = first_name + " " + last_name
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        confirmation = request.POST.get("confirmation")
-        if password != confirmation:
-            return JsonResponse({"error": "the passwords does not match"}, status=400)
-        try:
-            user = User(username = username, first_name = first_name, last_name = last_name, email = email, password = password)
-            user.save()
-        except IntegrityError:
-            return JsonResponse({"error": "the account already exist"}, status=409)
-        login(request, user)
-        return JsonResponse({"status": 200}, status=200)
-    return JsonResponse({"error": "bad request method"}, status=405)
 
 def add_new(request):
     if request.method == "POST":
@@ -117,6 +85,7 @@ def otp_view(request):
     send_otp(request)
     return HttpResponse(status=200)
 
+@reauthentication_required
 def Delete(request):
     if request.method == "POST":
         try:
@@ -125,19 +94,18 @@ def Delete(request):
             return redirect("/")
         except User.DoesNotExist:
             return HttpResponse({"error":"There is no such account, please reload the page and try again"}, status=500)
-    else:
-        return HttpResponse({"error":"bad request method"}, status=400)
+    return HttpResponse({"error":"bad request method"}, status=400)
 
+@reauthentication_required
 def accountEdit(request):
     if request.method == "POST":
+        data = json.loads(request.body)
         user = User.objects.get(id=request.user.id)
-        current = datetime.now(timezone.utc)
-        if current - user.validation_date < timedelta(minutes=15):
-            user.first_name = request.POST.get("first-name")
-            user.last_name = request.POST.get("last-name")
-            user.save()
-            return HttpResponse(status=200)
-        return HttpResponse(status=400)
+        user.username = data.get("username")
+        user.first_name = data.get("first-name")
+        user.last_name = data.get("last-name")
+        user.save()
+        return HttpResponse(status=200)
     return HttpResponse(status=403)
 
 def crop(request):

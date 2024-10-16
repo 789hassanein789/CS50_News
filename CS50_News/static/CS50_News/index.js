@@ -16,6 +16,27 @@ const popupForms = document.querySelectorAll('.popup-form');
 const subItems = document.querySelectorAll('.sub-item');
 const popup = document.querySelector('.popup');
 const inputs = document.querySelectorAll('.otp-input');
+const validationForm = document.querySelector('#validation-form');
+const settingsForm = document.querySelector('#settings-form');
+const loginForm = document.querySelector('#login-form');
+const signupFrom = document.querySelector('#sigup-form');
+const closeBtns = document.querySelectorAll('.btn-close.setting-btn');
+const settingUsername = document.querySelector('#username');
+const settingFirst = document.querySelector('#first-name');
+const settingLast = document.querySelector('#last-name');
+const loginError = document.querySelector('#conflict-login');
+const loginInputs = document.querySelectorAll('.login-input')
+/*
+const aaaa = document.querySelector('');
+const aaaa = document.querySelector('');
+const aaaa = document.querySelector('');
+const aaaa = document.querySelector('');
+const aaaa = document.querySelector('');
+const aaaa = document.querySelector('');
+const aaaa = document.querySelector('');
+const aaaa = document.querySelector('');
+const aaaa = document.querySelector('');
+*/
 const popupContent = popup.innerHTML;
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
@@ -95,6 +116,37 @@ if (accountDP) {
 }
 
 
+validationForm && validationForm.addEventListener('submit',() => {
+    event.preventDefault();
+    reauthenticate()
+})
+
+
+
+closeBtns.forEach(button => {
+    button.addEventListener('click',() => {
+        settings()
+    })
+})
+
+deleteLink && deleteLink.addEventListener('click',() => {
+    show('delete')
+})
+
+deleteBackBtn && deleteBackBtn.addEventListener('click',() => {
+    show('settings')
+})
+
+loginForm && loginForm.addEventListener('submit', () => {
+    event.preventDefault()
+    login()
+})
+
+signupFrom && signupFrom.addEventListener('submit', () => {
+    event.preventDefault()
+    signup()
+})
+
 function enableDarkMode() {
     document.body.classList.add('dark-mode');
     document.body.setAttribute('data-bs-theme', 'dark')
@@ -130,28 +182,46 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function validate() {
+function reauthenticate() {
     const passwordInput = document.querySelector('#validation-password');
     const continueBtn = document.querySelector('#continue-btn');
-    continueBtn.innerHTML = '<div class="spinner-border" role="status"></div>'
-    let form = new FormData(document.querySelector('#validation-form'));
-    fetch('/check', {
-         method: 'POST',
-         headers: {
-            'X-CSRFToken': getCookie('csrftoken'),
-         },
-         credentials: "same-origin",
-         body: form
-    })
-    .then((res) => res.json())
-    .then((result) => {
-        document.querySelector('#validation-form > .erorr-p').classList.add('d-none');
-        passwordInput.classList.remove('is-invalid');
-        passwordInput.value = ''
-        show('settings')
-    })  
-    .catch(() => {
-        document.querySelector('#validation-form > .error-p').classList.remove('d-none');
+    const errorPar = document.querySelector('#validation-password-error-p');
+    continueBtn.innerHTML = '<div class="spinner-border" role="status"></div>';
+    fetch('/_allauth/browser/v1/auth/reauthenticate', {
+        method: 'POST',
+        headers: {
+           'X-CSRFToken': getCookie('csrftoken'),
+        },
+        credentials: "same-origin",
+        body: JSON.stringify({
+            'password': passwordInput.value
+        })
+   })
+   .then((res) => res.json())
+   .then(result => {
+        if (result.status == 200) {
+            errorPar.classList.add('d-none');
+            passwordInput.classList.remove('is-invalid');
+            passwordInput.value = ''
+            continueBtn.textContent = 'Continue'
+            if (validationForm.getAttribute('data-state') == 'submit') {
+                validationForm.setAttribute('data-state', 'validate');
+
+                settingsForm.submit();
+                settings();
+            }
+            else {
+                show('settings');
+            }
+        }
+        else {
+            throw result
+        }
+   })
+   .catch((error) => {
+        console.log(error)
+        errorPar.classList.remove('d-none');
+        errorPar.textContent = error.errors[0].message
         passwordInput.classList.add('is-invalid');
         passwordInput.value = ''
         continueBtn.textContent = 'Continue'
@@ -201,18 +271,29 @@ function removeError(input) {
 
 function accountEdit() {
     document.querySelector('#done-btn').innerHTML = '<div class="spinner-border" role="status"></div>'
-    let form = new FormData(document.querySelector('#settings-form'))
     fetch('/edit', {
         method: 'POST',
         headers: {
         'X-CSRFToken': getCookie('csrftoken'),
         },
         credentials: "same-origin",
-        body: form
+        body: JSON.stringify({
+            'username': document.querySelector('#username').value,
+            'first-name': document.querySelector('#first-name').value,
+            'last-name': document.querySelector('#last-name').value
+        })
     })
     .then((res) => {
-    document.querySelector('#done-btn').textContent = 'Done'
-    settings()
+        if (res.status == 200) {
+            document.querySelector('#done-btn').textContent = 'Done'
+            settings()
+        }
+        else {
+            throw res
+        }
+    })
+    .catch(() => {
+        document.querySelector('#done-btn').textContent = 'Done'
     })
 }
 
@@ -235,12 +316,20 @@ function backward(input)   {
 }
 
 function otp() {
-    show('otp');
-    fetch('/OTP')
+    fetch('/_allauth/browser/v1/auth/2fa/reauthenticate', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        credentials: "same-origin",
+    })
+    .then(res => res.json())
+    .then(result => {
+        console.log(result)
+    })
 }
 
 function verifyOtp() {
-    
     let form = new FormData();
     form.append('otp', otpCode);
     fetch('/OTP', {
@@ -346,17 +435,22 @@ function login() {
     })
     .catch(error => {
         if (error.status == 400) {
-            const input = document.querySelector(`#${error.errors[0].param}-login-input`);
-            input.value = '';
-            input.classList.add('is-invalid')
+            loginInputs.forEach(input => {
+                input.value = '';
+                input.classList.add('is-invalid');
+            })
             const errorPar = document.querySelector(`#${error.errors[0].param}-login-input-error-p`);
             errorPar.textContent = error.errors[0].message;
             errorPar.classList.remove('d-none')
         }
-        else {
-            document.querySelector('#conflict-login').classList.remove('d-none');
+        else if (error.status == 401) {
+            show('otp')
         }
-        continueBtn.textContent = 'Continue'
+        else {
+            loginError.textContent = 'the user is already loged in, try to reload the page';
+            loginError.classList.remove('d-none');
+        }
+        continueBtn.textContent = 'Continue';
 
     })
 }
