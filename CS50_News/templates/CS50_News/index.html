@@ -2,6 +2,429 @@
 
 {% block body %}
     <div id="main-container">
-        
+        <div class="carousel-div">
+            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                    <img src="{{news.0.image.url}}" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{news.0.headline}}</h5>
+                        <p>Some representative placeholder content for the first slide.</p>
+                    </div>
+                    </div>
+                    <div class="carousel-item">
+                    <img src="{{news.1.image.url}}" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{news.1.headline}}</h5>
+                        <p>Some representative placeholder content for the second slide.</p>
+                    </div>
+                    </div>
+                    <div class="carousel-item">
+                    <img src="{{news.2.image.url}}" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{news.2.headline}}</h5>
+                        <p>Some representative placeholder content for the third slide.</p>
+                    </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div class="side-div">
+            <div class="side-new">
+                <div class="side-new-image-div">
+                    <img src="{{news.0.image.url}}" alt="">
+                </div>
+                <div class="side-new-text">
+                    <h6 class="main-text">{{news.0.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>{{news.0.timestamp}}</span>
+                        <div></div>
+                        <span>{{news.0.sub_category}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="side-new">
+                <div class="side-new-image-div">
+                    <img src="{{news.1.image.url}}" alt="">
+                </div>
+                <div class="side-new-text">
+                    <h6 class="main-text">{{news.1.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>{{news.1.timestamp}}</span>
+                        <div></div>
+                        <span>{{news.1.sub_category}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="side-new">
+                <div class="side-new-image-div">
+                    <img src="{{news.2.image.url}}" alt="">
+                </div>
+                <div class="side-new-text">
+                    <h6 class="main-text">{{news.2.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>{{news.2.timestamp}}</span>
+                        <div></div>
+                        <span>{{news.2.sub_category}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="side-new">
+                <div class="side-new-image-div">
+                    <img src="{{news.3.image.url}}" alt="">
+                </div>
+                <div class="side-new-text">
+                    <h6 class="main-text">{{news.3.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>{{news.3.timestamp}}</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="news-seperator">
+        <div></div>
+    </div>
+    <h3 class="news-section-heading">News</h3>
+    <div class="news-section">
+        {% for new in news %}
+            <div class="new-container">
+                <div class="new-image">
+                    <img src="{{new.image.url}}" alt="">
+                </div>
+                <div class="content">
+                    <h6 class="content-heading">{{new.headline}}</h6>
+                    <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
+                    <div class="secondary-div">
+                        <span>1.5 days ago</span>
+                        <div></div>
+                        <span>{{new.sub_category}}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="news-seperator">
+    </div>
+    <h3 class="only-section-heading">Only from CS50 News</h3>
+    <div class="only-section">
+        <div class="tn">
+            <div class="img">
+                <img src="{{news.2.image.url}}" alt="">
+            </div>
+            <div class="content">
+                <h6 class="content-heading">{{news.2.headline}}</h6>
+                <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
+                <div class="secondary-div">
+                    <span>1.5 days ago</span>
+                    <div></div>
+                    <span>{{news.2.sub_category}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="tn">
+            <div class="img">
+                <img src="{{news.3.image.url}}" alt="">
+            </div>
+            <div class="content">
+                <h6 class="content-heading">{{news.3.headline}}</h6>
+                <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
+                <div class="secondary-div">
+                    <span>1.5 days ago</span>
+                    <div></div>
+                    <span>{{news.3.sub_category}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="news-seperator">
+    </div>
+    <h3 class="trending-section-heading">Most read</h3>
+    <div class="trending">
+        <div class="trend">
+            <a class="link" href="">
+                <span>
+                    1
+                </span>
+                <h6>
+                    {{news.3.headline}}
+                </h6>
+            </a>
+        </div>
+        <div class="trend">
+            <a class="link" href="">
+                <span>
+                    2
+                </span>
+                <h6>
+                    {{news.3.headline}}
+                </h6>
+            </a>
+        </div>
+        <div class="trend">
+            <a class="link" href="">
+                <span>
+                    3
+                </span>
+                <h6>
+                    {{news.3.headline}}
+                </h6>
+            </a>
+        </div>
+        <div class="trend">
+            <a class="link" href="">
+                <span>
+                    4
+                </span>
+                <h6>
+                    {{news.3.headline}}
+                </h6>
+            </a>
+        </div>
+        <div class="trend">
+            <a class="link" href="">
+                <span>
+                    5
+                </span>
+                <h6>
+                    {{news.3.headline}}
+                </h6>
+            </a>
+        </div>
+        <div class="trend">
+            <a class="link" href="">
+                <span>
+                    6
+                </span>
+                <h6>
+                    {{news.3.headline}}
+                </h6>           
+            </a>
+        </div>
+        <div class="trend">
+            <a class="link" href="">
+                <span>
+                    7
+                </span>
+                <h6>
+                    {{news.3.headline}}
+                </h6>
+            </a>
+        </div>
+        <div class="trend">
+            <a class="link" href="">
+                <span>
+                    8
+                </span>
+                <h6>
+                    {{news.3.headline}}
+                </h6>
+            </a>
+        </div>
+        <div class="trend">
+            <a class="link" href="">
+                <span>
+                    9
+                </span>
+                <h6>
+                    {{news.3.headline}}
+                </h6>
+            </a>
+        </div>
+        <div class="trend">
+            <a class="link" href="">
+                <span>
+                    10
+                </span>
+                <h6>
+                    {{news.3.headline}}
+                </h6>
+            </a>
+        </div>
+    </div>
+
+    <div class="news-seperator">
+    </div>
+    
+    <h3 class="Featured-section-heading">Featured Sections</h3>
+    <div class="Featured">
+        <div class="Featured-section science">
+            <h4 class="Featured-sub_heading">Science</h4>
+            <div class="main">
+                <div class="img">
+                    <img src="{{news.11.image.url}}" alt="">
+                </div>
+                <div class="content">
+                    <h6 class="content-heading">{{news.11.headline}}</h6>
+                </div>
+            </div>
+            <div>
+                <a class="link" href="">
+                    <h6>Scientists pinpoint origins of humanity’s love of carbs</h6>
+                </a> 
+            </div>       
+            <div>
+                <a class="link" href="">
+                    <h6>Astronomers’ discovery of distant Milky Way-like galaxy challenges our theories of how cosmos evolved</h6>
+                </a> 
+            </div>       
+            <div>
+                <a class="link" href="">
+                    <h6>Wild dolphins off US Southeast coast found with microplastics in their breath, study says</h6>
+                </a>
+            </div>
+            <div>
+                <a class="link" href="">
+                    <h6>Peer into the underwater volcanic caves where life thrives</h6>
+                </a>
+            </div>
+        </div>
+        <div class="Featured-section Travel">
+            <h4 class="Featured-sub_heading">Travel</h4>
+            <div class="main">
+                <a class="link" href="">
+                    <div class="img">
+                        <img src="{{news.12.image.url}}" alt="">
+                    </div>
+                    <div class="content">
+                        <h6 class="content-heading">{{news.12.headline}}</h6>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a class="link" href="">
+                    <h6>How the full English breakfast divides Britain</h6>
+                </a> 
+            </div>       
+            <div>
+                <a class="link" href="">
+                    <h6>Tired of California, he moved to Colombia: ‘I feel safer here’</h6>
+                </a> 
+            </div>       
+            <div>
+                <a class="link" href="">
+                    <h6>The magical landscape that hides a 'portal to Hell'</h6>
+                </a>
+            </div>
+            <div>
+                <a class="link" href="">
+                    <h6>How ‘China’s Instagram’ is transforming the travel industry</h6>
+                </a>
+            </div>
+        </div>
+        <div class="Featured-section style">
+            <h4 class="Featured-sub_heading">Style</h4>
+            <div class="main">
+                <a class="link" href="">
+                    <div class="img">
+                        <img src="{{news.12.image.url}}" alt="">
+                    </div>
+                    <div class="content">
+                        <h6 class="content-heading">{{news.12.headline}}</h6>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a class="link" href="">
+                    <h6>How the full English breakfast divides Britain</h6>
+                </a> 
+            </div>       
+            <div>
+                <a class="link" href="">
+                    <h6>Tired of California, he moved to Colombia: ‘I feel safer here’</h6>
+                </a> 
+            </div>       
+            <div>
+                <a class="link" href="">
+                    <h6>The magical landscape that hides a 'portal to Hell'</h6>
+                </a>
+            </div>
+            <div>
+                <a class="link" href="">
+                    <h6>How ‘China’s Instagram’ is transforming the travel industry</h6>
+                </a>
+            </div>
+        </div>
+        <div class="Featured-section Sport">
+            <h4 class="Featured-sub_heading">Sport</h4>
+            <div class="main">
+                <a class="link" href="">
+                    <div class="img">
+                        <img src="{{news.12.image.url}}" alt="">
+                    </div>
+                    <div class="content">
+                        <h6 class="content-heading">{{news.12.headline}}</h6>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a class="link" href="">
+                    <h6>How the full English breakfast divides Britain</h6>
+                </a> 
+            </div>       
+            <div>
+                <a class="link" href="">
+                    <h6>Tired of California, he moved to Colombia: ‘I feel safer here’</h6>
+                </a> 
+            </div>       
+            <div>
+                <a class="link" href="">
+                    <h6>The magical landscape that hides a 'portal to Hell'</h6>
+                </a>
+            </div>
+            <div>
+                <a class="link" href="">
+                    <h6>How ‘China’s Instagram’ is transforming the travel industry</h6>
+                </a>
+            </div>
+        </div>
+        <div class="Featured-section Travel">
+            <h4 class="Featured-sub_heading">Travel</h4>
+            <div class="main">
+                <a class="link" href="">
+                    <div class="img">
+                        <img src="{{news.12.image.url}}" alt="">
+                    </div>
+                    <div class="content">
+                        <h6 class="content-heading">{{news.12.headline}}</h6>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a class="link" href="">
+                    <h6>How the full English breakfast divides Britain</h6>
+                </a> 
+            </div>       
+            <div>
+                <a class="link" href="">
+                    <h6>Tired of California, he moved to Colombia: ‘I feel safer here’</h6>
+                </a> 
+            </div>       
+            <div>
+                <a class="link" href="">
+                    <h6>The magical landscape that hides a 'portal to Hell'</h6>
+                </a>
+            </div>
+            <div>
+                <a class="link" href="">
+                    <h6>How ‘China’s Instagram’ is transforming the travel industry</h6>
+                </a>
+            </div>
+        </div>
     </div>
 {% endblock %}

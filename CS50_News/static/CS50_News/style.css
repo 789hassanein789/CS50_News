@@ -22,11 +22,12 @@
 #body {
   background-color: var(--page-background);
   color: var(--page-text);
+  overflow-x: hidden;
 }
 
 .content {
   height: 100%;
-  margin: 0;
+  margin: 0 1rem;
 }
 
 header {
@@ -832,6 +833,10 @@ header {
 
 .Cat-logo::before {
   background-image: url(/static/CS50_News/bundles/Cat.png);
+}
+
+.side-new {
+  border-bottom: 1px solid var(--pg-border);
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap");
