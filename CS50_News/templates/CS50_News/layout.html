@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'CS50_News/style.css' %}">
     <link rel="stylesheet" href="{% static 'CS50_News/index.css' %}">
+    <link rel="stylesheet" href="{% static 'CS50_News/footer.css' %}">
     <title>CS50_News</title>
 </head>
 <body id="body">
@@ -625,6 +626,68 @@
             </div>
         </div>
     </div>
+    <footer>
+        <div class="footer-column-container">
+            <div class="footer-column">
+                <a class="main-link">About Us</a>
+                <a class="footer-link">About Us</a>
+                <a class="footer-link">Terms of Use</a>
+                <a class="footer-link">Privacy Policy</a>
+                <a class="footer-link">Cookies</a>
+                <a class="footer-link">Accessibility</a>
+                <a class="footer-link">Work for CS50 News</a>
+            </div>
+            <div class="footer-column">
+                <a class="main-link">Contact Us</a>
+                <a class="footer-link">Contact CS50 News</a>
+                <a class="footer-link">Contact Technical support </a>
+                <a class="footer-link">Advertise with Us</a>
+                <a class="footer-link">Newsletters</a>
+            </div>
+            <div class="footer-column">
+                <a class="main-link">News</a>
+                <a class="footer-link">News</a>
+                <a class="footer-link">Israel-Hamas War</a>
+                <a class="footer-link">Ukraine-Russia War</a>
+                <a class="footer-link">US elections</a>
+                <a class="footer-link">Iraq</a>
+                <a class="footer-link">US & Canada</a>
+                <a class="footer-link">Middle East</a>
+                <a class="footer-link">Europe</a>
+                <a class="footer-link">Asia</a>
+                <a class="footer-link">Africa</a>
+                <a class="footer-link">Australia</a>
+                <a class="footer-link">Latin America</a>
+            </div>
+        </div>
+        <div class="footer-main">
+            <div class="media">
+                <div class="follow">
+                    <p>Follow CS50 News on:</p>
+                </div>
+                <div class="icons">
+                    <a class="link" href="">
+                        <i class="fa-brands fa-2x fa-facebook"></i>
+                    </a>
+                    <a class="link" href="">
+                        <i class="fa-brands fa-2x fa-youtube"></i>
+                    </a>
+                    <a class="link" href="">
+                        <i class="fa-brands fa-2x fa-x-twitter"></i>
+                    </a>
+                    <a class="link" href="">
+                        <i class="fa-brands fa-2x fa-telegram"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="logo">
+                <a class="footer-brand" href="{% url 'index' %}" style="font-family: 'Pirata One', system-ui;">CS50 News</a>
+            </div>
+            <div class="Rights">
+                Copyright 2024 CS50 News. All rights reserved.
+            </div>
+        </div>
+    </footer>
     {% csrf_token %}
     <script src="{% static 'CS50_News/index.js' %}"></script>
     <script src="{% static 'CS50_News/bootstrap.bundle.min.js' %}"></script>

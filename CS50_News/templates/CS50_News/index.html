@@ -11,25 +11,31 @@
                 </div>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                    <img src="{{news.0.image.url}}" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>{{news.0.headline}}</h5>
-                        <p>Some representative placeholder content for the first slide.</p>
-                    </div>
-                    </div>
-                    <div class="carousel-item">
-                    <img src="{{news.1.image.url}}" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>{{news.1.headline}}</h5>
-                        <p>Some representative placeholder content for the second slide.</p>
-                    </div>
+                        <a class="link" href="">
+                            <img src="{{news.0.image.url}}" class="d-block w-100" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{{news.0.headline}}</h5>
+                                <p>Some representative placeholder content for the first slide.</p>
+                            </div>
+                        </a>
                     </div>
                     <div class="carousel-item">
-                    <img src="{{news.2.image.url}}" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>{{news.2.headline}}</h5>
-                        <p>Some representative placeholder content for the third slide.</p>
+                        <a href="">
+                            <img src="{{news.1.image.url}}" class="d-block w-100" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{{news.1.headline}}</h5>
+                                <p>Some representative placeholder content for the second slide.</p>
+                            </div>
+                        </a>
                     </div>
+                    <div class="carousel-item">
+                        <a href="">
+                            <img src="{{news.2.image.url}}" class="d-block w-100" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{{news.2.headline}}</h5>
+                                <p>Some representative placeholder content for the third slide.</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
@@ -97,8 +103,7 @@
             </div>
         </div>
     </div>
-    <div class="news-seperator">
-        <div></div>
+    <div class="bold-seperator">
     </div>
     <h3 class="news-section-heading">News</h3>
     <div class="news-section">
@@ -119,7 +124,7 @@
             </div>
         {% endfor %}
     </div>
-    <div class="news-seperator">
+    <div class="light-seperator">
     </div>
     <h3 class="only-section-heading">Only from CS50 News</h3>
     <div class="only-section">
@@ -152,7 +157,7 @@
             </div>
         </div>
     </div>
-    <div class="news-seperator">
+    <div class="light-seperator">
     </div>
     <h3 class="trending-section-heading">Most read</h3>
     <div class="trending">
@@ -258,12 +263,133 @@
         </div>
     </div>
 
-    <div class="news-seperator">
-    </div>
+    <div class="light-seperator"></div>
     
+    <h3 class="stories-section-heading">MORE TOP STORIES</h3>
+    <div class="stories-section">
+        <div class="side column-section">
+            <div class="main">
+                <div class="img">
+                    <img src="{{news.4.image.url}}" alt="">
+                </div>
+                <div class="content">
+                    <h6 class="content-heading">{{news.4.headline}}</h6>
+                    <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </div>     
+            <div>
+                <a href="" class="link column-side-new">
+                    <div class="img">
+                        <img src="{{news.2.image.url}}" alt="">
+                    </div>
+                    <div class="content">
+                        <h6>{{news.2.headline}}</h6>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a href="" class="link column-side-new">
+                    <div class="img">
+                        <img src="{{news.3.image.url}}" alt="">
+                    </div>
+                    <div class="content">
+                        <h6>{{news.3.headline}}</h6>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a href="" class="link column-side-new">
+                    <div class="img">
+                        <img src="{{news.4.image.url}}" alt="">
+                    </div>
+                    <div class="content">
+                        <h6>{{news.4.headline}}</h6>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="middle">
+            <div class="main">
+                <div class="img">
+                    <img src="{{news.5.image.url}}" alt="">
+                </div>
+                <div class="content">
+                    <h6>{{news.5.headline}}</h6>
+                    <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </div>
+            <a class="link column-side-new" href="">
+                <div class="img">
+                    <img src="{{news.13.image.url}}" alt="">
+                </div>
+                <div class="content">
+                    <h6>{{news.13.headline}}</h6>
+                </div>
+            </a>
+            
+            <a class="link column-side-new" href="">
+                <div class="img">
+                    <img src="{{news.14.image.url}}" alt="">
+                </div>
+                <div class="content">
+                    <h6>{{news.14.headline}}</h6>
+                </div>
+            </a>
+        </div>
+        <div class="side column-section">
+            <div class="main">
+                <div class="img">
+                    <img src="{{news.6.image.url}}" alt="">
+                </div>
+                <div class="content">
+                    <h6 class="content-heading">{{news.4.headline}}</h6>
+                    <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </div>     
+            <div>
+                <a href="" class="link column-side-new">
+                    <div class="content">
+                        <h6>{{news.2.headline}}</h6>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a href="" class="link column-side-new">
+                    <div class="content">
+                        <h6>{{news.3.headline}}</h6>
+                    </div>
+                </a>
+            </div>
+            <div>
+                <a href="" class="link column-side-new">
+                    <div class="content">
+                        <h6>{{news.4.headline}}</h6>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="light-seperator"></div>
+
     <h3 class="Featured-section-heading">Featured Sections</h3>
     <div class="Featured">
-        <div class="Featured-section science">
+        <div class="column-section science">
             <h4 class="Featured-sub_heading">Science</h4>
             <div class="main">
                 <div class="img">
@@ -271,6 +397,12 @@
                 </div>
                 <div class="content">
                     <h6 class="content-heading">{{news.11.headline}}</h6>
+                    <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
                 </div>
             </div>
             <div>
@@ -294,7 +426,7 @@
                 </a>
             </div>
         </div>
-        <div class="Featured-section Travel">
+        <div class="column-section Travel">
             <h4 class="Featured-sub_heading">Travel</h4>
             <div class="main">
                 <a class="link" href="">
@@ -327,7 +459,7 @@
                 </a>
             </div>
         </div>
-        <div class="Featured-section style">
+        <div class="column-section style">
             <h4 class="Featured-sub_heading">Style</h4>
             <div class="main">
                 <a class="link" href="">
@@ -360,7 +492,7 @@
                 </a>
             </div>
         </div>
-        <div class="Featured-section Sport">
+        <div class="column-section Sport">
             <h4 class="Featured-sub_heading">Sport</h4>
             <div class="main">
                 <a class="link" href="">
@@ -393,7 +525,7 @@
                 </a>
             </div>
         </div>
-        <div class="Featured-section Travel">
+        <div class="column-section Travel">
             <h4 class="Featured-sub_heading">Travel</h4>
             <div class="main">
                 <a class="link" href="">
@@ -423,6 +555,7 @@
             <div>
                 <a class="link" href="">
                     <h6>How ‘China’s Instagram’ is transforming the travel industry</h6>
+                    
                 </a>
             </div>
         </div>

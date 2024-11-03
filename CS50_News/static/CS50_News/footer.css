@@ -1,0 +1,80 @@
+footer {
+  display: grid;
+  grid-template-columns: 6fr 2fr;
+  -moz-column-gap: 5%;
+       column-gap: 5%;
+  margin: 1rem 3rem;
+  padding: 1rem 0;
+  border-top: 1px solid hsl(0, 0%, 69%);
+}
+
+.footer-column-container {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+.footer-column .main-link {
+  color: inherit;
+  text-decoration: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+}
+
+.footer-link {
+  text-decoration: none;
+  cursor: pointer;
+  color: hsl(0, 0%, 35%);
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.footer-link:hover {
+  text-decoration: underline;
+  color: black;
+}
+
+.footer-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.media .follow {
+  font-weight: 600;
+}
+.media .icons {
+  display: flex;
+  justify-content: space-between;
+}
+.media .icons .fa-facebook {
+  color: blue;
+}
+.media .icons .fa-youtube {
+  color: red;
+}
+.media .icons .fa-x-twitter {
+  color: black;
+}
+.media .icons .fa-telegram {
+  color: hsl(200, 74%, 51%);
+}
+
+.logo {
+  margin-top: 1.5rem;
+}
+
+.footer-brand {
+  color: black;
+  text-decoration: none;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.Rights {
+  margin-top: -1rem;
+}/*# sourceMappingURL=footer.css.map */
