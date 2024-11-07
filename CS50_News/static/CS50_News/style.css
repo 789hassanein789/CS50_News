@@ -25,7 +25,7 @@
   overflow-x: hidden;
 }
 
-.content {
+.body-content {
   height: 100%;
   margin: 0 1rem;
 }
@@ -883,7 +883,7 @@ header {
   margin: 16px auto;
   cursor: pointer;
 }
-.img {
+.img-crop {
   display: block;
   max-width: 100%;
 }

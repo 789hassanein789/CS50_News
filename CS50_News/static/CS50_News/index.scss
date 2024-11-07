@@ -33,6 +33,12 @@ $secondary: hsl(210, 2%, 34%);
     background-color: $secondary;
 }
 
+@mixin border {
+    margin-bottom: .5rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid hsl(210, 9%, 91%);
+}
+
 .link {
     color: black;
     text-decoration: none;
@@ -58,13 +64,7 @@ $secondary: hsl(210, 2%, 34%);
         @include new-hover;
 
         .side-new-text {
-        position: relative;
-        }
-
-        .secondary-div {
-            position: absolute; 
-            bottom: 0;
-            left: 0;
+            position: relative;
         }
 
         .side-new-image-div {
@@ -84,11 +84,16 @@ $secondary: hsl(210, 2%, 34%);
     }
 }
 
+.side-secondary {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
 .secondary-div {
     display: flex;
     gap: 4px;
     align-items: center;
-    
     color: $secondary;
     font-size: 12px;
     font-weight: 300;
@@ -135,8 +140,10 @@ $secondary: hsl(210, 2%, 34%);
 
         .new-image {
             background-color: white;
+            width: 100%;
             img {
                 width: 100%;
+                aspect-ratio: 16 / 9;
                 object-fit: cover;
             }
         }
@@ -237,8 +244,11 @@ $secondary: hsl(210, 2%, 34%);
 .column-section {
      
     .main {
+        @include border;
+        @include new-hover;
+
         .img {
-        width: 100%;
+            width: 100%;
             img {
                 width: 100%;
                 aspect-ratio: 16 / 9;
@@ -249,19 +259,11 @@ $secondary: hsl(210, 2%, 34%);
             margin: 1rem 0;
         }
     }
-    & > div {
+    & > .column-side-new {
         @include new-hover;
-        padding-bottom: .5rem;
-        margin-bottom: .5rem;
-        border-bottom: 1px solid hsl(210, 9%, 91%);
-
-        img {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-        }
+        @include border;
     }
-    div:last-child {
+    .column-side-new:last-child {
         border-bottom: none;
     }
 }
@@ -275,9 +277,7 @@ $secondary: hsl(210, 2%, 34%);
         
 
         .main {
-            margin-bottom: .5rem;
-            padding-bottom: .5rem;
-            border-bottom: 1px solid hsl(210, 9%, 91%);
+            @include border;
             @include new-hover;
 
             .img {
@@ -313,21 +313,33 @@ $secondary: hsl(210, 2%, 34%);
 .column-side-new {
     width: 100%;
     display: flex;
-    margin-bottom: .5rem;
-    padding-bottom: .5rem;
-    border-bottom: 1px solid hsl(210, 9%, 91%);
+    @include border;
     @include new-hover;
 
     .img {
         flex: 1;
         img {
             width: 100%;
-            height: 100%;
             object-fit: cover;
             border-radius: .25rem;
         }
     }
     .content {
-        flex: 1;
+        margin: 0 1rem;
+        position: relative;
     }
+}
+
+.carousel:hover {
+    h5 {
+        text-decoration: underline;
+    }
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }

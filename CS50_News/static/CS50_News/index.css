@@ -31,11 +31,6 @@
 .side-div .side-new .side-new-text {
   position: relative;
 }
-.side-div .side-new .secondary-div {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-}
 .side-div .side-new .side-new-image-div {
   position: relative;
   float: left;
@@ -49,6 +44,12 @@
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+}
+
+.side-secondary {
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
 .secondary-div {
@@ -121,9 +122,11 @@
 }
 .news-section .new-container .new-image {
   background-color: white;
+  width: 100%;
 }
 .news-section .new-container .new-image img {
   width: 100%;
+  aspect-ratio: 16/9;
   -o-object-fit: cover;
      object-fit: cover;
 }
@@ -247,6 +250,18 @@
   flex-basis: 33.3333333333%;
 }
 
+.column-section .main {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid hsl(210, 9%, 91%);
+  cursor: pointer;
+}
+.column-section .main:hover img {
+  opacity: 0.8;
+}
+.column-section .main:hover h6 {
+  text-decoration: underline;
+}
 .column-section .main .img {
   width: 100%;
 }
@@ -259,25 +274,19 @@
 .column-section .main .content {
   margin: 1rem 0;
 }
-.column-section > div {
+.column-section > .column-side-new {
   cursor: pointer;
-  padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid hsl(210, 9%, 91%);
 }
-.column-section > div:hover img {
+.column-section > .column-side-new:hover img {
   opacity: 0.8;
 }
-.column-section > div:hover h6 {
+.column-section > .column-side-new:hover h6 {
   text-decoration: underline;
 }
-.column-section > div img {
-  width: 100%;
-  aspect-ratio: 16/9;
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-.column-section div:last-child {
+.column-section .column-side-new:last-child {
   border-bottom: none;
 }
 
@@ -344,11 +353,23 @@
 }
 .column-side-new .img img {
   width: 100%;
-  height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
   border-radius: 0.25rem;
 }
 .column-side-new .content {
-  flex: 1;
+  margin: 0 1rem;
+  position: relative;
+}
+
+.carousel:hover h5 {
+  text-decoration: underline;
+}
+
+.carousel-caption {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }/*# sourceMappingURL=index.css.map */

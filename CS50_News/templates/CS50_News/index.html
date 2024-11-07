@@ -13,7 +13,7 @@
                     <div class="carousel-item active">
                         <a class="link" href="">
                             <img src="{{news.0.image.url}}" class="d-block w-100" alt="...">
-                            <div class="carousel-caption d-none d-md-block">
+                            <div class="carousel-caption">
                                 <h5>{{news.0.headline}}</h5>
                                 <p>Some representative placeholder content for the first slide.</p>
                             </div>
@@ -49,58 +49,58 @@
             </div>
         </div>
         <div class="side-div">
-            <div class="side-new">
+            <a class="side-new link" href="">
                 <div class="side-new-image-div">
                     <img src="{{news.0.image.url}}" alt="">
                 </div>
                 <div class="side-new-text">
                     <h6 class="main-text">{{news.0.headline}}</h6>
-                    <div class="secondary-div">
+                    <div class="secondary-div side-secondary">
                         <span>{{news.0.timestamp}}</span>
                         <div></div>
                         <span>{{news.0.sub_category}}</span>
                     </div>
                 </div>
-            </div>
-            <div class="side-new">
+            </a>
+            <a class="side-new link" href="">
                 <div class="side-new-image-div">
                     <img src="{{news.1.image.url}}" alt="">
                 </div>
                 <div class="side-new-text">
                     <h6 class="main-text">{{news.1.headline}}</h6>
-                    <div class="secondary-div">
-                        <span>{{news.1.timestamp}}</span>
+                    <div class="secondary-div side-secondary">
+                        <span>{{news.0.timestamp}}</span>
                         <div></div>
-                        <span>{{news.1.sub_category}}</span>
+                        <span>{{news.0.sub_category}}</span>
                     </div>
                 </div>
-            </div>
-            <div class="side-new">
+            </a>
+            <a class="side-new link" href="">
                 <div class="side-new-image-div">
                     <img src="{{news.2.image.url}}" alt="">
                 </div>
                 <div class="side-new-text">
                     <h6 class="main-text">{{news.2.headline}}</h6>
-                    <div class="secondary-div">
-                        <span>{{news.2.timestamp}}</span>
+                    <div class="secondary-div side-secondary">
+                        <span>{{news.0.timestamp}}</span>
                         <div></div>
-                        <span>{{news.2.sub_category}}</span>
+                        <span>{{news.0.sub_category}}</span>
                     </div>
                 </div>
-            </div>
-            <div class="side-new">
+            </a>
+            <a class="side-new link" href="">
                 <div class="side-new-image-div">
                     <img src="{{news.3.image.url}}" alt="">
                 </div>
                 <div class="side-new-text">
                     <h6 class="main-text">{{news.3.headline}}</h6>
-                    <div class="secondary-div">
-                        <span>{{news.3.timestamp}}</span>
+                    <div class="secondary-div side-secondary">
+                        <span>{{news.0.timestamp}}</span>
                         <div></div>
-                        <span>{{news.3.sub_category}}</span>
+                        <span>{{news.0.sub_category}}</span>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
     <div class="bold-seperator">
@@ -128,7 +128,7 @@
     </div>
     <h3 class="only-section-heading">Only from CS50 News</h3>
     <div class="only-section">
-        <div class="tn">
+        <a class="tn link" href="">
             <div class="img">
                 <img src="{{news.2.image.url}}" alt="">
             </div>
@@ -141,8 +141,8 @@
                     <span>{{news.2.sub_category}}</span>
                 </div>
             </div>
-        </div>
-        <div class="tn">
+        </a>
+        <a class="tn link" href="">
             <div class="img">
                 <img src="{{news.3.image.url}}" alt="">
             </div>
@@ -155,7 +155,7 @@
                     <span>{{news.3.sub_category}}</span>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
     <div class="light-seperator">
     </div>
@@ -282,36 +282,45 @@
                     </div>
                 </div>
             </div>     
-            <div>
-                <a href="" class="link column-side-new">
-                    <div class="img">
-                        <img src="{{news.2.image.url}}" alt="">
+            <a href="" class="link column-side-new">
+                <div class="img">
+                    <img src="{{news.4.image.url}}" alt="">
+                </div>
+                <div>
+                    <h6>{{news.4.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>1 month ago</span>
+                        <div></div>
+                        <span>{{news.4.sub_category}}</span>
                     </div>
-                    <div class="content">
-                        <h6>{{news.2.headline}}</h6>
+                </div>
+            </a>
+            <a href="" class="link column-side-new">
+                <div class="img">
+                    <img src="{{news.3.image.url}}" alt="">
+                </div>
+                <div>
+                    <h6>{{news.4.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>1 month ago</span>
+                        <div></div>
+                        <span>{{news.4.sub_category}}</span>
                     </div>
-                </a>
-            </div>
-            <div>
-                <a href="" class="link column-side-new">
-                    <div class="img">
-                        <img src="{{news.3.image.url}}" alt="">
+                </div>
+            </a>
+            <a href="" class="link column-side-new">
+                <div class="img">
+                    <img src="{{news.4.image.url}}" alt="">
+                </div>
+                <div>
+                    <h6>{{news.4.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>1 month ago</span>
+                        <div></div>
+                        <span>{{news.4.sub_category}}</span>
                     </div>
-                    <div class="content">
-                        <h6>{{news.3.headline}}</h6>
-                    </div>
-                </a>
-            </div>
-            <div>
-                <a href="" class="link column-side-new">
-                    <div class="img">
-                        <img src="{{news.4.image.url}}" alt="">
-                    </div>
-                    <div class="content">
-                        <h6>{{news.4.headline}}</h6>
-                    </div>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
         <div class="middle">
             <div class="main">
@@ -334,15 +343,24 @@
                 </div>
                 <div class="content">
                     <h6>{{news.13.headline}}</h6>
+                    <div class="side-secondary secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
                 </div>
             </a>
-            
             <a class="link column-side-new" href="">
                 <div class="img">
                     <img src="{{news.14.image.url}}" alt="">
                 </div>
                 <div class="content">
                     <h6>{{news.14.headline}}</h6>
+                    <div class="side-secondary secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
                 </div>
             </a>
         </div>
@@ -361,27 +379,36 @@
                     </div>
                 </div>
             </div>     
-            <div>
-                <a href="" class="link column-side-new">
-                    <div class="content">
-                        <h6>{{news.2.headline}}</h6>
+            <a href="" class="link column-side-new">
+                <div>
+                    <h6>{{news.2.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
                     </div>
-                </a>
-            </div>
-            <div>
-                <a href="" class="link column-side-new">
-                    <div class="content">
-                        <h6>{{news.3.headline}}</h6>
+                </div>
+            </a>
+            <a href="" class="link column-side-new">
+                <div>
+                    <h6>{{news.3.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
                     </div>
-                </a>
-            </div>
-            <div>
-                <a href="" class="link column-side-new">
-                    <div class="content">
-                        <h6>{{news.4.headline}}</h6>
+                </div>
+            </a>
+            <a href="" class="link column-side-new">
+                <div>
+                    <h6>{{news.4.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a> 
         </div>
     </div>
 
@@ -405,26 +432,49 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <a class="link" href="">
-                    <h6>Scientists pinpoint origins of humanity’s love of carbs</h6>
-                </a> 
-            </div>       
-            <div>
-                <a class="link" href="">
+            <a href="" class="link column-side-new">
+                <div>
+                    <h6>{{news.4.headline}}</h6>
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </a> 
+            
+            <a class="link column-side-new" href="">
+                <div>
                     <h6>Astronomers’ discovery of distant Milky Way-like galaxy challenges our theories of how cosmos evolved</h6>
-                </a> 
-            </div>       
-            <div>
-                <a class="link" href="">
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </a> 
+        
+            <a class="link column-side-new" href="">
+                <div>
                     <h6>Wild dolphins off US Southeast coast found with microplastics in their breath, study says</h6>
-                </a>
-            </div>
-            <div>
-                <a class="link" href="">
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </a>
+        
+            <a class="link column-side-new" href="">
+                <div>
                     <h6>Peer into the underwater volcanic caves where life thrives</h6>
-                </a>
-            </div>
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </a>
         </div>
         <div class="column-section Travel">
             <h4 class="Featured-sub_heading">Travel</h4>
@@ -438,26 +488,46 @@
                     </div>
                 </a>
             </div>
-            <div>
-                <a class="link" href="">
+            <a class="link column-side-new" href="">
+                <div>
                     <h6>How the full English breakfast divides Britain</h6>
-                </a> 
-            </div>       
-            <div>
-                <a class="link" href="">
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </a>        
+            <a class="link column-side-new" href="">
+                <div>
                     <h6>Tired of California, he moved to Colombia: ‘I feel safer here’</h6>
-                </a> 
-            </div>       
-            <div>
-                <a class="link" href="">
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </a>        
+            <a class="link column-side-new" href="">
+                <div>
                     <h6>The magical landscape that hides a 'portal to Hell'</h6>
-                </a>
-            </div>
-            <div>
-                <a class="link" href="">
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </a>
+            <a class="link column-side-new" href="">
+                <div>
                     <h6>How ‘China’s Instagram’ is transforming the travel industry</h6>
-                </a>
-            </div>
+                    <div class="secondary-div">
+                        <span>3 days ago</span>
+                        <div></div>
+                        <span>{{news.3.sub_category}}</span>
+                    </div>
+                </div>
+            </a>
         </div>
         <div class="column-section style">
             <h4 class="Featured-sub_heading">Style</h4>
