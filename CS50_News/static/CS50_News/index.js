@@ -3,7 +3,7 @@ const toggleBtn = document.querySelector('#toggle-button');
 const mainHeader = document.querySelector('#main-header_content')
 const mainSearch = document.querySelector('.main-header_search');
 const mainItems = document.querySelectorAll('.main-section-item');
-const ddItems = document.querySelectorAll('.nav-dd-item');
+const ddItems = document.querySelectorAll('.list-group-item');
 const dropDowns = document.querySelectorAll('.drop-down');
 const searchBtn = document.querySelector('#min-search-btn');
 const backBtn = document.querySelector('#backBtn');
@@ -39,7 +39,7 @@ const aaaa = document.querySelector('');
 */
 const popupContent = popup.innerHTML;
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
+ 
 if (darkMode === 'enabled') {
     document.body.classList.add('dark-mode');
     document.body.setAttribute('data-bs-theme', 'dark')
@@ -58,7 +58,7 @@ toggleBtn.addEventListener('click', () => {
 mainItems.forEach(item => {
     let sectionName = item.dataset.sectionName
         item.addEventListener('click', () => {
-            document.querySelector(`#${sectionName}-drop-down`).classList.toggle('d-none'); 
+            document.querySelector(`#${sectionName}-drop-down`).classList.toggle('d-none');
         })
 })
 let category = sessionStorage.getItem('categorySelected')
@@ -66,10 +66,8 @@ if (category == null) {
     category = 'Main'
     sessionStorage.setItem('categorySelected', 'Main')
 }
-console.log(category)
 let selected = document.querySelector(`#${category}`)
 let t = selected.getAttribute('data-target');
-console.log(t)
 selected.classList.add('fw-bolder')
 document.querySelector(`#${t}`).classList.add('selected')
 document.querySelector(`#nav-${t}`).classList.add('clicked')
@@ -83,9 +81,8 @@ subItems.forEach(item => {
 
 ddItems.forEach(item => {
     let target = item.getAttribute('data-target')
-        item.addEventListener('click', () => {
-        let subItem = document.querySelector(`#${target}`)
-        sessionStorage.setItem('categorySelected', `${subItem.id}`)
+    item.addEventListener('click', () => {
+        sessionStorage.setItem('categorySelected', `${target}`)
     })
 })
 

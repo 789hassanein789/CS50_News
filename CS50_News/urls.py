@@ -11,10 +11,11 @@ urlpatterns = [
     path("crop", views.crop, name="crop"),
     path("saerch", views.search, name="search"),
     path("logout", views.logout_view, name="logout"),
-    path("category/<str:cat>", views.index, name="cat_index"),
     path("check", views.passwordCheck, name="check"),
     path("delete", views.Delete, name="delete"),
     path("edit", views.accountEdit, name="edit"),
     path("OTP", views.otp_view, name="otp"),
+    path("<str:category>", views.index, name="cat_index"),
+    
 ]
 

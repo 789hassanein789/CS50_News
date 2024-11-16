@@ -58,7 +58,7 @@
                     <div class="secondary-div side-secondary">
                         <span>{{news.0.timestamp}}</span>
                         <div></div>
-                        <span>{{news.0.sub_category}}</span>
+                        <span>{{news.0.sub_category.all.0}}</span>
                     </div>
                 </div>
             </a>
@@ -432,16 +432,21 @@
                     </div>
                 </div>
             </div>
-            <a href="" class="link column-side-new">
-                <div>
-                    <h6>{{news.4.headline}}</h6>
-                    <div class="secondary-div">
-                        <span>3 days ago</span>
-                        <div></div>
-                        <span>{{news.3.sub_category}}</span>
-                    </div>
-                </div>
-            </a> 
+            {% for new in news %}
+                <p>{{new.category}}</p>
+                {% if new.get_category_display == 'News' %}
+                    <a href="" class="link column-side-new">
+                        <div>
+                            <h6>{{new.headline}}</h6>
+                            <div class="secondary-div">
+                                <span>3 days ago</span>
+                                <div></div>
+                                <span>{{new.sub_category}}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
             
             <a class="link column-side-new" href="">
                 <div>

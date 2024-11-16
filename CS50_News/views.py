@@ -14,18 +14,22 @@ from allauth.account.decorators import reauthentication_required
 import pyotp
 import json
 
-from .models import User, New
+from .models import User, New, Sub_Category
 from .utils import send_otp
 
 
 # Create your views here.
-def index(request, cat="Main"):
-    if cat == "Main":
+def index(request, category=None):
+    if category == None:
         news = New.objects.all()
-    elif cat in ["News", "Sport", "Business", "Innovation"]:
-        news = New.objects.filter(category=cat)
+    elif category in ["News", "Sport", "Business", "Innovation", "Culture", "Art", "Travel", "Earth"]:
+        print("full")
+        news = New.objects.filter(category=category[0])
     else:
-        news = New.objects.filter(sub_category=cat)
+        print("love")
+        news = New.objects.filter(sub_category__category=category)
+    for new in news:
+        new.sub_category.all()[0]
     return render(request, "CS50_News/index.html", {
         "news" : news
     })

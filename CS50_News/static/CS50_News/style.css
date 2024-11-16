@@ -301,11 +301,7 @@ header {
   position: relative;
 }
 
-.nav-list {
-  padding: 10px;
-}
-
-.nav-list:hover::after {
+li.nav-dd-item:hover::after {
   content: "";
   width: 100%;
   height: 4px;
@@ -350,7 +346,7 @@ header {
   padding-bottom: 6px;
 }
 
-#body .nav-list-group-item:hover {
+#body .list-group-item:hover {
   text-decoration: underline;
   transition: 0.2s ease-in-out;
 }
