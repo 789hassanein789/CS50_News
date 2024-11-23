@@ -1,0 +1,147 @@
+.h1 {
+  margin: 1.5rem auto;
+  width: 728px;
+}
+.h1 h1 {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.main-img {
+  margin: 0 auto;
+  width: 932px;
+}
+.main-img img {
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.new-content {
+  margin: 1rem auto;
+  width: 728px;
+}
+.new-content p {
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+  letter-spacing: -0.36px;
+}
+.new-content h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.36px;
+  margin: 1rem 0;
+}
+.new-content div {
+  width: 100%;
+}
+.new-content div img {
+  width: 100%;
+}
+
+.border {
+  background-color: black;
+  height: 3px;
+}
+
+h5 {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+aside {
+  margin: 2rem 0.5rem 4rem 0.5rem;
+}
+aside .content {
+  display: flex;
+  gap: 3rem;
+}
+aside .content h6 {
+  font-size: 1.25rem;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+.link:hover img {
+  opacity: 0.8;
+}
+.link:hover h6 {
+  text-decoration: underline;
+}
+
+.small-font {
+  font-size: 0.75rem;
+  color: hsl(210, 2%, 34%);
+}
+
+.more .new-container {
+  margin: 0 4rem;
+}
+.more .new-container .horizontal-new {
+  display: flex;
+  min-height: 190px;
+  text-decoration: none;
+  color: inherit;
+  margin-top: 2rem;
+  cursor: pointer;
+}
+.more .new-container .horizontal-new:hover img {
+  opacity: 0.8;
+}
+.more .new-container .horizontal-new:hover h6 {
+  text-decoration: underline;
+}
+.more .new-container .horizontal-new .timestamp {
+  flex-basis: 90px;
+}
+.more .new-container .horizontal-new span {
+  display: flex;
+  align-items: start;
+}
+.more .new-container .horizontal-new .img-content {
+  display: flex;
+  flex: 1;
+}
+.more .new-container .horizontal-new .content {
+  position: relative;
+}
+.more .new-container .horizontal-new .content h6 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.more .new-container .horizontal-new .content .sub {
+  font-size: 0.9rem;
+}
+.more .new-container .horizontal-new .content .small-font {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+.more .new-container .horizontal-new .img {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+.more .new-container .horizontal-new .img img {
+  width: 100%;
+}
+
+.secondary-div {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  color: hsl(210, 2%, 34%);
+  font-size: 12px;
+  font-weight: 300;
+}
+.secondary-div div {
+  background-color: hsl(210, 2%, 34%);
+  height: 1rem;
+  width: 1px;
+  margin: auto 2px;
+}/*# sourceMappingURL=new.css.map */

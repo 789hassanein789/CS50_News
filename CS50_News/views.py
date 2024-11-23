@@ -11,25 +11,23 @@ from django.template.defaulttags import register
 from django.core import serializers
 from datetime import datetime, timezone, timedelta
 from allauth.account.decorators import reauthentication_required
+import time
 import pyotp
+import schedule
 import json
 
-from .models import User, New, Sub_Category
+from .models import User, New
 from .utils import send_otp
 
 
 # Create your views here.
-def index(request, category=None):
+def index(request, category=None): 
     if category == None:
         news = New.objects.all()
     elif category in ["News", "Sport", "Business", "Innovation", "Culture", "Art", "Travel", "Earth"]:
-        print("full")
-        news = New.objects.filter(category=category[0])
+         news = New.objects.filter(category=category[0])
     else:
-        print("love")
-        news = New.objects.filter(sub_category__category=category)
-    for new in news:
-        new.sub_category.all()[0]
+        news = New.objects.filter(sub_category=category)
     return render(request, "CS50_News/index.html", {
         "news" : news
     })
@@ -115,3 +113,8 @@ def accountEdit(request):
 def crop(request):
     return render(request, "CS50_News/crop.html")
 
+def new(request, id):
+    new = New.objects.get(id=id)
+    return render(request, "CS50_News/new.html", {
+        "new": new
+    })

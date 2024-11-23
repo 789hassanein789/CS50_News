@@ -9,22 +9,32 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username}"
     
-class Sub_Category(models.Model):
+class New(models.Model):
+    CATEGORYS = {
+        "N": "News",
+        "S": "Sport",
+        "B": "Business",
+        "I": "Innovation",
+        "C": "Culture",
+        "A": "Art",
+        "T": "Travel",
+        "E": "Earth",
+    }
     SUB = {
         "N": "News",
-        "IG": "Israil-Gaza_war",
-        "UR": "Ukraine-Russia_war",
+        "IG": "Israil-Gaza war",
+        "UR": "Ukraine-Russia war",
         "IQ": "Iraq",
-        "US&C": "US_&_Canada",
-        "MD": "Middle_East",
+        "US&C": "US & Canada",
+        "MD": "Middle East",
         "EU": "Europe",
         "AS": "Asia",
         "AF": "Africa",
         "AU": "Australia",
-        "LA": "Latine_America",
+        "LA": "Latine America",
 
         "SP": "Sport",
-        "MA": "Martial_Arts",
+        "MA": "Martial Arts",
         "FB": "Football",
 
         "IN": "Innovation",
@@ -64,22 +74,6 @@ class Sub_Category(models.Model):
         "": "",
         "": "",
     }
-    category = models.CharField(max_length=10, choices=SUB)
-
-    def __str__(self):
-        return f"{self.category}"
-
-class New(models.Model):
-    CATEGORYS = {
-        "N": "News",
-        "S": "Sport",
-        "B": "Business",
-        "I": "Innovation",
-        "C": "Culture",
-        "A": "Art",
-        "T": "Travel",
-        "E": "Earth",
-    }
     headline = models.CharField(max_length=200)
     sub_headline = models.CharField(max_length=200)
     image = models.ImageField(upload_to="CS50_News/static/CS50_News/cover" ,blank=True, null=True)
@@ -87,7 +81,8 @@ class New(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORYS)
     views = models.IntegerField(default=0)
     scroll = models.IntegerField(default=0)
+    score = models.IntegerField(default=10)
     timestamp = models.DateTimeField(auto_now_add=True)
-    sub_category = models.ManyToManyField(Sub_Category)
+    sub_category = models.CharField(max_length=25, choices=SUB, default="IG")
     auther = models.ForeignKey(User, on_delete=models.CASCADE, related_name="publishes")
 

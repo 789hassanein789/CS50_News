@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="{% static 'CS50_News/style.css' %}">
     <link rel="stylesheet" href="{% static 'CS50_News/index.css' %}">
     <link rel="stylesheet" href="{% static 'CS50_News/footer.css' %}">
-    <title>CS50_News</title>
+    {% block head %}
+    {% endblock %}
+    <title>CS50 News</title>
 </head>
 <body id="body">
     <header>
@@ -39,6 +41,11 @@
             <div id="main-header_content">
                 <a class="navbar-brand" id="brand" href="{% url 'index' %}" style="font-family: 'Pirata One', system-ui;">CS50 News</a>
                 <div id="navbar-content">
+                    <div class="icon-div">
+                        <a class="icon-btn" href="{% url '' %}">
+                            <i class="fa-solid fa-user-tie"></i>                    
+                        </a>
+                    </div>
                     <div class="icon-div">
                         <button class="icon-btn" id="toggle-button">
                             <i class="fa-solid fa-circle-half-stroke fa-rotate-180"></i>

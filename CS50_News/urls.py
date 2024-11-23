@@ -16,6 +16,6 @@ urlpatterns = [
     path("edit", views.accountEdit, name="edit"),
     path("OTP", views.otp_view, name="otp"),
     path("<str:category>", views.index, name="cat_index"),
-    
+    path("new/<int:id>", views.new, name="new")
 ]
 

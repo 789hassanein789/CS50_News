@@ -1,0 +1,161 @@
+$secondary: hsl(210, 2%, 34%);
+
+@mixin new-hover {
+    cursor: pointer;
+    &:hover {
+        img {
+            opacity: .8;
+        }
+        h6 {
+            text-decoration: underline;
+        }
+    }
+}
+
+.h1 {
+    margin: 1.5rem auto;
+    width: 728px;
+    h1 {
+        font-size: 3rem;
+        font-weight: 700;
+    }
+}
+
+.main-img {
+    margin: 0 auto;
+    width: 932px;
+
+    img {
+        width: 100%;
+        object-fit: cover;
+    }
+}
+
+.new-content {
+    margin: 1rem auto;
+    width: 728px;
+    p {
+        font-size: 1.25rem;
+        font-weight: 500;
+        line-height: 1.75rem;
+        letter-spacing: -.36px;
+    }
+    h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: -.36px;
+        margin: 1rem 0;
+    }
+    div {
+        width: 100%;
+        
+        img {
+            width: 100%;
+        }
+    }
+}
+
+.border {
+    background-color: black;
+    height: 3px;
+}
+
+h5 {
+    margin-top: .5rem;
+    margin-bottom: 1rem; 
+    font-weight: 500;
+}
+
+aside {
+    margin: 2rem .5rem 4rem .5rem;
+
+    
+    .content {
+        display: flex;
+        gap: 3rem;
+
+        h6 {
+            font-size: 1.25rem;
+        }
+    }
+}
+
+.link {
+    text-decoration: none;
+    color: inherit;
+    margin-right: 1rem;
+    @include new-hover;
+}
+
+.small-font {
+    font-size: .75rem;
+    color: $secondary;
+}
+
+.more {
+
+
+    .new-container {
+        margin: 0 4rem;
+
+        .horizontal-new {
+            display: flex;
+            min-height: 190px;
+            text-decoration: none;
+            color: inherit;
+            margin-top: 2rem;
+            @include new-hover;
+
+            .timestamp {
+                flex-basis: 90px;
+            }
+            span {
+                display: flex;
+                align-items: start;
+            }
+            .img-content {
+                display: flex;
+                flex: 1;
+            }
+            .content {
+                position: relative;
+                h6 {
+                    font-size: 1.5rem;
+                    font-weight: 600;
+                }
+                .sub {
+                    font-size: .9rem;
+                }
+                .small-font {
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                }
+            }
+            .img {
+                margin-left: 1rem;
+                margin-bottom: 1rem;
+
+                img {
+                    width: 100%;
+
+                }
+            }
+        }
+    }
+}
+
+.secondary-div {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    color: $secondary;
+    font-size: 12px;
+    font-weight: 300;
+    div {
+        background-color: $secondary;
+        height: 1rem;
+        width: 1px;
+        margin: auto 2px;
+    }
+}
