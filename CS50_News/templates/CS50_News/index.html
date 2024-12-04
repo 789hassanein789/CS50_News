@@ -1,4 +1,5 @@
 {% extends "CS50_News/layout.html" %}
+{% load change %}
 
 {% block body %}
     <div id="main-container">
@@ -56,7 +57,7 @@
                 <div class="side-new-text">
                     <h6 class="main-text">{{news.0.headline}}</h6>
                     <div class="secondary-div side-secondary">
-                        <span>{{news.0.timestamp}}</span>
+                        <span>{{news.0.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
                         <span>{{news.0.get_sub_category_display}}</span>
                     </div>
@@ -69,9 +70,9 @@
                 <div class="side-new-text">
                     <h6 class="main-text">{{news.1.headline}}</h6>
                     <div class="secondary-div side-secondary">
-                        <span>{{news.0.timestamp}}</span>
+                        <span>{{news.1.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
-                        <span>{{news.0.sub_category}}</span>
+                        <span>{{news.1.sub_category}}</span>
                     </div>
                 </div>
             </a>
@@ -82,9 +83,9 @@
                 <div class="side-new-text">
                     <h6 class="main-text">{{news.2.headline}}</h6>
                     <div class="secondary-div side-secondary">
-                        <span>{{news.0.timestamp}}</span>
+                        <span>{{news.2.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
-                        <span>{{news.0.sub_category}}</span>
+                        <span>{{news.2.sub_category}}</span>
                     </div>
                 </div>
             </a>
@@ -95,9 +96,9 @@
                 <div class="side-new-text">
                     <h6 class="main-text">{{news.3.headline}}</h6>
                     <div class="secondary-div side-secondary">
-                        <span>{{news.0.timestamp}}</span>
+                        <span>{{news.3.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
-                        <span>{{news.0.sub_category}}</span>
+                        <span>{{news.3.sub_category}}</span>
                     </div>
                 </div>
             </a>
@@ -116,7 +117,7 @@
                     <h6 class="content-heading">{{new.headline}}</h6>
                     <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
                     <div class="secondary-div">
-                        <span>1.5 days ago</span>
+                        <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
                         <span>{{new.sub_category}}</span>
                     </div>
