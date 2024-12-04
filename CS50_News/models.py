@@ -10,79 +10,66 @@ class User(AbstractUser):
         return f"{self.username}"
     
 class New(models.Model):
+    headline = models.CharField(max_length=200)
+    sub_headline = models.CharField(max_length=200)
+    image = models.ImageField(upload_to="CS50_News/static/CS50_News/cover" ,blank=True, null=True)
+    content = models.TextField()
+    views = models.IntegerField(default=0)
+    scroll = models.IntegerField(default=0)
+    score = models.IntegerField(default=10)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    auther = models.ForeignKey(User, on_delete=models.CASCADE, related_name="publishes")
+
+class Category(models.Model):
     CATEGORYS = {
         "N": "News",
         "S": "Sport",
         "B": "Business",
         "I": "Innovation",
         "C": "Culture",
-        "A": "Art",
         "T": "Travel",
         "E": "Earth",
-    }
-    SUB = {
-        "N": "News",
-        "IG": "Israil-Gaza war",
-        "UR": "Ukraine-Russia war",
+        "IG": "Israil-Gaza_war",
+        "UR": "Ukraine-Russia_war",
         "IQ": "Iraq",
-        "US&C": "US & Canada",
-        "MD": "Middle East",
+        "US&C": "US_&_Canada",
+        "MD": "Middle_East",
         "EU": "Europe",
         "AS": "Asia",
         "AF": "Africa",
         "AU": "Australia",
-        "LA": "Latine America",
+        "LA": "Latine_America",
 
-        "SP": "Sport",
-        "MA": "Martial Arts",
+
+        "MA": "Martial_Arts",
         "FB": "Football",
+        "CR": "Cricket",
+        "F1": "Formula_1",
+        "TE": "Tennis",
+        "GO": "Golf",
+        "AT": "Athletics",
+        "CY": "Cycling",
 
-        "IN": "Innovation",
         "TECH": "Technology",
-        "HE": "Health",
+        "S&HE": "Science_&_Health",
 
-        "CU": "Culture",
         "BOOK": "Books",
-        "STY": "Style",
+        "ST": "Style",
+        "TV": "Film_&_TV",
+        "MS": "Music",
+        "AR&D": "Art_&_Design",
+        "EN": "Entertainment",
 
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
-        "": "",
+        "DE": "Destinations",
+        "FOOD": "Food_&_Drink",
+        "AD": "Adventures",
+
+        "NW": "Natural_Wonders",
+        "WE&C": "Weather_&_Climate",
     }
-    headline = models.CharField(max_length=200)
-    sub_headline = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="CS50_News/static/CS50_News/cover" ,blank=True, null=True)
-    content = models.TextField(max_length=10000)
     category = models.CharField(max_length=50, choices=CATEGORYS)
-    views = models.IntegerField(default=0)
-    scroll = models.IntegerField(default=0)
-    score = models.IntegerField(default=10)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    sub_category = models.CharField(max_length=25, choices=SUB, default="IG")
-    auther = models.ForeignKey(User, on_delete=models.CASCADE, related_name="publishes")
+    parent = models.CharField(max_length=50, choices=CATEGORYS, null=True, blank=True)
+    news = models.ManyToManyField(New, related_name="category", null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f"{self.category}"

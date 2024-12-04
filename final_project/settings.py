@@ -15,7 +15,7 @@ from pathlib import Path
 ACCOUNT_RATE_LIMITS = False
 
 
-SITE_ID = 1
+SITE_ID = 2
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

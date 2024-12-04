@@ -9,27 +9,39 @@ from datetime import datetime
 from django.core.paginator import Paginator
 from django.template.defaulttags import register
 from django.core import serializers
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from allauth.account.decorators import reauthentication_required
-import time
+import markdown
 import pyotp
-import schedule
 import json
 
-from .models import User, New
+from .models import User, New, Category
 from .utils import send_otp
 
 
 # Create your views here.
-def index(request, category=None): 
-    if category == None:
+def index(request, cat=None):
+    if cat == None:
         news = New.objects.all()
-    elif category in ["News", "Sport", "Business", "Innovation", "Culture", "Art", "Travel", "Earth"]:
-         news = New.objects.filter(category=category[0])
+        return render(request, "CS50_News/index.html", {
+            "news" : news
+        })
+    elif cat in ["News", "Sport", "Business", "Innovation", "Culture", "Art", "Travel", "Earth"]:
+        news = New.objects.filter(category=Category.objects.get(category=cat[0]))
+        sub_categories = Category.objects.filter(parent=cat[0])
     else:
-        news = New.objects.filter(sub_category=category)
+        cat_dict = Category.CATEGORYS
+        short_name = ""
+        for key, value in cat_dict.items():
+            if value == cat:
+                short_name = key
+        print(short_name) 
+        news = New.objects.filter(category=Category.objects.get(category=short_name))
+        parent = Category.objects.get(category=short_name).parent
+        sub_categories = Category.objects.filter(parent=parent)
     return render(request, "CS50_News/index.html", {
-        "news" : news
+        "news" : news,
+        "subs": sub_categories
     })
 
 def search(request):
@@ -47,6 +59,9 @@ def search(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
+
+def admin_view(request):
+    return render(request, "CS50_News/admin.html")
 
 def add_new(request):
     if request.method == "POST":
@@ -114,7 +129,9 @@ def crop(request):
     return render(request, "CS50_News/crop.html")
 
 def new(request, id):
+    md = markdown.Markdown(extensions=["fenced_code"])
     new = New.objects.get(id=id)
+    new.content = md.convert(new.content)
     return render(request, "CS50_News/new.html", {
         "new": new
     })

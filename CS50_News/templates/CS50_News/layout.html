@@ -1,5 +1,6 @@
 {% load static %}
 {% load socialaccount %}
+{% load change %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,7 +43,7 @@
                 <a class="navbar-brand" id="brand" href="{% url 'index' %}" style="font-family: 'Pirata One', system-ui;">CS50 News</a>
                 <div id="navbar-content">
                     <div class="icon-div">
-                        <a class="icon-btn" href="{% url '' %}">
+                        <a class="icon-btn">
                             <i class="fa-solid fa-user-tie"></i>                    
                         </a>
                     </div>
@@ -78,153 +79,34 @@
         </div>
         <nav id="navbar">
             <ul id="navbar-ul">
-                <a class="nav-link" href="{% url 'index' %}"><li class="p-2 nav-dd-item" data-target="Main" id="nav-Main">Main</li></a>
-                <div class="drop-down">
-                    <a class="nav-link" href="{% url 'cat_index' category='News' %}"><li class="p-2 nav-dd-item" data-target="News" id="nav-NewsCategory">News</li><i class="fa-solid fa-caret-down"></i></a>
-                    <div class="hover-drop-down-div" id="News-drop-down-div">
-                        <ul class="list-group list-group-flush">
-                            <a href="{% url 'cat_index' category='News' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="News">News</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Israel-Gaza War' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="Israel-Gaza_War">Israel-Gaza War</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='War in Ukraine' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="War_in_Ukraine">War in Ukraine</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Iraq' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="Iraq">Iraq</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='US & Canada' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="US_and_Canada">US & Canada</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='MD' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="Middle_East">Middle East</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Europe' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="Europe">Europe</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Asia' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="Asia">Asia</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Africa' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="Africa">Africa</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Australia' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="Australia">Australia</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Latin America' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item" data-target="Latin_America">Latin America</li>
-                            </a>
-                        </ul>
-                    </div>
-                </div>
-                <div class="drop-down">
-                    <a class="nav-link nav-dd-item" href="{% url 'cat_index' category='Sport' %}"><li class="p-2 nav-dd-item" data-target="Sport"  id="nav-SportCategory">Sport</li><i class="fa-solid fa-caret-down"></i></a>
-                    <div class="hover-drop-down-div" id="Sport-drop-down-div">
-                        <ul class="list-group list-group-flush">
-                            <a href="{% url 'cat_index' category='Sport' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Sport">Sport</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Martial arts' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Martial_arts">Martial arts</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Football' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Football">Football</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Tennis' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Tennis">Tennis</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Cricket' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Cricket">Cricket</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Golf' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Golf">Golf</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Cycling' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Cycling">Cycling</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Formula 1' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Formula_1">Formula 1</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='American Football' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="American_Football">American Football</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Athlatics' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Athlatics">Athlatics</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Olympic Games' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Olympic_Games">Olympic Games</li>
-                            </a>
-                        </ul>
-                    </div>
-                </div>
-                <a class="nav-link" href="{% url 'cat_index' category='Business' %}"><li class="p-2 nav-dd-item" data-target="Business" id="nav-Business">Business</li></a>
-                <div class="drop-down">
-                    <a class="nav-link" href="{% url 'cat_index' category='Innovation' %}"><li class="p-2 nav-dd-item" data-target="Innovation" id="nav-InnovationCategory">Innovation</li><i class="fa-solid fa-caret-down"></i></a>
-                    <div class="hover-drop-down-div" id="Innovation-drop-down-div">
-                        <ul class="list-group list-group-flush">
-                            <a href="{% url 'cat_index' category='Innovation' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Innovation">Innovation</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Technology' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Technology">Technology</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Health' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Health">Health</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Science' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="Science">Science</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='AI' %}" class="item-a">
-                                <li class="list-group-item nav-list-group-item nav-dd-item" data-target="AI">AI</li>
-                            </a>
-                        </ul>
-                    </div>
-                </div>
-                <div class="drop-down">
-                    <a class="nav-link" href="{% url 'cat_index' category='Culture' %}"><li class="p-2 nav-dd-item" data-target="Culture" id="nav-CultureCategory">Culture</li><i class="fa-solid fa-caret-down"></i></a>
-                    <div class="hover-drop-down-div" id="Culture-drop-down-div">
-                        <ul class="list-group list-group-flush">
-                            <a href="{% url 'cat_index' category='Culture' %}" class="item-a">
-                                <li class="list-group-item  nav-list-group-item" data-target="Culture">Culture</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Books' %}" class="item-a">
-                                <li class="list-group-item  nav-list-group-item" data-target="Books">Books</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Art & Design' %}" class="item-a">
-                                <li class="list-group-item  nav-list-group-item" data-target="Art_and_Design">Art & Design</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Style' %}" class="item-a">
-                                <li class="list-group-item  nav-list-group-item" data-target="Style">Style</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Entertainment' %}" class="item-a">
-                                <li class="list-group-item  nav-list-group-item" data-target="Entertainment">Entertainment</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Film & TV' %}" class="item-a">
-                                <li class="list-group-item  nav-list-group-item" data-target="Film_and_TV">Film & TV</li>
-                            </a>
-                            <a href="{% url 'cat_index' category='Music' %}" class="item-a">
-                                <li class="list-group-item  nav-list-group-item" data-target="Music">Music</li>
-                            </a>
-                        </ul>
-                    </div>
-                </div>
+                <a class="nav-link" href="{% url 'index' %}"><li class="p-2" data-target="Home" id="nav-Home">Home</li></a>
+                <a class="nav-link" href="{% url 'cat_index' cat='News' %}"><li class="p-2" data-target="News" id="nav-News">News</li></a>
+                <a class="nav-link" href="{% url 'cat_index' cat='Sport' %}"><li class="p-2" data-target="Sport"  id="nav-Sport">Sport</li></a>
+                <a class="nav-link" href="{% url 'cat_index' cat='Business' %}"><li class="p-2" data-target="Business" id="nav-Business">Business</li></a>
+                <a class="nav-link" href="{% url 'cat_index' cat='Innovation' %}"><li class="p-2" data-target="Innovation" id="nav-Innovation">Innovation</li></a>
+                <a class="nav-link" href="{% url 'cat_index' cat='Culture' %}"><li class="p-2" data-target="Culture" id="nav-Culture">Culture</li></a>
             </ul>
         </nav>
     </header>
+    {% if subs %}
+        <nav id="sub_nav">
+            {% for sub in subs %}
+                <a href="{% url 'cat_index' cat=sub.get_category_display %}" class="nav-link">
+                    <li class="list-group-item" data-target="{{sub.get_category_display}}"  id="sub-nav-{{sub.get_category_display}}" >{{ sub.get_category_display|change:"_ " }}</li>
+                </a>
+            {% endfor %}
+        </nav>
+    {% endif %}
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
         <div class="offcanvas-header">
             <button type="button" class="btn-close close-offcanvas" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
             <ul class="list-group list-group-flush">
-                <a href="{% url 'index' %}" class="list-group-item list-group-item-action sub-item" id="Main" data-target="Main">
-                    <div class="drop-down-div">
-                        <button class="main-section-button">Main</button>
-                    </div>
+                <a href="{% url 'index' %}" class="nav-link">
+                    <li class="list-group-item" data-target="Home" id="Home-category">Home</li>
                 </a>
-                <li class="list-group-item list-group-item-action main-section-item" data-section-name="News" id="NewsCategory">
+                <li class="list-group-item main-section-item" data-section-name="News" id="News-category">
                     <div class="drop-down-div">
                         <button class="main-section-button">News</button>
                         <button class="main-section-button">
@@ -232,44 +114,44 @@
                         </button>
                     </div>
                 </li>
-                <li class="list-group-item drop-down-item d-none" id="News-drop-down">
+                <li class="list-group-item drop-down-item d-none">
                     <ul class="list-group list-group-flush">
-                        <a href="{% url 'cat_index' category='News' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="News">News</li>
+                        <a href="{% url 'cat_index' cat='News' %}" class="nav-link">
+                            <li class="list-group-item" data-target="News" id="News">News</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Israel-Gaza War' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="Israel-Gaza_War">Israel-Gaza War</li>
+                        <a href="{% url 'cat_index' cat='Israil-Gaza_war'%}" class="nav-link">
+                            <li class="list-group-item" data-target="Israil-Gaza_war" id="Israil-Gaza_war">Israel-Gaza war</li>
                         </a>
-                        <a href="{% url 'cat_index' category='War in Ukraine' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="War_in_Ukraine">War in Ukraine</li>
+                        <a href="{% url 'cat_index' cat='Ukraine-Russia_war' %}" class="nav-link">
+                            <li class="list-group-item" data-target="Ukraine-Russia_war" id="Ukraine-Russia_war">War in Ukraine</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Iraq' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="Iraq">Iraq</li>
+                        <a href="{% url 'cat_index' cat='Iraq' %}" class="nav-link">
+                            <li class="list-group-item" data-target="Iraq" id="Iraq">Iraq</li>
                         </a>
-                        <a href="{% url 'cat_index' category='US & Canada' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="US_and_Canada">US & Canada</li>
+                        <a href="{% url 'cat_index' cat='US_&_Canada' %}" class="nav-link">
+                            <li class="list-group-item" data-target="US_&_Canada" id="US_&_Canada">US & Canada</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Middle East' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="Middle_East">Middle East</li>
+                        <a href="{% url 'cat_index' cat='Middle_East' %}" class="nav-link">
+                            <li class="list-group-item" data-target="Middle_East" id="Middle_East">Middle East</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Europe' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="Europe">Europe</li>
+                        <a href="{% url 'cat_index' cat='Europe' %}" class="nav-link">
+                            <li class="list-group-item" data-target="Europe" id="Europe">Europe</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Asia' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="Asia">Asia</li>
+                        <a href="{% url 'cat_index' cat='Asia' %}" class="nav-link">
+                            <li class="list-group-item" data-target="Asia" id="Asia">Asia</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Africa' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="Africa">Africa</li>
+                        <a href="{% url 'cat_index' cat='Africa' %}" class="nav-link">
+                            <li class="list-group-item" data-target="Africa" id="Africa">Africa</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Australia' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="Australia">Australia</li>
+                        <a href="{% url 'cat_index' cat='Australia' %}" class="nav-link">
+                            <li class="list-group-item" data-target="Australia" id="Australia">Australia</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Latin America' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="NewsCategory" id="Latin_America">Latin America</li>
+                        <a href="{% url 'cat_index' cat='Latine_America' %}" class="nav-link">
+                            <li class="list-group-item" data-target="Latine_America" id="Latine_America">Latine America</li>
                         </a>
                     </ul>
                 </li>
-                <li class="list-group-item list-group-item-action main-section-item" data-section-name="Sport" id="SportCategory">
+                <li class="list-group-item main-section-item" data-section-name="Sport" id="Sport-category">
                     <div class="drop-down-div">
                         <button class="main-section-button">Sport</button>
                         <button class="main-section-button">
@@ -277,49 +159,41 @@
                         </button>
                     </div>
                 </li>
-                <li class="list-group-item drop-down-item d-none" id="Sport-drop-down">
+                <li class="list-group-item drop-down-item d-none">
                     <ul class="list-group list-group-flush">
-                        <a href="{% url 'cat_index' category='Sport' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="Sport">Sport</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Sport' %}">
+                            <li class="list-group-item" data-target="Sport" id="Sport">Sport</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Martial arts' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="Martial_arts">Martial arts</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Martial_Arts' %}">
+                            <li class="list-group-item" data-target="Martial_Arts" id="Martial_Arts">Martial arts</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Football' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="Football">Football</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Football' %}">
+                            <li class="list-group-item" data-target="Football" id="Football">Football</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Tennis' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="Tennis">Tennis</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Cricket' %}">
+                            <li class="list-group-item" data-target="Cricket" id="Cricket">Cricket</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Cricket' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="Cricket">Cricket</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Formula_1' %}">
+                            <li class="list-group-item" data-target="Formula_1" id="Formula_1">Formula 1</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Golf' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="Golf">Golf</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Tennis' %}">
+                            <li class="list-group-item" data-target="Tennis" id="Tennis">Tennis</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Cycling' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="Cycling">Cycling</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Golf' %}">
+                            <li class="list-group-item" data-target="Golf" id="Golf">Golf</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Formula 1' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="Formula_1">Formula 1</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Athletics' %}">
+                            <li class="list-group-item" data-target="Athletics" id="Athletics">Athletics</li>
                         </a>
-                        <a href="{% url 'cat_index' category='American Football' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="American_Football">American Football</li>
-                        </a>
-                        <a href="{% url 'cat_index' category='Athlatics' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="Athlatics">Athlatics</li>
-                        </a>
-                        <a href="{% url 'cat_index' category='Olympic Games' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="SportCategory" id="Olympic_Games">Olympic Games</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Cycling' %}">
+                            <li class="list-group-item" data-target="Cycling" id="Cycling">Cycling</li>
                         </a>
                     </ul>
                 </li>
-                <a href="{% url 'cat_index' category='Business' %}" class="list-group-item list-group-item-action sub-item" id="Business" data-target="Business">
-                    <div class="drop-down-div">
-                        <button class="main-section-button">Business</button>
-                    </div>
+                <a href="{% url 'cat_index' cat='Business' %}" class="nav-link">
+                    <li class="list-group-item" data-target="Business" id="Business-category">Business</li>
                 </a>
-                <li class="list-group-item list-group-item-action main-section-item" data-section-name="Innovation" id="InnovationCategory">
+                <li class="list-group-item main-section-item" data-section-name="Innovation" id="Innovation-category">
                     <div class="drop-down-div">
                         <button class="main-section-button">Innovation</button>
                         <button class="main-section-button">
@@ -327,26 +201,20 @@
                         </button>
                     </div>
                 </li>
-                <li class="list-group-item drop-down-item d-none" id="Innovation-drop-down">
+                <li class="list-group-item drop-down-item d-none">
                     <ul class="list-group list-group-flush">
-                        <a href="{% url 'cat_index' category='Innovation' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="InnovationCategory" id="Innovation">Innovation</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Innovation' %}">
+                            <li class="list-group-item" data-target="Innovation" id="Innovation">Innovation</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Technology' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="InnovationCategory" id="Technology">Technology</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Technology' %}">
+                            <li class="list-group-item" data-target="Technology" id="Technology">Technology</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Health' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="InnovationCategory" id="Health">Health</li>
-                        </a>
-                        <a href="{% url 'cat_index' category='Science' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="InnovationCategory" id="Science">Science</li>
-                        </a>
-                        <a href="{% url 'cat_index' category='AI' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="InnovationCategory" id="AI">AI</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Science_&_Health' %}">
+                            <li class="list-group-item" data-target="Science_&_Health" id="Science_&_Health">Science_&_Health</li>
                         </a>
                     </ul>
                 </li>
-                <li class="list-group-item list-group-item-action main-section-item" data-section-name="Culture" id="CultureCategory">
+                <li class="list-group-item main-section-item" data-section-name="Culture" id="Culture-category">
                     <div class="drop-down-div">
                         <button class="main-section-button">Culture</button>
                         <button class="main-section-button">
@@ -354,29 +222,31 @@
                         </button>
                     </div>
                 </li>
-                <li class="list-group-item drop-down-item d-none" id="Culture-drop-down">
+                <li class="list-group-item drop-down-item d-none">
                     <ul class="list-group list-group-flush">
-                        <a href="{% url 'cat_index' category='Culture' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="CultureCategory" id="Culture">Culture</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Culture' %}">
+                            <li class="list-group-item" data-target="Culture" id="Culture">Culture</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Books' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="CultureCategory" id="Books">Books</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Books' %}">
+                            <li class="list-group-item" data-target="Books" id="Books">Books</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Art & Design' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="CultureCategory" id="Art_and_Design">Art & Design</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Style' %}">
+                            <li class="list-group-item" data-target="Style" id="Style">Style</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Style' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="CultureCategory" id="Style">Style</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Film_&_TV' %}">
+                            <li class="list-group-item" data-target="Film_&_TV" id="Film_&_TV">Film & TV</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Entertainment' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="CultureCategory" id="Entertainment">Entertainment</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Music' %}">
+                            <li class="list-group-item" data-target="Music" id="Music">Music</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Film & TV' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="CultureCategory" id="Film_and_TV">Film & TV</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Art_&_Design' %}">
+                            <li class="list-group-item" data-target="Art_&_Design" id="Art_&_Design">Art & Design</li>
                         </a>
-                        <a href="{% url 'cat_index' category='Music' %}" class="item-a">
-                            <li class="list-group-item list-group-item-action sub-item" data-target="CultureCategory" id="Music">Music</li>
+                        <a class="nav-link" href="{% url 'cat_index' cat='Entertainment' %}">
+                            <li class="list-group-item" data-target="Entertainment" id="Entertainment">Entertainment</li>
                         </a>
+                        
+                        
                     </ul>
                 </li>
             </ul>
@@ -537,7 +407,7 @@
                                     <span>Log in with Google</span>
                                 </button>
                             </form>
-                            <form action="{% provider_login_url 'github' %}?next=/" method="post"> 
+                            <form> 
                                 {% csrf_token %}
                                 <button class="social-login Github-login">
                                     <span class="Cat-logo social-login-logo">
@@ -551,7 +421,7 @@
                                     <span>Log in with github</span>
                                 </button>
                             </form>
-                            <form action="{% provider_login_url 'facebook' %}?next=/" method="post">
+                            <form>
                                 {% csrf_token %}
                                 <button class="social-login Facebook-login">
                                     <span class="social-login-logo">

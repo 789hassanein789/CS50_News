@@ -1,6 +1,4 @@
 from django.urls import path
-from django.conf.urls.static import static
-from django.conf import settings
 from . import views
 
 
@@ -15,7 +13,7 @@ urlpatterns = [
     path("delete", views.Delete, name="delete"),
     path("edit", views.accountEdit, name="edit"),
     path("OTP", views.otp_view, name="otp"),
-    path("<str:category>", views.index, name="cat_index"),
-    path("new/<int:id>", views.new, name="new")
+    path("new/<int:id>", views.new, name="new"),
+    path("cat/<str:cat>", views.index, name="cat_index"),
 ]
 

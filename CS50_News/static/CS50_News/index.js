@@ -3,8 +3,6 @@ const toggleBtn = document.querySelector('#toggle-button');
 const mainHeader = document.querySelector('#main-header_content')
 const mainSearch = document.querySelector('.main-header_search');
 const mainItems = document.querySelectorAll('.main-section-item');
-const ddItems = document.querySelectorAll('.list-group-item');
-const dropDowns = document.querySelectorAll('.drop-down');
 const searchBtn = document.querySelector('#min-search-btn');
 const backBtn = document.querySelector('#backBtn');
 const accountDP = document.querySelector('#a-dp-btn');
@@ -13,7 +11,6 @@ const settingBtn = document.querySelector('.setting-btn');
 const deleteLink = document.querySelector('#delete-link');
 const deleteBackBtn = document.querySelector('#back-btn');
 const popupForms = document.querySelectorAll('.popup-form');
-const subItems = document.querySelectorAll('.sub-item');
 const popup = document.querySelector('.popup');
 const inputs = document.querySelectorAll('.otp-input');
 const validationForm = document.querySelector('#validation-form');
@@ -25,9 +22,10 @@ const settingUsername = document.querySelector('#username');
 const settingFirst = document.querySelector('#first-name');
 const settingLast = document.querySelector('#last-name');
 const loginError = document.querySelector('#conflict-login');
-const loginInputs = document.querySelectorAll('.login-input')
+const loginInputs = document.querySelectorAll('.login-input');
+const navLinks = document.querySelectorAll('.nav-link');
+
 /*
-const aaaa = document.querySelector('');
 const aaaa = document.querySelector('');
 const aaaa = document.querySelector('');
 const aaaa = document.querySelector('');
@@ -39,7 +37,8 @@ const aaaa = document.querySelector('');
 */
 const popupContent = popup.innerHTML;
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
- 
+
+// dark/light mood
 if (darkMode === 'enabled') {
     document.body.classList.add('dark-mode');
     document.body.setAttribute('data-bs-theme', 'dark')
@@ -55,45 +54,70 @@ toggleBtn.addEventListener('click', () => {
     darkMode = localStorage.getItem('darkmode')
 })
 
+// offcanvas dropdown
 mainItems.forEach(item => {
-    let sectionName = item.dataset.sectionName
-        item.addEventListener('click', () => {
-            document.querySelector(`#${sectionName}-drop-down`).classList.toggle('d-none');
-        })
+    item.addEventListener('click', () => {
+        item.nextElementSibling.classList.toggle('d-none');
+    })
 })
+
+// selected section style
+
+// get category from sessionStorage
 let category = sessionStorage.getItem('categorySelected')
+let Main = sessionStorage.getItem('mainCategory')
+
+// Main if null
 if (category == null) {
-    category = 'Main'
-    sessionStorage.setItem('categorySelected', 'Main')
+    category = 'Home'
+    sessionStorage.setItem('categorySelected', 'Home')
 }
-let selected = document.querySelector(`#${category}`)
-let t = selected.getAttribute('data-target');
-selected.classList.add('fw-bolder')
-document.querySelector(`#${t}`).classList.add('selected')
-document.querySelector(`#nav-${t}`).classList.add('clicked')
 
-subItems.forEach(item => {
-    item.addEventListener('click', () => {
-        sessionStorage.setItem('categorySelected', `${item.id}`);
-    })
-})
+if (Main == null) {
+    Main = 'Home'
+    sessionStorage.setItem('mainCategory', 'Home')
+}
 
+// add classes
+const selected = document.getElementById(category)
+//check if selected exist, when clicking Home or Business selected doesn't exist.
+if (selected) {
+    selected.classList.add('fw-bolder');
+}
 
-ddItems.forEach(item => {
-    let target = item.getAttribute('data-target')
-    item.addEventListener('click', () => {
-        sessionStorage.setItem('categorySelected', `${target}`)
-    })
-})
+const subNav = document.getElementById(`sub-nav-${category}`);
 
+if(subNav) {
+    subNav.classList.add('fw-bolder');
+}
 
-dropDowns.forEach(dropDown => {
-    let icon = dropDown.querySelector(':scope > .nav-link > .fa-caret-down');
-    dropDown.addEventListener('mouseenter', () => {
-        icon.classList.replace('fa-caret-down', 'fa-caret-up')
-    })
-    dropDown.addEventListener('mouseleave', () => {
-        icon.classList.replace('fa-caret-up', 'fa-caret-down')
+document.querySelector(`#${Main}-category`).classList.add('selected')
+document.querySelector(`#nav-${Main}`).classList.add('clicked')
+
+// defining an object for categor maping
+sub_categorys = [['Home'],
+                ['News', 'Israil-Gaza_war', 'Ukraine-Russia_war', 'Iraq', 'US_&_Canada', 'Middle_East', 'Europe', 'Asia', 'Africa', 'Australia', 'Latine_America'],
+                ['Sport', 'Martial_Arts', 'Football', 'Cricket', 'Formula_1', 'Tennis', 'Golf', 'Athletics', 'Cycling'],
+                ['Business'],
+                ['Innovation', 'Technology', 'Science_&_Health'],
+                ['Culture', 'Books', 'Style', 'Film_&_TV', 'Music', 'Art_&_Design', 'Entertainment'],
+                ['Travel', 'Destinations', 'Food_&_Drink', 'Adventures'],
+                ['Earth', 'Natural_Wonders', 'Weather_&_Climate']];
+
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        const li = link.firstElementChild;
+        console.log(li.dataset.target);
+        console.log('hi');
+        sessionStorage.setItem('categorySelected', `${li.dataset.target}`);
+        for (let i = 0; i < sub_categorys.length; i++) {
+            let list = sub_categorys[i];
+            for(let x = 0; x < list.length; x++) {
+                if (li.dataset.target === list[x]) {
+                    sessionStorage.setItem('mainCategory', `${list[0]}`);
+                }
+            }
+        }
     })
 })
 
