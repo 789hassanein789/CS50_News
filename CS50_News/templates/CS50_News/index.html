@@ -9,35 +9,20 @@
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
                 </div>
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <a class="link" href="">
-                            <img src="{{news.0.image.url}}" class="d-block w-100" alt="...">
-                            <div class="carousel-caption">
-                                <h5>{{news.0.headline}}</h5>
-                                <p>Some representative placeholder content for the first slide.</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="carousel-item">
-                        <a href="">
-                            <img src="{{news.1.image.url}}" class="d-block w-100" alt="...">
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5>{{news.1.headline}}</h5>
-                                <p>Some representative placeholder content for the second slide.</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="carousel-item">
-                        <a href="">
-                            <img src="{{news.2.image.url}}" class="d-block w-100" alt="...">
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5>{{news.2.headline}}</h5>
-                                <p>Some representative placeholder content for the third slide.</p>
-                            </div>
-                        </a>
-                    </div>
+                    {% for new in hero %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <a class="link" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
+                                <img src="{{new.image.url}}" class="d-block w-100" alt="...">
+                                <div class="carousel-caption">
+                                    <h5>{{new.headline}}</h5>
+                                    <p>{{new.sub_headline}}</p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -50,66 +35,29 @@
             </div>
         </div>
         <div class="side-div">
-            <a class="side-new link" href="">
-                <div class="side-new-image-div">
-                    <img src="{{news.0.image.url}}" alt="">
-                </div>
-                <div class="side-new-text">
-                    <h6 class="main-text">{{news.0.headline}}</h6>
-                    <div class="secondary-div side-secondary">
-                        <span>{{news.0.timestamp|timesince|timeformat|safe}}</span>
-                        <div></div>
-                        <span>{{news.0.get_sub_category_display}}</span>
+            {% for new in side %}
+                <a class="side-new link" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
+                    <div class="side-new-image-div">
+                        <img src="{{new.image.url}}" alt="">
                     </div>
-                </div>
-            </a>
-            <a class="side-new link" href="">
-                <div class="side-new-image-div">
-                    <img src="{{news.1.image.url}}" alt="">
-                </div>
-                <div class="side-new-text">
-                    <h6 class="main-text">{{news.1.headline}}</h6>
-                    <div class="secondary-div side-secondary">
-                        <span>{{news.1.timestamp|timesince|timeformat|safe}}</span>
-                        <div></div>
-                        <span>{{news.1.sub_category}}</span>
+                    <div class="side-new-text">
+                        <h6 class="main-text">{{new.headline}}</h6>
+                        <div class="secondary-div side-secondary">
+                            <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                            <div></div>
+                            <span>{{new.category.all.0.get_category_display}}</span>
+                        </div>
                     </div>
-                </div>
-            </a>
-            <a class="side-new link" href="">
-                <div class="side-new-image-div">
-                    <img src="{{news.2.image.url}}" alt="">
-                </div>
-                <div class="side-new-text">
-                    <h6 class="main-text">{{news.2.headline}}</h6>
-                    <div class="secondary-div side-secondary">
-                        <span>{{news.2.timestamp|timesince|timeformat|safe}}</span>
-                        <div></div>
-                        <span>{{news.2.sub_category}}</span>
-                    </div>
-                </div>
-            </a>
-            <a class="side-new link" href="">
-                <div class="side-new-image-div">
-                    <img src="{{news.3.image.url}}" alt="">
-                </div>
-                <div class="side-new-text">
-                    <h6 class="main-text">{{news.3.headline}}</h6>
-                    <div class="secondary-div side-secondary">
-                        <span>{{news.3.timestamp|timesince|timeformat|safe}}</span>
-                        <div></div>
-                        <span>{{news.3.sub_category}}</span>
-                    </div>
-                </div>
-            </a>
+                </a>
+            {% endfor %}
         </div>
     </div>
     <div class="bold-seperator">
     </div>
     <h3 class="news-section-heading">News</h3>
     <div class="news-section">
-        {% for new in news %}
-            <div class="new-container">
+        {% for new in news|slice:":7" %}
+            <a class="new-container" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
                 <div class="new-image">
                     <img src="{{new.image.url}}" alt="">
                 </div>
@@ -119,10 +67,10 @@
                     <div class="secondary-div">
                         <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
-                        <span>{{new.sub_category}}</span>
+                        <span>{{new.category.all.0.get_category_display}}</span>
                     </div>
                 </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
     <div class="light-seperator">
@@ -162,106 +110,18 @@
     </div>
     <h3 class="trending-section-heading">Most read</h3>
     <div class="trending">
-        <div class="trend">
-            <a class="link" href="">
-                <span>
-                    1
-                </span>
-                <h6>
-                    {{news.3.headline}}
-                </h6>
-            </a>
-        </div>
-        <div class="trend">
-            <a class="link" href="">
-                <span>
-                    2
-                </span>
-                <h6>
-                    {{news.3.headline}}
-                </h6>
-            </a>
-        </div>
-        <div class="trend">
-            <a class="link" href="">
-                <span>
-                    3
-                </span>
-                <h6>
-                    {{news.3.headline}}
-                </h6>
-            </a>
-        </div>
-        <div class="trend">
-            <a class="link" href="">
-                <span>
-                    4
-                </span>
-                <h6>
-                    {{news.3.headline}}
-                </h6>
-            </a>
-        </div>
-        <div class="trend">
-            <a class="link" href="">
-                <span>
-                    5
-                </span>
-                <h6>
-                    {{news.3.headline}}
-                </h6>
-            </a>
-        </div>
-        <div class="trend">
-            <a class="link" href="">
-                <span>
-                    6
-                </span>
-                <h6>
-                    {{news.3.headline}}
-                </h6>           
-            </a>
-        </div>
-        <div class="trend">
-            <a class="link" href="">
-                <span>
-                    7
-                </span>
-                <h6>
-                    {{news.3.headline}}
-                </h6>
-            </a>
-        </div>
-        <div class="trend">
-            <a class="link" href="">
-                <span>
-                    8
-                </span>
-                <h6>
-                    {{news.3.headline}}
-                </h6>
-            </a>
-        </div>
-        <div class="trend">
-            <a class="link" href="">
-                <span>
-                    9
-                </span>
-                <h6>
-                    {{news.3.headline}}
-                </h6>
-            </a>
-        </div>
-        <div class="trend">
-            <a class="link" href="">
-                <span>
-                    10
-                </span>
-                <h6>
-                    {{news.3.headline}}
-                </h6>
-            </a>
-        </div>
+        {% for new in news|slice:":10" %}
+            <div class="trend">
+                <a class="link" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %} ">
+                    <span>
+                        {{forloop.counter}}
+                    </span>
+                    <h6>
+                        {{new.headline}}
+                    </h6>
+                </a>
+            </div>
+        {% endfor %}
     </div>
 
     <div class="light-seperator"></div>
@@ -269,147 +129,103 @@
     <h3 class="stories-section-heading">MORE TOP STORIES</h3>
     <div class="stories-section">
         <div class="side column-section">
-            <div class="main">
-                <div class="img">
-                    <img src="{{news.4.image.url}}" alt="">
-                </div>
-                <div class="content">
-                    <h6 class="content-heading">{{news.4.headline}}</h6>
-                    <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
-                    <div class="secondary-div">
-                        <span>3 days ago</span>
-                        <div></div>
-                        <span>{{news.3.sub_category}}</span>
-                    </div>
-                </div>
-            </div>     
-            <a href="" class="link column-side-new">
-                <div class="img">
-                    <img src="{{news.4.image.url}}" alt="">
-                </div>
-                <div>
-                    <h6>{{news.4.headline}}</h6>
-                    <div class="secondary-div">
-                        <span>1 month ago</span>
-                        <div></div>
-                        <span>{{news.4.sub_category}}</span>
-                    </div>
-                </div>
-            </a>
-            <a href="" class="link column-side-new">
-                <div class="img">
-                    <img src="{{news.3.image.url}}" alt="">
-                </div>
-                <div>
-                    <h6>{{news.4.headline}}</h6>
-                    <div class="secondary-div">
-                        <span>1 month ago</span>
-                        <div></div>
-                        <span>{{news.4.sub_category}}</span>
-                    </div>
-                </div>
-            </a>
-            <a href="" class="link column-side-new">
-                <div class="img">
-                    <img src="{{news.4.image.url}}" alt="">
-                </div>
-                <div>
-                    <h6>{{news.4.headline}}</h6>
-                    <div class="secondary-div">
-                        <span>1 month ago</span>
-                        <div></div>
-                        <span>{{news.4.sub_category}}</span>
-                    </div>
-                </div>
-            </a>
+            {% for new in top_stories|slice:":4" %}
+                {% if forloop.first %}
+                    <a class="main" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
+                        <div class="img">
+                            <img src="{{new.image.url}}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">{{new.headline}}</h6>
+                            <p>{{new.sub_headline}}</p>
+                            <div class="secondary-div">
+                                <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                                <div></div>
+                                <span>{{new.category.all.0.get_category_display}}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}" class="link column-side-new">
+                        <div class="img">
+                            <img src="{{new.image.url}}" alt="">
+                        </div>
+                        <div>
+                            <h6>{{new.headline}}</h6>
+                            <div class="secondary-div">
+                                <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                                <div></div>
+                                <span>{{new.category.all.0.get_category_display}}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
         </div>
         <div class="middle">
-            <div class="main">
-                <div class="img">
-                    <img src="{{news.5.image.url}}" alt="">
-                </div>
-                <div class="content">
-                    <h6>{{news.5.headline}}</h6>
-                    <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
-                    <div class="secondary-div">
-                        <span>3 days ago</span>
-                        <div></div>
-                        <span>{{news.3.sub_category}}</span>
-                    </div>
-                </div>
-            </div>
-            <a class="link column-side-new" href="">
-                <div class="img">
-                    <img src="{{news.13.image.url}}" alt="">
-                </div>
-                <div class="content">
-                    <h6>{{news.13.headline}}</h6>
-                    <div class="side-secondary secondary-div">
-                        <span>3 days ago</span>
-                        <div></div>
-                        <span>{{news.3.sub_category}}</span>
-                    </div>
-                </div>
-            </a>
-            <a class="link column-side-new" href="">
-                <div class="img">
-                    <img src="{{news.14.image.url}}" alt="">
-                </div>
-                <div class="content">
-                    <h6>{{news.14.headline}}</h6>
-                    <div class="side-secondary secondary-div">
-                        <span>3 days ago</span>
-                        <div></div>
-                        <span>{{news.3.sub_category}}</span>
-                    </div>
-                </div>
-            </a>
+            {% for new in top_stories|slice:"4:7" %}
+                {% if forloop.first %}
+                    <a class="main" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
+                        <div class="img">
+                            <img src="{{new.image.url}}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6>{{new.headline}}</h6>
+                            <p>{{new.sub_headline}}</p>
+                            <div class="secondary-div">
+                                <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                                <div></div>
+                                <span>{{new.sub_category}}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <a class="link column-side-new" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
+                        <div class="img">
+                            <img src="{{new.image.url}}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6>{{new.headline}}</h6>
+                            <div class="side-secondary secondary-div">
+                                <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                                <div></div>
+                                <span>{{new.category.all.0.get_category_display}}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
         </div>
         <div class="side column-section">
-            <div class="main">
-                <div class="img">
-                    <img src="{{news.6.image.url}}" alt="">
-                </div>
-                <div class="content">
-                    <h6 class="content-heading">{{news.4.headline}}</h6>
-                    <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
-                    <div class="secondary-div">
-                        <span>3 days ago</span>
-                        <div></div>
-                        <span>{{news.3.sub_category}}</span>
-                    </div>
-                </div>
-            </div>     
-            <a href="" class="link column-side-new">
-                <div>
-                    <h6>{{news.2.headline}}</h6>
-                    <div class="secondary-div">
-                        <span>3 days ago</span>
-                        <div></div>
-                        <span>{{news.3.sub_category}}</span>
-                    </div>
-                </div>
-            </a>
-            <a href="" class="link column-side-new">
-                <div>
-                    <h6>{{news.3.headline}}</h6>
-                    <div class="secondary-div">
-                        <span>3 days ago</span>
-                        <div></div>
-                        <span>{{news.3.sub_category}}</span>
-                    </div>
-                </div>
-            </a>
-            <a href="" class="link column-side-new">
-                <div>
-                    <h6>{{news.4.headline}}</h6>
-                    <div class="secondary-div">
-                        <span>3 days ago</span>
-                        <div></div>
-                        <span>{{news.3.sub_category}}</span>
-                    </div>
-                </div>
-            </a> 
+            {% for new in top_stories|slice:"7:13" %}
+                {% if forloop.first %}
+                    <a class="main" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
+                        <div class="img">
+                            <img src="{{new.image.url}}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">{{new.headline}}</h6>
+                            <p>{{new.sub_headline}}</p>
+                            <div class="secondary-div">
+                                <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                                <div></div>
+                                <span>{{new.category.all.0.get_category_display}}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}" class="link column-side-new">
+                        <div>
+                            <h6>{{new.headline}}</h6>
+                            <div class="secondary-div">
+                                <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                                <div></div>
+                                <span>{{new.category.all.0.get_category_display}}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 

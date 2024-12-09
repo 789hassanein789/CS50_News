@@ -16,31 +16,32 @@ import pyotp
 import json
 
 from .models import User, New, Category
-from .utils import send_otp
+from .utils import send_otp, Rescore, short_category
 
 
 # Create your views here.
 def index(request, cat=None):
+    Rescore(New.objects.all())
     if cat == None:
-        news = New.objects.all()
-        return render(request, "CS50_News/index.html", {
-            "news" : news
-        })
+        news = New.objects.prefetch_related('category').order_by("score")
+        sub_categories = None
     elif cat in ["News", "Sport", "Business", "Innovation", "Culture", "Art", "Travel", "Earth"]:
-        news = New.objects.filter(category=Category.objects.get(category=cat[0]))
+        news = New.objects.filter(category__category=cat[0]).order_by("score")
         sub_categories = Category.objects.filter(parent=cat[0])
     else:
-        cat_dict = Category.CATEGORYS
-        short_name = ""
-        for key, value in cat_dict.items():
-            if value == cat:
-                short_name = key
-        print(short_name) 
-        news = New.objects.filter(category=Category.objects.get(category=short_name))
+        short_name = short_category(cat)
+        news = New.objects.filter(category__category=short_name).order_by("score")
         parent = Category.objects.get(category=short_name).parent
         sub_categories = Category.objects.filter(parent=parent)
+    hero = news.filter(section="H")
+    side = news.filter(section="S")
+    top_stories = news.filter(section="T")
+
     return render(request, "CS50_News/index.html", {
         "news" : news,
+        "hero": hero,
+        "side": side,
+        "top_stories": top_stories,
         "subs": sub_categories
     })
 
@@ -128,9 +129,14 @@ def accountEdit(request):
 def crop(request):
     return render(request, "CS50_News/crop.html")
 
-def new(request, id):
+def new(request, id, cat=None):
     md = markdown.Markdown(extensions=["fenced_code"])
-    new = New.objects.get(id=id)
+    if cat == None:
+        new = New.objects.get(id=id)
+    else:
+        short_name = short_category(cat)
+        print(short_name)
+        new = New.objects.get(id=id, category__category=short_name)
     new.content = md.convert(new.content)
     return render(request, "CS50_News/new.html", {
         "new": new

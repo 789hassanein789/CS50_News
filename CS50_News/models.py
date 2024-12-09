@@ -1,6 +1,8 @@
-from typing import Iterable
+import datetime
+import pytz
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timesince
 
 # Create your models here.
 class User(AbstractUser):
@@ -10,6 +12,12 @@ class User(AbstractUser):
         return f"{self.username}"
     
 class New(models.Model):
+    SECTIONS =  {
+        "H": "hero",
+        "S": "side",
+        "T": "top_stories",
+        "F": "featured",
+    }
     headline = models.CharField(max_length=200)
     sub_headline = models.CharField(max_length=200)
     image = models.ImageField(upload_to="CS50_News/static/CS50_News/cover" ,blank=True, null=True)
@@ -18,7 +26,11 @@ class New(models.Model):
     scroll = models.IntegerField(default=0)
     score = models.IntegerField(default=10)
     timestamp = models.DateTimeField(auto_now_add=True)
+    section = models.CharField(max_length=50, choices=SECTIONS, null=True, blank=True)
     auther = models.ForeignKey(User, on_delete=models.CASCADE, related_name="publishes")
+
+    def timesince(self):
+        return (self.timestamp - datetime.datetime.now(tz=pytz.UTC)).total_seconds()
 
 class Category(models.Model):
     CATEGORYS = {

@@ -1,10 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("staff", views.admin_view, name="staff"),
     path("add", views.add_new, name="add"),
     path("crop", views.crop, name="crop"),
     path("saerch", views.search, name="search"),
@@ -13,7 +14,9 @@ urlpatterns = [
     path("delete", views.Delete, name="delete"),
     path("edit", views.accountEdit, name="edit"),
     path("OTP", views.otp_view, name="otp"),
-    path("new/<int:id>", views.new, name="new"),
-    path("cat/<str:cat>", views.index, name="cat_index"),
+    path("<str:cat>/", include([
+        path("", views.index, name="cat_index"),
+        path("<int:id>", views.new, name="new"),
+    ])),
 ]
 

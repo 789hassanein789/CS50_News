@@ -8,8 +8,9 @@ def change(value, args):
     return value.replace(args[0], args[1])
 
 def timeformat(value):
-    if value[0] == "0":
-        return "now"
+    if len(value) > 0:
+        if value[0] == "0":
+            return "now"
     for i, s in enumerate(value):
         if s == ',':
             return f"{value[:i]}&nbspago"
