@@ -31,6 +31,9 @@
 .side-div .side-new .side-new-text {
   position: relative;
 }
+.side-div .side-new .side-new-text .main-text {
+  font-weight: 600;
+}
 .side-div .side-new .side-new-image-div {
   position: relative;
   float: left;
@@ -57,8 +60,9 @@
   gap: 4px;
   align-items: center;
   color: hsl(210, 2%, 34%);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 300;
+  white-space: nowrap;
 }
 .secondary-div div {
   background-color: hsl(210, 2%, 34%);

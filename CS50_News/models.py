@@ -17,6 +17,7 @@ class New(models.Model):
         "S": "side",
         "T": "top_stories",
         "F": "featured",
+        "O": "only"
     }
     headline = models.CharField(max_length=200)
     sub_headline = models.CharField(max_length=200)

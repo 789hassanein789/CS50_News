@@ -26,7 +26,7 @@ def index(request, cat=None):
         news = New.objects.prefetch_related('category').order_by("score")
         sub_categories = None
     elif cat in ["News", "Sport", "Business", "Innovation", "Culture", "Art", "Travel", "Earth"]:
-        news = New.objects.filter(category__category=cat[0]).order_by("score")
+        news = New.objects.filter(category__parent=cat[0]).order_by("score")
         sub_categories = Category.objects.filter(parent=cat[0])
     else:
         short_name = short_category(cat)
@@ -36,12 +36,16 @@ def index(request, cat=None):
     hero = news.filter(section="H")
     side = news.filter(section="S")
     top_stories = news.filter(section="T")
+    only = news.filter(section="O")
+    featured = news.filter(section="F")
 
     return render(request, "CS50_News/index.html", {
         "news" : news,
         "hero": hero,
         "side": side,
         "top_stories": top_stories,
+        "only": only,
+        "featured": featured,
         "subs": sub_categories
     })
 
@@ -136,7 +140,7 @@ def new(request, id, cat=None):
     else:
         short_name = short_category(cat)
         print(short_name)
-        new = New.objects.get(id=id, category__category=short_name)
+        new = New.objects.prefetch_related("category", "auther").get(id=id, category__category=short_name)
     new.content = md.convert(new.content)
     return render(request, "CS50_News/new.html", {
         "new": new

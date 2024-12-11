@@ -65,6 +65,11 @@ $secondary: hsl(210, 2%, 34%);
 
         .side-new-text {
             position: relative;
+
+            .main-text {
+                font-weight: 600;
+                
+            }
         }
 
         .side-new-image-div {
@@ -95,8 +100,9 @@ $secondary: hsl(210, 2%, 34%);
     gap: 4px;
     align-items: center;
     color: $secondary;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 300;
+    white-space: nowrap;
 
     div {
         background-color: $secondary;

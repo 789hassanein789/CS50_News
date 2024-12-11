@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://db.onlinewebfonts.com/c/92d9892fa0ef64406bf151c8f730eff2?family=BBC+Reith+Serif');
+
+* {
+  font-family: inherit;
+}
+
 :root {
     --page-background: #fff;
     --elements-background:#fff;
@@ -8,6 +15,7 @@
     --bg-hover: #dedbdb;
     --opacity: 0.8;
 }
+
 .dark-mode {
     --page-background: #272727;
     --elements-background:#424242;
@@ -28,6 +36,7 @@ a {
   background-color: var(--page-background);
   color: var(--page-text);
   overflow-x: hidden;
+  font-family: "BBC Reith Serif";
 }
 
 .body-content {
@@ -304,6 +313,8 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 500;
   position: relative;
   transition: .2s ease-in-out;
 }
@@ -850,7 +861,6 @@ li.nav-dd-item:hover::after {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Outfit", sans-serif;
 }
 
 .custom-wrapper {

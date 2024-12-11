@@ -77,34 +77,22 @@
     </div>
     <h3 class="only-section-heading">Only from CS50 News</h3>
     <div class="only-section">
-        <a class="tn link" href="">
-            <div class="img">
-                <img src="{{news.2.image.url}}" alt="">
-            </div>
-            <div class="content">
-                <h6 class="content-heading">{{news.2.headline}}</h6>
-                <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
-                <div class="secondary-div">
-                    <span>1.5 days ago</span>
-                    <div></div>
-                    <span>{{news.2.sub_category}}</span>
+        {% for new in only %}
+            <a class="tn link" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
+                <div class="img">
+                    <img src="{{new.image.url}}" alt="">
                 </div>
-            </div>
-        </a>
-        <a class="tn link" href="">
-            <div class="img">
-                <img src="{{news.3.image.url}}" alt="">
-            </div>
-            <div class="content">
-                <h6 class="content-heading">{{news.3.headline}}</h6>
-                <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
-                <div class="secondary-div">
-                    <span>1.5 days ago</span>
-                    <div></div>
-                    <span>{{news.3.sub_category}}</span>
+                <div class="content">
+                    <h6 class="content-heading">{{new.headline}}</h6>
+                    <p>{{new.sub_headline}}</p>
+                    <div class="secondary-div">
+                        <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                        <div></div>
+                        <span>{{new.category.all.0.get_category_display}}</span>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        {% endfor %}
     </div>
     <div class="light-seperator">
     </div>
@@ -112,7 +100,7 @@
     <div class="trending">
         {% for new in news|slice:":10" %}
             <div class="trend">
-                <a class="link" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %} ">
+                <a class="link" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
                     <span>
                         {{forloop.counter}}
                     </span>
@@ -386,36 +374,39 @@
         </div>
         <div class="column-section Sport">
             <h4 class="Featured-sub_heading">Sport</h4>
-            <div class="main">
-                <a class="link" href="">
-                    <div class="img">
-                        <img src="{{news.12.image.url}}" alt="">
-                    </div>
-                    <div class="content">
-                        <h6 class="content-heading">{{news.12.headline}}</h6>
-                    </div>
-                </a>
-            </div>
-            <div>
-                <a class="link" href="">
-                    <h6>How the full English breakfast divides Britain</h6>
-                </a> 
-            </div>       
-            <div>
-                <a class="link" href="">
-                    <h6>Tired of California, he moved to Colombia: ‘I feel safer here’</h6>
-                </a> 
-            </div>       
-            <div>
-                <a class="link" href="">
-                    <h6>The magical landscape that hides a 'portal to Hell'</h6>
-                </a>
-            </div>
-            <div>
-                <a class="link" href="">
-                    <h6>How ‘China’s Instagram’ is transforming the travel industry</h6>
-                </a>
-            </div>
+            {% for new in featured %}
+                {% for category in new.category.all %}
+                    {% if category.category == "S" %} 
+                        {% if forloop.parentloop.first %}
+                            <a class="main" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
+                                <div class="img">
+                                    <img src="{{new.image.url}}" alt="">
+                                </div>
+                                <div class="content">
+                                    <h6 class="content-heading">{{new.headline}}</h6>
+                                    <p>{{new.sub_headline}}</p>
+                                    <div class="secondary-div">
+                                        <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                                        <div></div>
+                                        <span>{{category.get_category_display}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}" class="link column-side-new">
+                                <div>
+                                    <h6>{{new.headline}}</h6>
+                                    <div class="secondary-div">
+                                        <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                                        <div></div>
+                                        <span>{{category.get_category_display}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
         </div>
         <div class="column-section Travel">
             <h4 class="Featured-sub_heading">Travel</h4>
