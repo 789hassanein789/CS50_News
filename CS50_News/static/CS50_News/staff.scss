@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    gap: 1rem;
+
+} 
+
+.create {
+    width: 260px;
+    height: 150px;
+    border: 2px solid rgb(224, 224, 224);
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .3s ease-in-out;
+    font-size: 3rem;
+    color: rgb(224, 224, 224);
+
+    &:hover {
+        border-color: rgb(190, 190, 190);
+        color: rgb(190, 190, 190);
+    }
+}

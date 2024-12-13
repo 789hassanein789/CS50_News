@@ -1,7 +1,14 @@
 {% extends 'CS50_News/layout.html' %}
+{% load static %}
 
-{% block title %} {% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'CS50_News/staff.css' %}">
+{% endblock %}
 
 {% block body %}
-<h1>Hi Admin</h1>
+    <div class="container">
+        <a class="create" href="{% url 'add' %}">
+            +
+        </a>
+    </div>
 {% endblock %}

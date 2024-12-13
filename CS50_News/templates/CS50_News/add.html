@@ -1,28 +1,36 @@
 {% extends 'CS50_News/layout.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'CS50_News/CKEditor.css' %}">
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.0.0/ckeditor5.css" crossorigin>
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5-premium-features/44.0.0/ckeditor5-premium-features.css" crossorigin>
+{% endblock %}
 
 {% block body %}
-    <form action="{% url 'add' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="form-group mb-3">
-        <input type="text" name="headline" placeholder="headline" class="form-control" required>
+    <div class="main-container">
+        <div class="presence" id="editor-presence"></div>
+        <div
+            class="editor-container editor-container_document-editor editor-container_include-outline editor-container_include-annotations editor-container_include-pagination"
+            id="editor-container"
+        >
+            <div class="editor-container__menu-bar" id="editor-menu-bar"></div>
+            <div class="editor-container__toolbar" id="editor-toolbar"></div>
+            <div class="editor-container__editor-wrapper">
+                <div class="editor-container__sidebar"><div id="editor-outline"></div></div>
+                <div class="editor-container__editor"><div id="editor"></div></div>
+                <div class="editor-container__sidebar"><div id="editor-annotations"></div></div>
+            </div>
         </div>
-        <div class="input-group mb-3">
-            <input type="file" name="image" class="form-control">
-        </div>          
-        <div class="form-group mb-3">
-        <textarea name="content" rows="20" id="content-textarea" class="form-control form-control-lg" placeholder="body" required></textarea>
+        <div class="revision-history" id="editor-revision-history">
+            <div class="revision-history__wrapper">
+                <div class="revision-history__editor" id="editor-revision-history-editor"></div>
+                <div class="revision-history__sidebar" id="editor-revision-history-sidebar"></div>
+            </div>
         </div>
-        <div class="form-group mb-3">
-        <select name="category" id="category-select" class="form-control" required>
-            <option selected disabled>category</option>
-            <option value="Sport">sport</option>
-            <option value="Technology">technology</option>
-            <option value="Politics">politics</option>
-            <option value="Health">health</option>
-            <option value="Science">science</option>
-            <option value="Culture">culture</option>
-        </select>
-        </div>
-        <input type="submit" class="btn btn-outline-primary">
-    </form>
+    </div>
+    <script src="https://cdn.ckeditor.com/ckeditor5/44.0.0/ckeditor5.umd.js" crossorigin></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5-premium-features/44.0.0/ckeditor5-premium-features.umd.js" crossorigin></script>
+    <script src="https://cdn.ckbox.io/ckbox/2.6.1/ckbox.js" crossorigin></script>
+    <script src="{% static 'CS50_News/CKEditor.js' %}"></script>
 {% endblock %}
