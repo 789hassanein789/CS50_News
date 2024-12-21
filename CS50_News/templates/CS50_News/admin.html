@@ -1,4 +1,5 @@
 {% extends 'CS50_News/layout.html' %}
+{% load change %}
 {% load static %}
 
 {% block head %}
@@ -6,9 +7,26 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <a class="create" href="{% url 'add' %}">
+    <div class="news-container" data-mouse-down-at="0" data-percentage="0">
+        <a class="create" href="{% url 'add' %}" draggable="false">
             +
         </a>
+        {% for new in news %}
+            <a class="created" draggable="false">
+                <div class="img">
+                    <img src="{{new.image}}" alt="" draggable="false">
+                </div>
+                <div class="content">
+                    <h6 class="content-heading">{{new.headline}}</h6>
+                    <p>{{new.sub_headline}}</p>
+                    <div class="secondary-div">
+                        <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                        <div></div>
+                        <span>{{new.category.all.0.get_category_display}}</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
     </div>
+    <script src="{% static 'CS50_News/admin.js' %}"></script>
 {% endblock %}

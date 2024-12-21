@@ -7,16 +7,11 @@
 }
 
 .main-container {
-	--ckeditor5-preview-sidebar-width: 270px;
 	--ckeditor5-preview-height: 700px;
 	font-family: 'Lato';
-	width: fit-content;
+	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
-}
-
-.main-container .presence {
-	margin-bottom: 8px;
 }
 
 .ck-content {
@@ -26,8 +21,8 @@
 }
 
 .editor-container__editor-wrapper {
-	display: flex;
-	width: fit-content;
+	overflow-y: scroll;
+	width: 100%;
 }
 
 .editor-container_document-editor {
@@ -61,7 +56,6 @@
 .editor-container_document-editor .editor-container__editor-wrapper {
 	max-height: var(--ckeditor5-preview-height);
 	min-height: var(--ckeditor5-preview-height);
-	overflow-y: scroll;
 	background: var(--ck-color-base-foreground);
 }
 
@@ -82,55 +76,6 @@
 	background: hsl(0, 0%, 100%);
 	box-shadow: 0 2px 3px hsla(0, 0%, 0%, 0.078);
 	flex: 1 1 auto;
-	margin-left: 72px;
-	margin-right: 72px;
-}
-
-.editor-container_include-outline .editor-container__editor .ck.ck-editor__editable {
-	margin-left: 0;
-}
-
-.editor-container_include-annotations .editor-container__editor .ck.ck-editor__editable {
-	margin-right: 0;
-}
-
-.editor-container__sidebar {
-	min-width: var(--ckeditor5-preview-sidebar-width);
-	max-width: var(--ckeditor5-preview-sidebar-width);
-	margin-top: 28px;
-	margin-left: 10px;
-	margin-right: 10px;
-}
-
-.revision-history {
-	display: none;
-}
-
-.revision-history__wrapper {
-	display: flex;
-}
-
-.revision-history__wrapper .ck.ck-editor {
-	margin: 0;
-	width: 795px;
-}
-
-.revision-history__wrapper .revision-history__sidebar {
-	border: 1px solid var(--ck-color-base-border);
-	border-left: 0;
-	width: var(--ckeditor5-preview-sidebar-width);
-	min-height: 100%;
-}
-
-.revision-history__wrapper .revision-history__sidebar .ck-revision-history-sidebar {
-	height: 100%;
-}
-
-.ck-content .table thead {
-	display: table-row-group;
-}
-
-.ck-content .table tr {
-	break-inside: avoid;
-	break-after: auto;
+	margin-left: auto;
+	margin-right: auto;
 }

@@ -42,6 +42,7 @@ a {
 .body-content {
   height: 100%;
   margin: 1rem;
+  width: min-content;
 }
 
 header {

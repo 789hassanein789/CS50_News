@@ -1,0 +1,143 @@
+#init-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5%;
+  height: 100vh;
+  font-family: sans-serif;
+  margin: 0 3rem;
+}
+
+.image-input {
+  flex-basis: 40%;
+}
+.image-input label {
+  width: 100%;
+  padding: 4rem;
+  aspect-ratio: 16/9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fafafa;
+  background-size: contain;
+}
+.image-input input {
+  margin: auto;
+  text-align: center;
+}
+
+.img-text {
+  text-align: center;
+}
+
+.link {
+  color: rgb(46, 46, 255);
+  cursor: pointer;
+}
+.link:hover {
+  color: blue;
+}
+
+.text-inputs {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 50%;
+  position: relative;
+}
+.text-inputs .t-input {
+  width: 100%;
+  height: 37px;
+  padding: 1.5rem 24px;
+  background-color: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+.text-inputs .t-input::-moz-placeholder {
+  font-size: 0.85rem;
+}
+.text-inputs .t-input::placeholder {
+  font-size: 0.85rem;
+}
+.text-inputs .t-input:focus-visible {
+  outline: none;
+}
+.text-inputs label {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+}
+.text-inputs ul:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 7px;
+  margin: 12px 0;
+  background-color: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+.text-inputs ul:first-child li {
+  display: flex;
+  list-style: none;
+  margin: 4px 3px;
+  background-color: #f2f2f2;
+  padding: 5px 10px;
+  justify-content: center;
+}
+.text-inputs ul:first-child li p {
+  margin: auto;
+  margin-right: 4px;
+}
+.text-inputs ul:first-child li i {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.text-inputs ul:first-child input {
+  border: none;
+  outline: none;
+  flex: 1;
+  background-color: transparent;
+  height: 37px;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+.text-inputs ul:first-child input::-moz-placeholder {
+  font-size: 0.85rem;
+}
+.text-inputs ul:first-child input::placeholder {
+  font-size: 0.85rem;
+}
+
+.suggestions {
+  width: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+.continue-btn {
+  background-color: #1a8917;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  width: 100px;
+  height: 37px;
+}
+
+.publish-btn {
+  background-color: #1a8917;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  width: 90px;
+  height: 30px;
+  margin-top: 1rem;
+  float: right;
+}
+
+@media only screen and (max-width: 1000px) {
+  #init-form {
+    display: block;
+  }
+  .image-input {
+    margin-bottom: 2rem;
+  }
+}/*# sourceMappingURL=create.css.map */

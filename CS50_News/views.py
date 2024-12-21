@@ -66,19 +66,31 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("index"))
 
 def admin_view(request):
-    return render(request, "CS50_News/admin.html")
+    news = New.objects.filter(auther=request.user)
+    return render(request, "CS50_News/admin.html", {
+        "news": news
+    })
 
 def add_new(request):
     if request.method == "POST":
         headline = request.POST["headline"]
+        sub_headline = request.POST["sub_headline"]
+        categories = request.POST["categories"]
         content = request.POST["content"]
-        category = request.POST["category"]
-        auther = User.objects.get(id=request.user.id)
-        image = request.FILES.get("image")
-        N = New(headline=headline, image=image, content=content, category=category, auther=auther)
-        N.save()
+
+        try:
+            image = request.FILES["img"]
+            new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user)
+            for category in categories:
+                Category.objects.get(category=category).news.add(new)
+            new.save()
+        except:
+            return HttpResponse({"erorr": "your form is incomplete, try resubmiting"}, status=400)
         return HttpResponseRedirect(reverse("index"))
-    return render(request, "CS50_News/add.html")
+    categories = Category.objects.all()
+    return render(request, "CS50_News/add.html", {
+        "categories": categories
+    })
 
 def passwordCheck(request):
     user = User.objects.get(id=request.user.id)
@@ -134,14 +146,12 @@ def crop(request):
     return render(request, "CS50_News/crop.html")
 
 def new(request, id, cat=None):
-    md = markdown.Markdown(extensions=["fenced_code"])
     if cat == None:
         new = New.objects.get(id=id)
     else:
         short_name = short_category(cat)
         print(short_name)
         new = New.objects.prefetch_related("category", "auther").get(id=id, category__category=short_name)
-    new.content = md.convert(new.content)
     return render(request, "CS50_News/new.html", {
         "new": new
     })

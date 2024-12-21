@@ -1,11 +1,16 @@
-.container {
-  display: flex;
-  gap: 1rem;
+.news-container {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 270px;
+  gap: 0.75rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 .create {
-  width: 260px;
-  height: 150px;
+  width: 270px;
+  aspect-ratio: 16/9;
   border: 2px solid rgb(224, 224, 224);
   border-radius: 1rem;
   display: flex;
@@ -18,4 +23,55 @@
 .create:hover {
   border-color: rgb(190, 190, 190);
   color: rgb(190, 190, 190);
+}
+
+.created {
+  width: 100%;
+  cursor: pointer;
+}
+.created:hover img {
+  opacity: 0.8;
+}
+.created:hover h6 {
+  text-decoration: underline;
+}
+.created .img {
+  width: 100%;
+}
+.created .img img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.created .content {
+  margin: 1rem 0;
+}
+.created .content h6 {
+  height: 48px;
+  font-size: 1rem;
+}
+@supports (-webkit-line-clamp: 2) {
+  .created .content h6 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+.created .content p {
+  height: 54px;
+  font-size: 0.75rem;
+}
+@supports (-webkit-line-clamp: 3) {
+  .created .content p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: initial;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
 }/*# sourceMappingURL=staff.css.map */
