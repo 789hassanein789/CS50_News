@@ -147,11 +147,27 @@ def crop(request):
 
 def new(request, id, cat=None):
     if cat == None:
-        new = New.objects.get(id=id)
+        news = New.objects.get(id=id)
     else:
         short_name = short_category(cat)
         print(short_name)
-        new = New.objects.prefetch_related("category", "auther").get(id=id, category__category=short_name)
+        news = New.objects.prefetch_related("category", "auther").get(id=id, category__category=short_name)
+        related =  New.objects.prefetch_related("category").filter(category__category=short_name).exclude(id=id).order_by('score')
+        Related = []
+        score = 0
+        for r in related:
+            #check how many categories are related
+            i = 0
+            for cat in news.category.all():
+                if cat in r.category.all():
+                    i += 1
+            if i >= score:
+                score = i
+                Related.append(r)
+        print(Related)
+        print(Related[-3:])
+
     return render(request, "CS50_News/new.html", {
-        "new": new
+        "new": news,
+        "RelatedNews": Related[-3:]
     })

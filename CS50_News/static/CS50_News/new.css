@@ -1,11 +1,22 @@
-.h1 {
+.heading {
   margin: 1.5rem auto;
   width: 728px;
 }
-.h1 h1 {
+.heading h1 {
   font-size: 2.5rem;
   font-weight: 600;
   font-family: inherit;
+}
+.heading p {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.heading .time {
+  font-size: 0.75rem;
+  color: hsl(210, 2%, 34%);
+}
+.heading .auther {
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .main-img {
@@ -23,8 +34,8 @@
   width: 728px;
 }
 .new-content p {
-  font-size: 1.25rem;
-  font-weight: 500;
+  font-size: 1.15rem;
+  font-weight: 400;
   line-height: 1.75rem;
   letter-spacing: -0.36px;
 }
@@ -36,6 +47,24 @@
 }
 .new-content img {
   width: 100%;
+}
+.new-content a {
+  border: none;
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0px;
+  padding: 0.6rem 0.7rem;
+  background-color: rgb(240, 240, 240);
+  font-family: Arial, Helvetica, sans-serif;
+  margin-right: 1rem;
+}
+.new-content a:hover {
+  background-color: hsl(210, 2%, 34%);
+  color: white;
+}
+.new-content a:focus {
+  background-color: black;
+  color: white;
 }
 
 .border {
@@ -53,11 +82,13 @@ aside {
   margin: 2rem 0.5rem 4rem 0.5rem;
 }
 aside .content {
-  display: flex;
-  gap: 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
 }
 aside .content h6 {
   font-size: 1.25rem;
+  font-weight: 500;
 }
 
 .link {
@@ -86,7 +117,6 @@ aside .content h6 {
   min-height: 190px;
   text-decoration: none;
   color: inherit;
-  margin-top: 2rem;
   cursor: pointer;
 }
 .more .new-container .horizontal-new:hover img {
@@ -103,15 +133,19 @@ aside .content h6 {
   align-items: start;
 }
 .more .new-container .horizontal-new .img-content {
-  display: flex;
   flex: 1;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid hsl(0, 0%, 90%);
 }
 .more .new-container .horizontal-new .content {
   position: relative;
+  height: 100%;
 }
 .more .new-container .horizontal-new .content h6 {
   font-size: 1.5rem;
   font-weight: 600;
+  margin-bottom: 0.75rem;
 }
 .more .new-container .horizontal-new .content .sub {
   font-size: 0.9rem;
@@ -120,10 +154,13 @@ aside .content h6 {
   position: absolute;
   left: 0;
   bottom: 0;
+  margin: 0;
 }
 .more .new-container .horizontal-new .img {
   margin-left: 1rem;
   margin-bottom: 1rem;
+  width: 300px;
+  float: right;
 }
 .more .new-container .horizontal-new .img img {
   width: 100%;
