@@ -287,8 +287,8 @@ header {
   justify-items: start;
   display: grid;
   padding: 12px 13px;
-  gap: 8px;
-  width: 160px;
+  gap: 1rem;
+  width: 100%;
 }
 
 .a-dp-btn:hover {
@@ -957,14 +957,35 @@ input[type="number"] {
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 992px) {
+    
+}
+
+@media screen and (max-width: 768px) {
   #min-search-btn {
     display: flex;
   }
   #navbar-form {
     display: none;
   }
+}
+
+@media screen and (max-width: 480px) {
   #offcanvasNavbar {
     width: 100%;
   }
+  #admin-div {
+    display: none;
+  }
+  #main-header_content {
+    padding: 0 .25rem;
+    grid-gap: 1rem;
+  }
+  #brand {
+    font-size: 1.75rem;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  
 }

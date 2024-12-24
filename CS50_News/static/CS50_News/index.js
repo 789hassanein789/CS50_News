@@ -24,9 +24,8 @@ const settingLast = document.querySelector('#last-name');
 const loginError = document.querySelector('#conflict-login');
 const loginInputs = document.querySelectorAll('.login-input');
 const navLinks = document.querySelectorAll('.nav-link');
-
+const headingIcons = document.querySelectorAll('#main-header_content i');
 /*
-const aaaa = document.querySelector('');
 const aaaa = document.querySelector('');
 const aaaa = document.querySelector('');
 const aaaa = document.querySelector('');
@@ -163,14 +162,26 @@ loginForm && loginForm.addEventListener('submit', () => {
     login()
 })
 
-signupFrom && signupFrom.addEventListener('submit', () => {
+signupFrom && signupFrom.addEventListener('submit', (event) => {
     event.preventDefault()
     signup()
 })
+  
+  // Create a MediaQueryList object
+  let media = window.matchMedia("(max-width: 480px)")
+  
+  // Call listener function at run time
+  iconSize(media);
+  
+  // Attach listener function on state changes
+  media.addEventListener("change", function() {
+    iconSize(media);
+  });
 
 function enableDarkMode() {
     document.body.classList.add('dark-mode');
-    document.body.setAttribute('data-bs-theme', 'dark')
+    document.body.setAttribute('data-bs-theme', 'dark');
+    
     localStorage.setItem('darkmode', 'enabled');
 }
 
@@ -548,4 +559,28 @@ function verifyEmail() {
         })
     })
 
+}
+
+function iconSize(x) {
+    console.log('full')
+    if (x.matches) {
+        headingIcons.forEach(i => {
+            if (i.classList.contains('fa-bars')) {
+                i.classList.remove('fa-xl')
+            }
+            else {
+                i.classList.add('fa-sm')
+            }
+        })
+    }
+    else {
+        headingIcons.forEach(i => {
+            if (i.classList.contains('fa-bars')) {
+                i.classList.add('fa-xl')
+            }
+            else {
+                i.classList.remove('fa-sm')
+            }
+        })
+    }
 }

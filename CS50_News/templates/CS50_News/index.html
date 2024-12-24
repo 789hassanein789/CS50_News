@@ -56,7 +56,7 @@
     </div>
     <h3 class="news-section-heading">News</h3>
     <div class="news-section">
-        {% for new in news|slice:":7" %}
+        {% for new in news|slice:":10" %}
             <a class="new-container" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
                 <div class="new-image">
                     <img src="{{new.image.url}}" alt="">
@@ -140,11 +140,6 @@
                         </div>
                         <div>
                             <h6>{{new.headline}}</h6>
-                            <div class="secondary-div">
-                                <span>{{new.timestamp|timesince|timeformat|safe}}</span>
-                                <div></div>
-                                <span>{{new.category.all.0.get_category_display}}</span>
-                            </div>
                         </div>
                     </a>
                 {% endif %}
@@ -225,28 +220,27 @@
             <h4 class="Featured-sub_heading">Science</h4>
             <div class="main">
                 <div class="img">
-                    <img src="{{news.11.image.url}}" alt="">
+                    <img src="{{news.3.image}}" alt="">
                 </div>
                 <div class="content">
-                    <h6 class="content-heading">{{news.11.headline}}</h6>
-                    <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
+                    <h6 class="content-heading">{{news.3.headline}}</h6>
+                    <p>{{news.4.sub_headline}}</p>
                     <div class="secondary-div">
-                        <span>3 days ago</span>
+                        <span>{{news.4.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
-                        <span>{{news.3.sub_category}}</span>
+                        <span>{{news.3.category.all.0.get_category_display}}</span>
                     </div>
                 </div>
             </div>
             {% for new in news %}
-                <p>{{new.category}}</p>
-                {% if new.get_category_display == 'News' %}
+                {% if new.category.all.0.get_category_display == "News" %}
                     <a href="" class="link column-side-new">
                         <div>
                             <h6>{{new.headline}}</h6>
                             <div class="secondary-div">
-                                <span>3 days ago</span>
+                                <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{new.sub_category}}</span>
+                                <span>{{new.category.all.0.get_category_display}}</span>
                             </div>
                         </div>
                     </a>

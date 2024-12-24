@@ -48,6 +48,10 @@ $secondary: hsl(210, 2%, 34%);
     display: grid;
     grid-template-columns: calc(2 * (100% / 3)) 1fr;
 }
+
+.content {
+    margin: 1rem 0;
+}
     
 .side-div {
     display: grid;
@@ -127,7 +131,6 @@ $secondary: hsl(210, 2%, 34%);
 }
 
 .content-heading {
-    font-size: 1.25rem;
     font-weight: 600;
     letter-spacing: -0.36px;
     line-height: 1.5; 
@@ -135,18 +138,19 @@ $secondary: hsl(210, 2%, 34%);
  }
 
 .news-section {
-    columns: 300px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1rem;
     padding-bottom: 3rem;
 
     .new-container {
         @include new-hover;
-        padding-bottom: .5rem;
-        margin-bottom: .5rem;
-        border-bottom: 1px solid hsl(210, 9%, 91%);
 
         .new-image {
             background-color: white;
             width: 100%;
+
             img {
                 width: 100%;
                 aspect-ratio: 16 / 9;
@@ -157,6 +161,7 @@ $secondary: hsl(210, 2%, 34%);
             position: relative;
             display: grid;
             gap: .5rem;
+            @include border;
             
             p {
                 margin: 0;
@@ -198,9 +203,6 @@ $secondary: hsl(210, 2%, 34%);
                 object-fit: cover;
             }
         }
-        .content {
-            margin: 1rem 0;
-        }
     }
 }
 
@@ -241,10 +243,6 @@ $secondary: hsl(210, 2%, 34%);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: .5rem;
-
-    .column-section {
-        flex-basis: calc(100% / 3);
-    }
 }
 
 .column-section {
@@ -261,13 +259,12 @@ $secondary: hsl(210, 2%, 34%);
                 object-fit: cover;
             }
         }
-        .content {
-            margin: 1rem 0;
+        h6 {
+            font-size: 1.25rem;
         }
-    }
-    & > .column-side-new {
-        @include new-hover;
-        @include border;
+        p {
+            font-size: .9rem;
+        }
     }
     .column-side-new:last-child {
         border-bottom: none;
@@ -319,19 +316,20 @@ $secondary: hsl(210, 2%, 34%);
 .column-side-new {
     width: 100%;
     display: flex;
+    gap: .5rem;
     @include border;
     @include new-hover;
 
     .img {
-        flex: 1;
+        flex-basis: 40%;
+
         img {
             width: 100%;
+            aspect-ratio: 16/9;
             object-fit: cover;
-            border-radius: .25rem;
         }
     }
     .content {
-        margin: 0 1rem;
         position: relative;
     }
 }
@@ -348,4 +346,23 @@ $secondary: hsl(210, 2%, 34%);
     bottom: 0;
     left: 0;
     width: 100%;
+}
+@media screen and (max-width: 300px) {
+
+}
+
+@media screen and (max-width: 480px) {
+    
+}
+
+@media screen and (max-width: 768px) {
+    
+}
+
+@media screen and (max-width: 992px) {
+    
+}
+
+@media screen and (max-width: 1024px) {
+    
 }
