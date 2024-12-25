@@ -106,8 +106,6 @@ sub_categorys = [['Home'],
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
         const li = link.firstElementChild;
-        console.log(li.dataset.target);
-        console.log('hi');
         sessionStorage.setItem('categorySelected', `${li.dataset.target}`);
         for (let i = 0; i < sub_categorys.length; i++) {
             let list = sub_categorys[i];

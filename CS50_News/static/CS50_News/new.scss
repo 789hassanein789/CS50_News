@@ -200,3 +200,31 @@ aside {
         margin: auto 2px;
     }
 }
+
+@media screen and (max-width: 1024px) {
+
+}
+  
+@media screen and (max-width: 992px) {
+    .main-img {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    aside {
+        .content {
+            grid-template-columns: 1fr;
+            grid-template-rows: repeat(3, 1fr);
+            gap: 0;
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+}
+
+@media screen and (max-width: 300px) {
+
+}

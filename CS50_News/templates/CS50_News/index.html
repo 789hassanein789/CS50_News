@@ -56,7 +56,7 @@
     </div>
     <h3 class="news-section-heading">News</h3>
     <div class="news-section">
-        {% for new in news|slice:":10" %}
+        {% for new in news|slice:":12" %}
             <a class="new-container" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
                 <div class="new-image">
                     <img src="{{new.image.url}}" alt="">
@@ -117,7 +117,7 @@
     <h3 class="stories-section-heading">MORE TOP STORIES</h3>
     <div class="stories-section">
         <div class="side column-section">
-            {% for new in top_stories|slice:":4" %}
+            {% for new in news|slice:":4" %}
                 {% if forloop.first %}
                     <a class="main" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
                         <div class="img">
@@ -146,7 +146,7 @@
             {% endfor %}
         </div>
         <div class="middle">
-            {% for new in top_stories|slice:"4:7" %}
+            {% for new in news|slice:"4:7" %}
                 {% if forloop.first %}
                     <a class="main" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
                         <div class="img">
@@ -180,7 +180,7 @@
             {% endfor %}
         </div>
         <div class="side column-section">
-            {% for new in top_stories|slice:"7:13" %}
+            {% for new in news|slice:"7:13" %}
                 {% if forloop.first %}
                     <a class="main" href="{% url 'new' cat=new.category.all.0.get_category_display id=new.id %}">
                         <div class="img">

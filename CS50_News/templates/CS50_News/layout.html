@@ -123,7 +123,7 @@
                             <li class="list-group-item" data-target="Israil-Gaza_war" id="Israil-Gaza_war">Israel-Gaza war</li>
                         </a>
                         <a href="{% url 'cat_index' cat='Ukraine-Russia_war' %}" class="nav-link">
-                            <li class="list-group-item" data-target="Ukraine-Russia_war" id="Ukraine-Russia_war">War in Ukraine</li>
+                            <li class="list-group-item" data-target="Ukraine-Russia_war" id="Ukraine-Russia_war">Ukraine-Russia war</li>
                         </a>
                         <a href="{% url 'cat_index' cat='Iraq' %}" class="nav-link">
                             <li class="list-group-item" data-target="Iraq" id="Iraq">Iraq</li>
@@ -576,20 +576,61 @@
                 <a class="footer-link">Advertise with Us</a>
                 <a class="footer-link">Newsletters</a>
             </div>
-            <div class="footer-column">
-                <a class="main-link">News</a>
-                <a class="footer-link">News</a>
-                <a class="footer-link">Israel-Hamas War</a>
-                <a class="footer-link">Ukraine-Russia War</a>
-                <a class="footer-link">US elections</a>
-                <a class="footer-link">Iraq</a>
-                <a class="footer-link">US & Canada</a>
-                <a class="footer-link">Middle East</a>
-                <a class="footer-link">Europe</a>
-                <a class="footer-link">Asia</a>
-                <a class="footer-link">Africa</a>
-                <a class="footer-link">Australia</a>
-                <a class="footer-link">Latin America</a>
+            <div class="footer-column last">
+                <a class="main-link">Categories</a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' %}">
+                    <li class="list-group-item" data-target="News">News</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Sport' %}">
+                    <li class="list-group-item" data-target="Sport">Sport</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Business' %}">
+                    <li class="list-group-item" data-target="Business">Business</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Innovation' %}">
+                    <li class="list-group-item" data-target="Innovation">Innovation</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Culture' %}">
+                    <li class="list-group-item" data-target="Culture">Culture</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Travel' %}">
+                    <li class="list-group-item" data-target="Travel">Travel</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Earth' %}">
+                    <li class="list-group-item" data-target="Earth">Earth</li>
+                </a>
+            </div>
+            <div class="footer-column last">
+                <a class="main-link nav-link" href="{% url 'cat_index' cat='News' %}">
+                    <li class="list-group-item" data-target="News">News</li>
+                </a>
+                <a class="footer-link nav-link" herf="{% url 'cat_index' cat='Ukraine-Russia_war' %}">
+                    <li class="list-group-item" data-target="Ukraine-Russia_war">Ukraine-Russia War</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Iraq' %}">
+                    <li class="list-group-item" data-target="Iraq">Iraq</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='US_&_Canada' %}">
+                    <li class="list-group-item" data-target="US_&_Canada">US_&_Canada</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Middle_East' %}">
+                    <li class="list-group-item" data-target="Middle_East">Middle_East</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Europe' %}">
+                    <li class="list-group-item" data-target="Europe">Europe</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Asia' %}">
+                    <li class="list-group-item" data-target="Asia">Asia</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Africa' %}">
+                    <li class="list-group-item" data-target="Africa">Africa</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='Australia' %}">
+                    <li class="list-group-item" data-target="Australia">Australia</li>
+                </a>
+                <a class="footer-link nav-link" href="{% url 'cat_index' cat='>Latin_America' %}">
+                    <li class="list-group-item" data-target="Latin_America">Latin_America</li>
+                </a>
             </div>
         </div>
         <div class="footer-main">
@@ -598,18 +639,22 @@
                     <p>Follow CS50 News on:</p>
                 </div>
                 <div class="icons">
-                    <a class="link" href="">
-                        <i class="fa-brands fa-2x fa-facebook"></i>
-                    </a>
-                    <a class="link" href="">
-                        <i class="fa-brands fa-2x fa-youtube"></i>
-                    </a>
-                    <a class="link" href="">
-                        <i class="fa-brands fa-2x fa-x-twitter"></i>
-                    </a>
-                    <a class="link" href="">
-                        <i class="fa-brands fa-2x fa-telegram"></i>
-                    </a>
+                    <div>
+                        <a class="link me-4" href="">
+                            <i class="fa-brands fa-2x fa-facebook"></i>
+                        </a>
+                        <a class="link" href="">
+                            <i class="fa-brands fa-2x fa-youtube"></i>
+                        </a>
+                    </div>
+                    <div>
+                        <a class="link me-4" href="">
+                            <i class="fa-brands fa-2x fa-x-twitter"></i>
+                        </a>
+                        <a class="link" href="">
+                            <i class="fa-brands fa-2x fa-telegram"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="logo">

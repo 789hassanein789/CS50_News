@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 @import url('https://db.onlinewebfonts.com/c/92d9892fa0ef64406bf151c8f730eff2?family=BBC+Reith+Serif');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap");
 
 * {
   font-family: inherit;
@@ -188,14 +189,14 @@ header {
   box-shadow: none;
 }
 
-#body .list-group-item {
+.offcanvas-body .list-group-item {
   background: var(--elements-background);
   border-color: var(--icon-color);
   color: var(--page-text);
   transition: 0.2s ease-in-out;
 }
 
-#body .list-group-item:hover {
+.offcanvas-body .list-group-item:hover {
   background-color: var(--bg-hover);
 }
 
@@ -857,7 +858,6 @@ li.nav-dd-item:hover::after {
   border-bottom: 1px solid var(--pg-border);
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap");
 * {
   padding: 0;
   margin: 0;

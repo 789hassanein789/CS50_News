@@ -273,6 +273,7 @@ $secondary: hsl(210, 2%, 34%);
 
 .stories-section {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
 
     .middle {
@@ -280,9 +281,6 @@ $secondary: hsl(210, 2%, 34%);
         
 
         .main {
-            @include border;
-            @include new-hover;
-
             .img {
                 width: 100%;
 
@@ -298,11 +296,12 @@ $secondary: hsl(210, 2%, 34%);
                 font-weight: 700;
             }
         }
-        .column-side-new {
-            .img {
-                flex: none;
-                width: 25%;
-            }
+    }
+    .column-side-new {
+        .img {
+            flex: none;
+            width: 125px;
+            aspect-ratio: 16 / 9;
         }
     }
     .side {
@@ -347,22 +346,70 @@ $secondary: hsl(210, 2%, 34%);
     left: 0;
     width: 100%;
 }
-@media screen and (max-width: 300px) {
 
-}
-
-@media screen and (max-width: 480px) {
-    
-}
-
-@media screen and (max-width: 768px) {
-    
+@media screen and (max-width: 1024px) {
+    .news-section {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+    }
 }
 
 @media screen and (max-width: 992px) {
-    
+    #main-container {
+        grid-template-columns: 1fr;
+    }
+    .carousel-div {
+        margin-bottom: 1rem;
+    }
+    .side-div {
+        margin: 0;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+    .stories-section {
+        .middle {
+            width: 100%;
+        }
+        .side {
+            width: 100%;
+        }
+    }
+    .Featured {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-@media screen and (max-width: 1024px) {
-    
+@media screen and (max-width: 768px) {
+    .news-section {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+    }
+    .trending {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 570px) {
+    .side-div {
+        margin: 0;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+    }
+    .only-section {
+        flex-direction: column;
+    }
+    .Featured {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .news-section {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: repeat(12, 1fr);
+    }
+}
+
+@media screen and (max-width: 300px) {
+
 }

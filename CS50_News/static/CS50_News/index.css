@@ -286,22 +286,11 @@
 
 .stories-section {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 .stories-section .middle {
   width: calc(50% - 16px);
-}
-.stories-section .middle .main {
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid hsl(210, 9%, 91%);
-  cursor: pointer;
-}
-.stories-section .middle .main:hover img {
-  opacity: 0.8;
-}
-.stories-section .middle .main:hover h6 {
-  text-decoration: underline;
 }
 .stories-section .middle .main .img {
   width: 100%;
@@ -317,9 +306,10 @@
   font-size: 1.5rem;
   font-weight: 700;
 }
-.stories-section .middle .column-side-new .img {
+.stories-section .column-side-new .img {
   flex: none;
-  width: 25%;
+  width: 125px;
+  aspect-ratio: 16/9;
 }
 .stories-section .side {
   width: calc(25% - 16px);
@@ -366,4 +356,61 @@
   bottom: 0;
   left: 0;
   width: 100%;
+}
+
+@media screen and (max-width: 1024px) {
+  .news-section {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+  }
+}
+@media screen and (max-width: 992px) {
+  #main-container {
+    grid-template-columns: 1fr;
+  }
+  .carousel-div {
+    margin-bottom: 1rem;
+  }
+  .side-div {
+    margin: 0;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  .stories-section .middle {
+    width: 100%;
+  }
+  .stories-section .side {
+    width: 100%;
+  }
+  .Featured {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 768px) {
+  .news-section {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+  }
+  .trending {
+    grid-template-columns: 1fr;
+  }
+}
+@media screen and (max-width: 570px) {
+  .side-div {
+    margin: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
+  .only-section {
+    flex-direction: column;
+  }
+  .Featured {
+    grid-template-columns: 1fr;
+  }
+}
+@media screen and (max-width: 480px) {
+  .news-section {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+  }
 }/*# sourceMappingURL=index.css.map */
