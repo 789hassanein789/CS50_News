@@ -10,8 +10,9 @@ from django.core.paginator import Paginator
 from django.template.defaulttags import register
 from django.core import serializers
 from datetime import datetime, timezone
-from allauth.account.decorators import reauthentication_required
-import markdown
+from allauth.account.decorators import reauthentication_required, login_required, verified_email_required, secure_admin_login
+from django.contrib.admin.views.decorators import staff_member_required
+from PIL import Image
 import pyotp
 import json
 
@@ -73,22 +74,30 @@ def admin_view(request):
 
 def add_new(request):
     if request.method == "POST":
-        headline = request.POST["headline"]
-        sub_headline = request.POST["sub_headline"]
-        categories = request.POST["categories"]
-        content = request.POST["content"]
-
+        headline = request.POST.get("headline")
+        sub_headline = request.POST.get("sub_headline")
+        categories = request.POST.get("categories")
+        content = request.POST.get("content")
+        image = request.FILES.get("blob")
+        with Image.open(image) as img:
+            w, h = img.size
+            if w / h != 16 / 9:
+                newh = w*9/16
+                img.crop((0, (h/2-newh/2), w, (h/2+newh/2)))
+                img.show()
         try:
-            image = request.FILES["img"]
             new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user)
-            for category in categories:
-                Category.objects.get(category=category).news.add(new)
             new.save()
         except:
-            return HttpResponse({"erorr": "your form is incomplete, try resubmiting"}, status=400)
-        return HttpResponseRedirect(reverse("index"))
+            return JsonResponse({'error': 'could not create the article'}, status=400)
+        categories = categories.split()
+        for category in categories:
+            short_name = short_category(category)
+            cat_obj = Category.objects.get(category=short_name)
+            cat_obj.news.add(new)
+        return redirect("index")
     categories = Category.objects.all()
-    return render(request, "CS50_News/add.html", {
+    return render(request, "CS50_News/editor.html", {
         "categories": categories
     })
 
@@ -143,6 +152,11 @@ def accountEdit(request):
     return HttpResponse(status=403)
 
 def crop(request):
+    if request.method == 'POST':
+        blob = request.FILES.get('blob')
+        print(blob)
+        print(blob.name)
+        return HttpResponse(200)
     return render(request, "CS50_News/crop.html")
 
 def new(request, id, cat=None):

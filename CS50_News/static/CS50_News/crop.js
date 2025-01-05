@@ -11,6 +11,7 @@ let customCropper = "";
 let customFileName = "";
 
 customFileInput.onchange = () => {
+  // just styling
   customPreviewImage.src = "";
   customHeightInput.value = 0;
   customWidthInput.value = 0;
@@ -66,6 +67,7 @@ customPreviewButton.addEventListener("click", (e) => {
   e.preventDefault();
   customDownloadButton.classList.remove("custom-hide");
   let imgSrc = customCropper.getCroppedCanvas({}).toDataURL();
+  console.log(imgSrc)
   customPreviewImage.src = imgSrc;
   customDownloadButton.download = `cropped_${customFileName}.png`;
   customDownloadButton.setAttribute("href", imgSrc);

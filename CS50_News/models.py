@@ -42,6 +42,8 @@ class Category(models.Model):
         "C": "Culture",
         "T": "Travel",
         "E": "Earth",
+    }
+    SUB_ACTEGORIES = {
         "IG": "Israil-Gaza_war",
         "UR": "Ukraine-Russia_war",
         "IQ": "Iraq",
@@ -80,7 +82,7 @@ class Category(models.Model):
         "NW": "Natural_Wonders",
         "WE&C": "Weather_&_Climate",
     }
-    category = models.CharField(max_length=50, choices=CATEGORYS)
+    category = models.CharField(max_length=50)
     parent = models.CharField(max_length=50, choices=CATEGORYS, null=True, blank=True)
     news = models.ManyToManyField(New, related_name="category", null=True, blank=True)
 

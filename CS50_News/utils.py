@@ -26,6 +26,8 @@ def Rescore(news):
 
 def short_category(cat):
     cat_dict = Category.CATEGORYS
+    cat = cat.capitalize()
+    cat.replace(' ', '_')
     short_name = ""
     for key, value in cat_dict.items():
         if value == cat:

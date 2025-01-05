@@ -94,7 +94,7 @@ if(subNav) {
 document.querySelector(`#${Main}-category`).classList.add('selected')
 document.querySelector(`#nav-${Main}`).classList.add('clicked')
 
-// defining an object for categor maping
+// defining an object for category maping
 sub_categorys = [['Home'],
                 ['News', 'Israil-Gaza_war', 'Ukraine-Russia_war', 'Iraq', 'US_&_Canada', 'Middle_East', 'Europe', 'Asia', 'Africa', 'Australia', 'Latine_America'],
                 ['Sport', 'Martial_Arts', 'Football', 'Cricket', 'Formula_1', 'Tennis', 'Golf', 'Athletics', 'Cycling'],
@@ -216,7 +216,7 @@ function reauthenticate() {
         credentials: "same-origin",
         body: JSON.stringify({
             'password': passwordInput.value
-        })
+        }) 
    })
    .then((res) => res.json())
    .then(result => {

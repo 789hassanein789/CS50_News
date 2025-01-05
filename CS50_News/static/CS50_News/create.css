@@ -1,15 +1,20 @@
 #init-form {
+  width: 100%;
+  height: 100vh;
+}
+
+#init-form-div {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5%;
-  height: 100vh;
+  height: 100%;
   font-family: sans-serif;
   margin: 0 3rem;
 }
 
 .image-input {
-  flex-basis: 40%;
+  flex-basis: 50%;
 }
 .image-input label {
   width: 100%;
@@ -20,6 +25,9 @@
   align-items: center;
   background-color: #fafafa;
   background-size: contain;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center;
 }
 .image-input input {
   margin: auto;
@@ -41,7 +49,7 @@
 .text-inputs {
   display: flex;
   flex-direction: column;
-  flex-basis: 50%;
+  flex-basis: 45%;
   position: relative;
 }
 .text-inputs .t-input {
@@ -65,15 +73,21 @@
   font-weight: 500;
   line-height: 20px;
 }
-.text-inputs ul:first-child {
+.text-inputs .categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.text-inputs .chosed-tags {
   display: flex;
   flex-wrap: wrap;
   padding: 7px;
-  margin: 12px 0;
+  margin-top: 12px;
+  margin-bottom: 0;
   background-color: #fafafa;
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
-.text-inputs ul:first-child li {
+.text-inputs .chosed-tags li {
   display: flex;
   list-style: none;
   margin: 4px 3px;
@@ -81,16 +95,16 @@
   padding: 5px 10px;
   justify-content: center;
 }
-.text-inputs ul:first-child li p {
+.text-inputs .chosed-tags li p {
   margin: auto;
   margin-right: 4px;
 }
-.text-inputs ul:first-child li i {
+.text-inputs .chosed-tags li i {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
-.text-inputs ul:first-child input {
+.text-inputs .chosed-tags input {
   border: none;
   outline: none;
   flex: 1;
@@ -98,19 +112,20 @@
   height: 37px;
   padding: 0.5rem;
   font-size: 1rem;
+  width: 100%;
 }
-.text-inputs ul:first-child input::-moz-placeholder {
+.text-inputs .chosed-tags input::-moz-placeholder {
   font-size: 0.85rem;
 }
-.text-inputs ul:first-child input::placeholder {
+.text-inputs .chosed-tags input::placeholder {
   font-size: 0.85rem;
 }
-
-.suggestions {
+.text-inputs .suggestions {
   width: 100%;
   position: absolute;
   top: 100%;
   left: 0;
+  border-radius: 0;
 }
 
 .continue-btn {
@@ -120,6 +135,9 @@
   border-radius: 20px;
   width: 100px;
   height: 37px;
+  position: absolute;
+  top: 1rem;
+  right: 3rem;
 }
 
 .publish-btn {
@@ -133,8 +151,71 @@
   float: right;
 }
 
+.error {
+  color: rgb(196, 0, 0);
+  font-size: 0.85rem;
+}
+
+.overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1046;
+  overflow: auto;
+}
+
+.popup {
+  position: relative;
+  margin: auto;
+  padding: 12px 72px;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.popup .img {
+  width: 500px;
+}
+.popup .img img {
+  width: 100%;
+}
+.popup .btns {
+  text-align: center;
+}
+
+.popup-btn {
+  height: 52px;
+  width: 200px;
+  border: none;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: 0.3s ease-in-out;
+}
+
+.crop-btn {
+  background-color: #FC0;
+  color: white;
+}
+
+.cancel-btn {
+  border: 2px solid black;
+  background-color: transparent;
+  color: black;
+  transition: 0.3s ease-in-out;
+}
+.cancel-btn:hover {
+  background-color: black;
+  color: white;
+}
+
 @media only screen and (max-width: 1000px) {
-  #init-form {
+  #init-form-div {
     display: block;
   }
   .image-input {

@@ -6,12 +6,11 @@ const {
 	AutoLink,
 	Autosave,
 	BalloonToolbar,
+	Base64UploadAdapter,
 	BlockQuote,
 	Bold,
 	Bookmark,
-	CKBox,
-	CKBoxImageEdit,
-	CloudServices,
+	Code,
 	Essentials,
 	FindAndReplace,
 	FontBackgroundColor,
@@ -37,9 +36,13 @@ const {
 	LinkImage,
 	List,
 	ListProperties,
+	Markdown,
+	MediaEmbed,
+	Mention,
+	PageBreak,
 	Paragraph,
+	PasteFromMarkdownExperimental,
 	PasteFromOffice,
-	PictureEditing,
 	RemoveFormat,
 	SpecialCharacters,
 	SpecialCharactersArrows,
@@ -52,35 +55,37 @@ const {
 	Subscript,
 	Superscript,
 	TextTransformation,
+	Title,
 	TodoList,
-	Underline
+	Underline,
+	WordCount
 } = window.CKEDITOR;
-const { AIAssistant, ExportPdf, ExportWord, ImportWord, MultiLevelList, OpenAITextAdapter } = window.CKEDITOR_PREMIUM_FEATURES;
 
-const form = document.querySelector('#init-form')
+const label = document.querySelector('#label');
+const input = document.querySelector('#img-input');
+const imgText = document.querySelector('#img-text');
+const ul = document.querySelector('ul');
+const tagsInput = document.querySelector('#tags-input');
+const suggestionsList = document.querySelector('.suggestions');
+const allInputs = document.querySelectorAll('input');
+const overlay = document.querySelector('.overlay');
+const customImg = document.querySelector('.custom-img');
+const downloadBtn = document.querySelector('.popup-btn');
+let customCropper = "";
+let fileName = "";
+const form = document.querySelector('#init-form');
+const continueBtn = document.querySelector('.continue-btn');
 const editorForm = document.querySelector('#editor-form');
+const errors = document.querySelectorAll('.error');
+const tagsError = document.querySelector('.tags-input-error');
+let chosedTags;
 
 const LICENSE_KEY =
-	'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3MzUxNzExOTksImp0aSI6IjBmNmZjYjUxLTI1MGYtNDY1Ny1hM2FmLThlZDIxMTE4ODY5NyIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6ImVlZTNiZWEzIn0.nYFLSY7Q0uRO6rmeJNZZRN5recQtN360REK3L2ZReOixr_DJu-_kQ90obePzMeIU84Xp7blqLawTCMlvUYdQVA';
-
-/**
- * USE THIS INTEGRATION METHOD ONLY FOR DEVELOPMENT PURPOSES.
- *
- * This sample is configured to use OpenAI API for handling AI Assistant queries.
- * See: https://ckeditor.com/docs/ckeditor5/latest/features/ai-assistant/ai-assistant-integration.html
- * for a full integration and customization guide.
- */
-const AI_API_KEY = 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3MzUxNzExOTksImp0aSI6IjBmNmZjYjUxLTI1MGYtNDY1Ny1hM2FmLThlZDIxMTE4ODY5NyIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6ImVlZTNiZWEzIn0.nYFLSY7Q0uRO6rmeJNZZRN5recQtN360REK3L2ZReOixr_DJu-_kQ90obePzMeIU84Xp7blqLawTCMlvUYdQVA';
-
-const CLOUD_SERVICES_TOKEN_URL =
-	'https://0zs1pat_03ek.cke-cs.com/token/dev/98dca0da3f19cc35b9a26a0a97a1b7ac6efa41f15697f30780355e66c323?limit=10';
+	'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NjU0OTc1OTksImp0aSI6IjJkODE4MDBiLWFiOTMtNDM3Ny05MzBjLWQ2MTM3OTcxYzBhMCIsImxpY2Vuc2VkSG9zdHMiOlsiMTI3LjAuMC4xIiwibG9jYWxob3N0IiwiMTkyLjE2OC4qLioiLCIxMC4qLiouKiIsIjE3Mi4qLiouKiIsIioudGVzdCIsIioubG9jYWxob3N0IiwiKi5sb2NhbCJdLCJ1c2FnZUVuZHBvaW50IjoiaHR0cHM6Ly9wcm94eS1ldmVudC5ja2VkaXRvci5jb20iLCJkaXN0cmlidXRpb25DaGFubmVsIjpbImNsb3VkIiwiZHJ1cGFsIl0sImxpY2Vuc2VUeXBlIjoiZGV2ZWxvcG1lbnQiLCJmZWF0dXJlcyI6WyJEUlVQIiwiQk9YIl0sInZjIjoiYzljYThhMWIifQ.jC4HvAjJ_ZI33iwdEbEz5DGM_XjG_mg_PgVtV6YxXcui2qE2wavucwUrYD3BK1GFeVWmpSbvGHIiN2iamD2DEQ';
 
 const editorConfig = {
 	toolbar: {
 		items: [
-			'aiCommands',
-			'aiAssistant',
-			'|',
 			'heading',
 			'|',
 			'fontSize',
@@ -100,7 +105,6 @@ const editorConfig = {
 			'|',
 			'bulletedList',
 			'numberedList',
-			'multiLevelList',
 			'todoList',
 			'outdent',
 			'indent'
@@ -108,22 +112,18 @@ const editorConfig = {
 		shouldNotGroupWhenFull: false
 	},
 	plugins: [
-		AIAssistant,
 		Alignment,
 		Autoformat,
 		AutoImage,
 		AutoLink,
 		Autosave,
 		BalloonToolbar,
+		Base64UploadAdapter,
 		BlockQuote,
 		Bold,
 		Bookmark,
-		CKBox,
-		CKBoxImageEdit,
-		CloudServices,
+		Code,
 		Essentials,
-		ExportPdf,
-		ExportWord,
 		FindAndReplace,
 		FontBackgroundColor,
 		FontColor,
@@ -141,7 +141,6 @@ const editorConfig = {
 		ImageTextAlternative,
 		ImageToolbar,
 		ImageUpload,
-		ImportWord,
 		Indent,
 		IndentBlock,
 		Italic,
@@ -149,11 +148,13 @@ const editorConfig = {
 		LinkImage,
 		List,
 		ListProperties,
-		MultiLevelList,
-		OpenAITextAdapter,
+		Markdown,
+		MediaEmbed,
+		Mention,
+		PageBreak,
 		Paragraph,
+		PasteFromMarkdownExperimental,
 		PasteFromOffice,
-		PictureEditing,
 		RemoveFormat,
 		SpecialCharacters,
 		SpecialCharactersArrows,
@@ -166,62 +167,12 @@ const editorConfig = {
 		Subscript,
 		Superscript,
 		TextTransformation,
+		Title,
 		TodoList,
-		Underline
+		Underline,
+		WordCount
 	],
-	ai: {
-		openAI: {
-			requestHeaders: {
-				Authorization: 'Bearer ' + AI_API_KEY
-			}
-		}
-	},
-	balloonToolbar: ['aiAssistant', '|', 'bold', 'italic', '|', 'link', 'insertImage', '|', 'bulletedList', 'numberedList'],
-	cloudServices: {
-		tokenUrl: CLOUD_SERVICES_TOKEN_URL
-	},
-	exportPdf: {
-		stylesheets: [
-			/* This path should point to application stylesheets. */
-			/* See: https://ckeditor.com/docs/ckeditor5/latest/features/converters/export-pdf.html */
-			'./style.css',
-			/* Export PDF needs access to stylesheets that style the content. */
-			'https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.css',
-			'https://cdn.ckeditor.com/ckeditor5-premium-features/44.1.0/ckeditor5-premium-features.css'
-		],
-		fileName: 'export-pdf-demo.pdf',
-		converterOptions: {
-			format: 'A4',
-			margin_top: '20mm',
-			margin_bottom: '20mm',
-			margin_right: '12mm',
-			margin_left: '12mm',
-			page_orientation: 'portrait'
-		}
-	},
-	exportWord: {
-		stylesheets: [
-			/* This path should point to application stylesheets. */
-			/* See: https://ckeditor.com/docs/ckeditor5/latest/features/converters/export-word.html */
-			'./style.css',
-			/* Export Word needs access to stylesheets that style the content. */
-			'https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.css',
-			'https://cdn.ckeditor.com/ckeditor5-premium-features/44.1.0/ckeditor5-premium-features.css'
-		],
-		fileName: 'export-word-demo.docx',
-		converterOptions: {
-			document: {
-				orientation: 'portrait',
-				size: 'A4',
-				margins: {
-					top: '20mm',
-					bottom: '20mm',
-					right: '12mm',
-					left: '12mm'
-				}
-			}
-		}
-	},
+	balloonToolbar: ['bold', 'italic', '|', 'link', 'insertImage', '|', 'bulletedList', 'numberedList'],
 	fontFamily: {
 		supportAllValues: true
 	},
@@ -283,9 +234,7 @@ const editorConfig = {
 			'imageStyle:wrapText',
 			'imageStyle:breakText',
 			'|',
-			'resizeImage',
-			'|',
-			'ckboxImageEdit'
+			'resizeImage'
 		]
 	},
 	licenseKey: LICENSE_KEY,
@@ -309,23 +258,184 @@ const editorConfig = {
 			reversed: true
 		}
 	},
+	mention: {
+		feeds: [
+			{
+				marker: '@',
+				feed: [
+					/* See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html */
+				]
+			}
+		]
+	},
 	menuBar: {
 		isVisible: true
 	},
 	placeholder: 'Type or paste your content here!'
 };
 
-configUpdateAlert(editorConfig);
-
 let editor
 
 DecoupledEditor.create(document.querySelector('#editor'), editorConfig).then(newEditor => {
+	const wordCount = newEditor.plugins.get('WordCount');
+	document.querySelector('#editor-word-count').appendChild(wordCount.wordCountContainer);
+
 	document.querySelector('#editor-toolbar').appendChild(newEditor.ui.view.toolbar.element);
 	document.querySelector('#editor-menu-bar').appendChild(newEditor.ui.view.menuBarView.element);
 	editor = newEditor
 
 	return newEditor;
 });
+
+const availableTags = [
+    'israil-gaza war', 'ukraine-russia war', 'iraq', 'us & canada', 'middle east', 'europe', 'asia', 'africa', 'australia', 'latine America',
+    'martial arts', 'football', 'cricket', 'formula 1', 'tennis', 'golf', 'athletics', 'cycling',
+    'business',
+    'technology', 'science & health',
+    'books', 'style', 'film & tv', 'music', 'art & design', 'entertainment',
+    'destinations', 'food & drink', 'adventures',
+    'natural wonders', 'weather & climate'
+  ];
+
+let tags = [];
+
+input.addEventListener('change', uploadImage)
+
+label.addEventListener('dragover', (e) => {
+    e.preventDefault()
+})
+
+label.addEventListener('drop', (e) => {
+    e.preventDefault()
+    input.files = e.dataTransfer.files
+    uploadImage()
+})
+
+tagsInput.addEventListener('keyup', addTag)
+
+tagsInput.addEventListener('input', suggestions)
+/*
+tagsInput.addEventListener('blur', () => {
+    setTimeout(() => {
+        suggestionsList.innerHTML = '';
+    }, 100);
+});
+*/
+allInputs.forEach(input => {
+    input.addEventListener('focus', () => {
+        const alert = document.querySelector('.alert')
+        if (alert) {
+            alert.remove()
+        }
+    })
+})
+
+downloadBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    let imgURL = customCropper.getCroppedCanvas().toDataURL()
+    label.style.backgroundImage = `url(${imgURL})`;
+    input.src = imgURL;
+    imgText.style.display = 'none';
+    overlay.classList.add('d-none');
+})
+
+form.addEventListener('submit', (e) => e.preventDefault())
+
+function uploadImage() {
+    let imgURL = URL.createObjectURL(input.files[0]);
+    let img = new Image()
+    img.src = imgURL
+    img.onload = () => {
+        let width = img.naturalWidth
+        let height = img.naturalHeight
+
+        if (width / height != 16 / 9) crop(imgURL)
+        
+        else {
+            label.style.backgroundImage = `url(${imgURL})`;
+            imgText.style.display = 'none';
+        }
+    }    
+}
+
+function addTag(e) {
+    if (e.key == 'Enter') {
+		suggestionsList.innerHTML = '';
+        let tag = e.target.value.replace(/\s+/g, ' ');
+        if (tag.length > 1 && !tags.includes(tag)) {
+            tag.split(',').forEach(tag => {
+                createTag(tag)
+            });
+        }
+        e.target.value = '';
+    }
+}
+
+function createTag(tag) {
+	if (tags.length >= 5) {
+		tagsError.textContent = 'you have entered 5 tags, which is the maximum number of tags.';
+		tagsError.classList.remove('d-none');
+		return
+	}
+	tags.push(tag)
+    let li = document.createElement('li')
+    let p = document.createElement('p')
+    let i = document.createElement('i')
+    p.textContent = tag
+    i.classList.add('fa-solid', 'fa-x', 'fa-xs')
+    li.appendChild(p)
+    li.appendChild(i)
+    
+    ul.insertBefore(li, tagsInput);
+    i.onclick = () => removeTag(i, tag);
+}
+
+function removeTag(element, tag) {
+    let index = tags.indexOf(tag);
+    tags = [ ...tags.slice(0, index), ...tags.slice(index + 1)]
+    element.parentElement.remove()
+}
+
+function suggestions() {
+	tagsError.classList.add('d-none')
+    const query = this.value.trim().toLowerCase();
+    suggestionsList.innerHTML = '';
+    if (query) {
+        console.log(tags);
+		console.log(!tags.includes('hi'))
+		const filteredTags = availableTags.filter(tag => tag.includes(query) && !tags.includes(tag));
+
+        filteredTags.forEach(tag => {
+        const li = document.createElement('li');
+        li.textContent = tag;
+        li.classList.add('list-group-item', 'list-group-item-action')
+        li.addEventListener('click', () => {
+            createTag(tag)
+            suggestionsList.innerHTML = '';
+            tagsInput.value = '';
+        });
+        suggestionsList.appendChild(li);
+        });
+    }
+};
+
+function crop(url) {
+    overlay.classList.remove('d-none');
+    customImg.setAttribute('src', url)
+    let Reader = new FileReader();
+    Reader.readAsDataURL(input.files[0]);
+    Reader.onload = () => {
+        if (customCropper) {
+            customCropper.destroy()
+        }
+		customCropper = new Cropper(customImg, {
+			viewMode: 2,
+			aspectRatio: 16/9,
+			zoomable: false,
+		});   
+    }
+    fileName = input.files[0].name.split('.')[0]
+}
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -335,43 +445,56 @@ function getCookie(name) {
 
 let initialData;
 
-form.addEventListener('submit', (e) => {
-    e.preventDefault()
+continueBtn.addEventListener('click', (e) => {
     initialData = initSubmit()
 })
 
 editorForm.addEventListener('submit', (e) => {
     e.preventDefault();
-	if (initialData) {
-		finalSubmit(initialData)
-	}
-	else {
-		alert('your form is incomplete, please try resubmiting the previous form.')
-	}
+	finalSubmit(initialData);
 })
 
-
 function initSubmit() {
-    let body = new FormData(form)
-    const ps = document.querySelectorAll('ul p');
-    let values = [];
-    ps.forEach(p => {
-        values.push(p.textContent);
-        console.log(values);
-    })
-    body.append('categories', values)
-    form.classList.add('d-none')
-    editorForm.classList.remove('d-none')
-	document.body.classList.add('overflow-y-hidden');
-	globalThis.scrollTo({top: 0, left: 0, behavior: 'smooth'})
-    for (const [key, value] of body) {
-        console.log(`${key}: ${value}\n`);
-    }
-	return body
+	errors.forEach(error => {
+		error.classList.add('d-none')
+	})
+	if (form.img.value === '') {
+		errors[0].classList.remove('d-none')
+	}
+	else if (form.headline.value === '') {
+		errors[1].classList.remove('d-none')
+	}
+	else if (form.Sub_headline.value === '') {
+		errors[2].classList.remove('d-none')
+	}
+	else if (form.querySelector('li > p') == null) {
+		errors[3].classList.remove('d-none')
+	}
+	else {
+		let body = new FormData(form)
+
+		customCropper.getCroppedCanvas().toBlob((blob) => {
+			body.append('blob', blob)
+		})
+
+		const ps = document.querySelectorAll('ul p');
+		let values = [];
+		ps.forEach(p => {
+			values.push(p.textContent);
+			console.log(values);
+		})
+		body.append('categories', values.join())
+		form.classList.add('d-none')
+		editorForm.classList.remove('d-none')
+		document.body.classList.add('overflow-y-hidden');
+		globalThis.scrollTo({top: 0, left: 0, behavior: 'smooth'})
+		return body
+	}
 }
 
 function finalSubmit(body) {
 	console.log(editor.getData())
+	console.log(body)
     body.append('content', editor.getData())
 	fetch('/add', {
 		method: 'POST',
@@ -381,52 +504,16 @@ function finalSubmit(body) {
 		credentials: "same-origin",
 		body: body
 	})
-}
-/**
- * This function exists to remind you to update the config needed for premium features.
- * The function can be safely removed. Make sure to also remove call to this function when doing so.
- */
-function configUpdateAlert(config) {
-	if (configUpdateAlert.configUpdateAlertShown) {
-		return;
-	}
-
-	const isModifiedByUser = (currentValue, forbiddenValue) => {
-		if (currentValue === forbiddenValue) {
-			return false;
+	.then(res => res.json())
+	.then(result => {
+		if (result.ok) {
+			window.location.assign(result.url)
 		}
-
-		if (currentValue === undefined) {
-			return false;
-		}
-
-		return true;
-	};
-
-	const valuesToUpdate = [];
-
-	configUpdateAlert.configUpdateAlertShown = true;
-
-	if (!isModifiedByUser(config.licenseKey, '<YOUR_LICENSE_KEY>')) {
-		valuesToUpdate.push('LICENSE_KEY');
-	}
-
-	if (!isModifiedByUser(config.ai?.openAI?.requestHeaders?.Authorization, 'Bearer <YOUR_AI_API_KEY>')) {
-		valuesToUpdate.push('AI_API_KEY');
-	}
-
-	if (!isModifiedByUser(config.cloudServices?.tokenUrl, '<YOUR_CLOUD_SERVICES_TOKEN_URL>')) {
-		valuesToUpdate.push('CLOUD_SERVICES_TOKEN_URL');
-	}
-
-	if (valuesToUpdate.length) {
-		window.alert(
-			[
-				'Please update the following values in your editor config',
-				'to receive full access to Premium Features:',
-				'',
-				...valuesToUpdate.map(value => ` - ${value}`)
-			].join('\n')
-		);
-	}
+	})
+	.catch (error => {
+		form.classList.remove('d-none')
+		document.body.innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div> ${document.body.innerHTML}`;
+		editorForm.classList.add('d-none')
+	})
 }
+
