@@ -12,9 +12,7 @@ cs50 News is a bbc like news website were users can read the recent articles and
     - distribute new articles in the site
     - manage users accounts
 
-* **Categories**: each article should have a list of categories/tags that tell the user what this article is about, each article can have up to 5 categories and should have at least one main category  
-
-* **Dark/Light Mood**: 
+* **Categories**: each article should have a category and a list of tags, each article can have up to 10 tags and must have one category
 
 * **New Page**: when a user click's at a New he should be redircted to that New page where the user can:
 

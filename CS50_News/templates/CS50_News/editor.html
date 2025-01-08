@@ -42,9 +42,9 @@
 					<div class="mb-3">
 						<label>Chose a category for your article</label> <br>
 						<div class="categories">
-							{% for category in categories|slice:":7" %}
-								<input type="radio" id="{{category.get_category_display}}" name="category" class="btn-check" autocomplete="off">
-								<label for="{{category.get_category_display}}" class="btn btn-outline-secondary">{{category.get_category_display}}</label>
+							{% for category in categories %}
+								<input type="radio" id="{{category}}" value="{{category}}" name="category" class="btn-check" autocomplete="off">
+								<label for="{{category}}" class="btn btn-outline-secondary">{{category}}</label>
 							{% endfor %}
 						</div>
 						<p class="category-error error d-none">Please chose a category</p>

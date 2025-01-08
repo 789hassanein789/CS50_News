@@ -96,9 +96,9 @@
     </header>
     {% if subs %}
         <nav id="sub_nav">
-            {% for sub in subs %}
-                <a href="{% url 'cat_index' cat=sub.get_category_display %}" class="nav-link">
-                    <li class="list-group-item" data-target="{{sub.get_category_display}}"  id="sub-nav-{{sub.get_category_display}}" >{{ sub.get_category_display|change:"_ " }}</li>
+            {% for key, value in subs.items %}
+                <a href="{% url 'cat_index' cat=value %}" class="nav-link">
+                    <li class="list-group-item" data-target="{{value}}"  id="sub-nav-{{value}}" >{{ value|change:"_ " }}</li>
                 </a>
             {% endfor %}
         </nav>

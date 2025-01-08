@@ -1,7 +1,7 @@
 import pyotp
 from datetime import datetime, timedelta
 from django.core.mail import send_mail
-from .models import New, Category
+from .models import New
 
 def send_otp(request):
     totp = pyotp.TOTP(pyotp.random_base32(), interval=360)
@@ -25,7 +25,7 @@ def Rescore(news):
     return 
 
 def short_category(cat):
-    cat_dict = Category.CATEGORYS
+    cat_dict = ""
     cat = cat.capitalize()
     cat.replace(' ', '_')
     short_name = ""

@@ -16,7 +16,7 @@ from PIL import Image
 import pyotp
 import json
 
-from .models import User, New, Category
+from .models import User, New
 from .utils import send_otp, Rescore, short_category
 
 
@@ -24,21 +24,20 @@ from .utils import send_otp, Rescore, short_category
 def index(request, cat=None):
     Rescore(New.objects.all())
     if cat == None:
-        news = New.objects.prefetch_related('category').order_by("score")
+        news = New.objects.all().order_by("score")
         sub_categories = None
     elif cat in ["News", "Sport", "Business", "Innovation", "Culture", "Art", "Travel", "Earth"]:
-        news = New.objects.filter(category__parent=cat[0]).order_by("score")
-        sub_categories = Category.objects.filter(parent=cat[0])
+        news = New.objects.filter(category=cat[0]).order_by("score")
+        sub_categories = New.SUB_CATEGORIES[cat[0]]
     else:
         short_name = short_category(cat)
-        news = New.objects.filter(category__category=short_name).order_by("score")
-        parent = Category.objects.get(category=short_name).parent
-        sub_categories = Category.objects.filter(parent=parent)
+        news = New.objects.filter(category=cat).order_by("score")
     hero = news.filter(section="H")
     side = news.filter(section="S")
     top_stories = news.filter(section="T")
     only = news.filter(section="O")
     featured = news.filter(section="F")
+    print(sub_categories)
 
     return render(request, "CS50_News/index.html", {
         "news" : news,
@@ -76,27 +75,37 @@ def add_new(request):
     if request.method == "POST":
         headline = request.POST.get("headline")
         sub_headline = request.POST.get("sub_headline")
-        categories = request.POST.get("categories")
+        category = request.POST.get("category")
+        tags = request.POST.get("tags")
         content = request.POST.get("content")
         image = request.FILES.get("blob")
+        print(category)
+        print(tags)
+        print(type(tags))
+        # TODO: constantly crop
         with Image.open(image) as img:
             w, h = img.size
             if w / h != 16 / 9:
                 newh = w*9/16
                 img.crop((0, (h/2-newh/2), w, (h/2+newh/2)))
-                img.show()
-        try:
-            new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user)
-            new.save()
-        except:
-            return JsonResponse({'error': 'could not create the article'}, status=400)
+        #try:
+        new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0])
+        new.save()
+        new.tags.add(tags)
+        new.save()
+        #except:
+         #   return JsonResponse({'error': 'could not create the article'}, status=400)
+        # TODO: add 1 category and max(10) tags before save().
+        """
         categories = categories.split()
         for category in categories:
             short_name = short_category(category)
             cat_obj = Category.objects.get(category=short_name)
             cat_obj.news.add(new)
-        return redirect("index")
-    categories = Category.objects.all()
+        """
+        return JsonResponse({"message": "ok"}, status=200)
+    categories = New.CATEGORYS.values()
+    print(categories)
     return render(request, "CS50_News/editor.html", {
         "categories": categories
     })

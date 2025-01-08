@@ -396,6 +396,7 @@ function removeTag(element, tag) {
     element.parentElement.remove()
 }
 
+// TODO:
 function suggestions() {
 	tagsError.classList.add('d-none')
     const query = this.value.trim().toLowerCase();
@@ -445,7 +446,7 @@ function getCookie(name) {
 
 let initialData;
 
-continueBtn.addEventListener('click', (e) => {
+continueBtn.addEventListener('click', () => {
     initialData = initSubmit()
 })
 
@@ -472,18 +473,17 @@ function initSubmit() {
 	}
 	else {
 		let body = new FormData(form)
-
 		customCropper.getCroppedCanvas().toBlob((blob) => {
 			body.append('blob', blob)
 		})
-
 		const ps = document.querySelectorAll('ul p');
+		// TODO: tags immediately
 		let values = [];
-		ps.forEach(p => {
-			values.push(p.textContent);
+		tags.forEach(tag => {
+			values.push(tag);
 			console.log(values);
 		})
-		body.append('categories', values.join())
+		body.append('tags', values)
 		form.classList.add('d-none')
 		editorForm.classList.remove('d-none')
 		document.body.classList.add('overflow-y-hidden');
@@ -507,13 +507,16 @@ function finalSubmit(body) {
 	.then(res => res.json())
 	.then(result => {
 		if (result.ok) {
-			window.location.assign(result.url)
+			// TODO: redirect
+			console.log(result)
 		}
 	})
+	/*
 	.catch (error => {
 		form.classList.remove('d-none')
-		document.body.innerHTML = `<div class="alert alert-danger" role="alert">${error.message}</div> ${document.body.innerHTML}`;
+		document.body.innerHTML = `<div class="alert alert-danger" role="alert">${error.error}</div> ${document.body.innerHTML}`;
 		editorForm.classList.add('d-none')
 	})
+	*/
 }
 
