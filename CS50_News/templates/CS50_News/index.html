@@ -15,7 +15,7 @@
                     {% for new in hero %}
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
                             <a class="link" href="{% url 'new' cat=new.category id=new.id %}">
-                                <img src="{{new.image.url}}" class="d-block w-100" alt="...">
+                                <img src="{{new.image}}" class="d-block w-100" alt="...">
                                 <div class="carousel-caption">
                                     <h5>{{new.headline}}</h5>
                                     <p>{{new.sub_headline}}</p>
@@ -38,14 +38,14 @@
             {% for new in side %}
                 <a class="side-new link" href="{% url 'new' cat=new.category id=new.id %}">
                     <div class="side-new-image-div">
-                        <img src="{{new.image.url}}" alt="">
+                        <img src="{{new.image}}" alt="">
                     </div>
                     <div class="side-new-text">
                         <h6 class="main-text">{{new.headline}}</h6>
                         <div class="secondary-div side-secondary">
                             <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                             <div></div>
-                            <span>{{new.get_category_display}}</span>
+                            <span>{{new.get_sub_category_display|change:"_ "}}</span>
                         </div>
                     </div>
                 </a>
@@ -57,9 +57,9 @@
     <h3 class="news-section-heading">News</h3>
     <div class="news-section">
         {% for new in news|slice:":7" %}
-            <a class="new-container" href="{% url 'new' cat=new.category id=new.id %}">
+            <a class="new-container" href="{% url 'new' cat=new.get_category_display id=new.id %}">
                 <div class="new-image">
-                    <img src="{{new.image.url}}" alt="">
+                    <img src="{{new.image}}" alt="">
                 </div>
                 <div class="content">
                     <h6 class="content-heading">{{new.headline}}</h6>
@@ -67,7 +67,7 @@
                     <div class="secondary-div">
                         <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
-                        <span>{{new.get_category_display}}</span>
+                        <span>{{new.get_sub_category_display|change:"_ "}}</span>
                     </div>
                 </div>
             </a>
@@ -80,7 +80,7 @@
         {% for new in only %}
             <a class="tn link" href="{% url 'new' cat=new.category id=new.id %}">
                 <div class="img">
-                    <img src="{{new.image.url}}" alt="">
+                    <img src="{{new.image}}" alt="">
                 </div>
                 <div class="content">
                     <h6 class="content-heading">{{new.headline}}</h6>
@@ -88,7 +88,7 @@
                     <div class="secondary-div">
                         <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
-                        <span>{{new.get_category_display}}</span>
+                        <span>{{new.get_sub_category_display|change:"_ "}}</span>
                     </div>
                 </div>
             </a>
@@ -117,11 +117,11 @@
     <h3 class="stories-section-heading">MORE TOP STORIES</h3>
     <div class="stories-section">
         <div class="side column-section">
-            {% for new in top_stories|slice:":4" %}
+            {% for new in news|slice:":4" %}
                 {% if forloop.first %}
                     <a class="main" href="{% url 'new' cat=new.category id=new.id %}">
                         <div class="img">
-                            <img src="{{new.image.url}}" alt="">
+                            <img src="{{new.image}}" alt="">
                         </div>
                         <div class="content">
                             <h6 class="content-heading">{{new.headline}}</h6>
@@ -129,21 +129,21 @@
                             <div class="secondary-div">
                                 <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{new.get_category_display}}</span>
+                                <span>{{new.get_sub_category_display|change:"_ "}}</span>
                             </div>
                         </div>
                     </a>
                 {% else %}
                     <a href="{% url 'new' cat=new.category id=new.id %}" class="link column-side-new">
                         <div class="img">
-                            <img src="{{new.image.url}}" alt="">
+                            <img src="{{new.image}}" alt="">
                         </div>
                         <div>
                             <h6>{{new.headline}}</h6>
                             <div class="secondary-div">
                                 <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{new.get_category_display}}</span>
+                                <span>{{new.category.all.0.get_category_display}}</span>
                             </div>
                         </div>
                     </a>
@@ -151,11 +151,11 @@
             {% endfor %}
         </div>
         <div class="middle">
-            {% for new in top_stories|slice:"4:7" %}
+            {% for new in news|slice:"4:7" %}
                 {% if forloop.first %}
                     <a class="main" href="{% url 'new' cat=new.category id=new.id %}">
                         <div class="img">
-                            <img src="{{new.image.url}}" alt="">
+                            <img src="{{new.image}}" alt="">
                         </div>
                         <div class="content">
                             <h6>{{new.headline}}</h6>
@@ -170,14 +170,14 @@
                 {% else %}
                     <a class="link column-side-new" href="{% url 'new' cat=new.category id=new.id %}">
                         <div class="img">
-                            <img src="{{new.image.url}}" alt="">
+                            <img src="{{new.image}}" alt="">
                         </div>
                         <div class="content">
                             <h6>{{new.headline}}</h6>
                             <div class="side-secondary secondary-div">
                                 <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{new.get_category_display}}</span>
+                                <span>{{new.get_sub_category_display|change:"_ "}}</span>
                             </div>
                         </div>
                     </a>
@@ -185,11 +185,11 @@
             {% endfor %}
         </div>
         <div class="side column-section">
-            {% for new in top_stories|slice:"7:13" %}
+            {% for new in news|slice:"7:13" %}
                 {% if forloop.first %}
                     <a class="main" href="{% url 'new' cat=new.category id=new.id %}">
                         <div class="img">
-                            <img src="{{new.image.url}}" alt="">
+                            <img src="{{new.image}}" alt="">
                         </div>
                         <div class="content">
                             <h6 class="content-heading">{{new.headline}}</h6>
@@ -197,7 +197,7 @@
                             <div class="secondary-div">
                                 <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{new.get_category_display}}</span>
+                                <span>{{new.get_sub_category_display|change:"_ "}}</span>
                             </div>
                         </div>
                     </a>
@@ -208,7 +208,7 @@
                             <div class="secondary-div">
                                 <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{new.get_category_display}}</span>
+                                <span>{{new.get_sub_category_display|change:"_ "}}</span>
                             </div>
                         </div>
                     </a>
@@ -225,28 +225,28 @@
             <h4 class="Featured-sub_heading">Science</h4>
             <div class="main">
                 <div class="img">
-                    <img src="{{news.11.image.url}}" alt="">
+                    <img src="{{news.3.image}}" alt="">
                 </div>
                 <div class="content">
-                    <h6 class="content-heading">{{news.11.headline}}</h6>
-                    <p>The Republican says his opponent was "lying" about once working at McDonald's, while she says he is "unstable".</p>
+                    <h6 class="content-heading">{{news.3.headline}}</h6>
+                    <p>{{news.4.sub_headline}}</p>
                     <div class="secondary-div">
-                        <span>3 days ago</span>
+                        <span>{{news.4.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
-                        <span>{{news.3.sub_category}}</span>
+                        <span>{{news.3.category.all.0.get_category_display}}</span>
                     </div>
                 </div>
             </div>
             {% for new in news %}
-                <p>{{new.get_category_display}}</p>
+                <p>{{new.category}}</p>
                 {% if new.get_category_display == 'News' %}
                     <a href="" class="link column-side-new">
                         <div>
                             <h6>{{new.headline}}</h6>
                             <div class="secondary-div">
-                                <span>3 days ago</span>
+                                <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{new.sub_category}}</span>
+                                <span>{{new.category.all.0.get_category_display}}</span>
                             </div>
                         </div>
                     </a>
@@ -291,7 +291,7 @@
             <div class="main">
                 <a class="link" href="">
                     <div class="img">
-                        <img src="{{news.12.image.url}}" alt="">
+                        <img src="{{news.12.image}}" alt="">
                     </div>
                     <div class="content">
                         <h6 class="content-heading">{{news.12.headline}}</h6>
@@ -344,7 +344,7 @@
             <div class="main">
                 <a class="link" href="">
                     <div class="img">
-                        <img src="{{news.12.image.url}}" alt="">
+                        <img src="{{news.12.image}}" alt="">
                     </div>
                     <div class="content">
                         <h6 class="content-heading">{{news.12.headline}}</h6>
@@ -380,7 +380,7 @@
                         {% if forloop.parentloop.first %}
                             <a class="main" href="{% url 'new' cat=new.category id=new.id %}">
                                 <div class="img">
-                                    <img src="{{new.image.url}}" alt="">
+                                    <img src="{{new.image}}" alt="">
                                 </div>
                                 <div class="content">
                                     <h6 class="content-heading">{{new.headline}}</h6>
@@ -413,7 +413,7 @@
             <div class="main">
                 <a class="link" href="">
                     <div class="img">
-                        <img src="{{news.12.image.url}}" alt="">
+                        <img src="{{news.12.image}}" alt="">
                     </div>
                     <div class="content">
                         <h6 class="content-heading">{{news.12.headline}}</h6>

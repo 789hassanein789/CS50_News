@@ -31,7 +31,8 @@ def index(request, cat=None):
         sub_categories = New.SUB_CATEGORIES[cat[0]]
     else:
         short_name = short_category(cat)
-        news = New.objects.filter(category=cat).order_by("score")
+        news = New.objects.filter(category=short_name).order_by("score")
+        sub_categories = New.SUB_CATEGORIES[cat[0]]
     hero = news.filter(section="H")
     side = news.filter(section="S")
     top_stories = news.filter(section="T")
@@ -60,54 +61,50 @@ def search(request):
         "news": all_news,
         "input": q,
     })
-    
+
+@login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
+@secure_admin_login
 def admin_view(request):
     news = New.objects.filter(auther=request.user)
     return render(request, "CS50_News/admin.html", {
         "news": news
     })
 
+@secure_admin_login
 def add_new(request):
     if request.method == "POST":
         headline = request.POST.get("headline")
         sub_headline = request.POST.get("sub_headline")
         category = request.POST.get("category")
+        sub_category = request.POST.get("sub_category")
         tags = request.POST.get("tags")
         content = request.POST.get("content")
         image = request.FILES.get("blob")
-        print(category)
-        print(tags)
-        print(type(tags))
-        # TODO: constantly crop
-        with Image.open(image) as img:
-            w, h = img.size
-            if w / h != 16 / 9:
-                newh = w*9/16
-                img.crop((0, (h/2-newh/2), w, (h/2+newh/2)))
-        #try:
-        new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0])
-        new.save()
-        new.tags.add(tags)
-        new.save()
-        #except:
-         #   return JsonResponse({'error': 'could not create the article'}, status=400)
-        # TODO: add 1 category and max(10) tags before save().
-        """
-        categories = categories.split()
-        for category in categories:
-            short_name = short_category(category)
-            cat_obj = Category.objects.get(category=short_name)
-            cat_obj.news.add(new)
-        """
-        return JsonResponse({"message": "ok"}, status=200)
-    categories = New.CATEGORYS.values()
-    print(categories)
+        short_name = short_category(sub_category)
+        try:
+            with Image.open(image) as img:
+                w, h = img.size
+                if w / h != 16 / 9:
+                    newh = w*9/16
+                    img.crop((0, (h/2-newh/2), w, (h/2+newh/2)))
+                    print("crop")
+        except:
+            return HttpResponse({"error": "please provied an image"}, status=400)
+        try:
+            new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name)
+            new.save()
+            new.tags.add(tags)
+            new.save()
+        except:
+           return HttpResponse({"error": "could not create the article"}, status=400)
+        return HttpResponseRedirect(reverse("staff"))
     return render(request, "CS50_News/editor.html", {
-        "categories": categories
+        "categories": New.CATEGORYS.values(),
+        "subs": New.SUB_CATEGORIES
     })
 
 def passwordCheck(request):
@@ -170,11 +167,27 @@ def crop(request):
 
 def new(request, id, cat=None):
     if cat == None:
-        new = New.objects.get(id=id)
+        news = New.objects.get(id=id)
     else:
         short_name = short_category(cat)
         print(short_name)
-        new = New.objects.prefetch_related("category", "auther").get(id=id, category__category=short_name)
+        news = New.objects.prefetch_related("category", "auther").get(id=id, category__category=short_name)
+        related =  New.objects.prefetch_related("category").filter(category__category=short_name).exclude(id=id).order_by('score')
+        Related = []
+        score = 0
+        for r in related:
+            #check how many categories are related
+            i = 0
+            for cat in news.category.all():
+                if cat in r.category.all():
+                    i += 1
+            if i >= score:
+                score = i
+                Related.append(r)
+        print(Related)
+        print(Related[-3:])
+
     return render(request, "CS50_News/new.html", {
-        "new": new
+        "new": news,
+        "RelatedNews": Related[-3:]
     })

@@ -199,6 +199,7 @@ HEADLESS_FRONTEND_URLS = {
 }
 
 #ACCOUNT_FORMS = {'signup': 'CS50_News.forms.signupForm'}
+#LOGIN_URL = '/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

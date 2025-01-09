@@ -7,9 +7,9 @@ footer {
     border-top: 1px solid  hsl(0, 0%, 69%);
 }
 .footer-column-container {
-    display: flex;
-    gap: 2rem;
-    
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 2rem;
 }
 
 .footer-column {
@@ -22,6 +22,14 @@ footer {
         font-size: 1.5rem;
         cursor: pointer;
         margin-bottom: .75rem;
+    }
+    li {
+        text-decoration: none;
+        color: inherit;
+
+        &:hover {
+            background-color: transparent;    
+        }
     }
 }
 
@@ -48,11 +56,14 @@ footer {
 
 
     .follow {
+        text-align: center;
         font-weight: 600;
     }
     .icons {
         display: flex;
-        justify-content: space-between;
+        gap: 1.5rem;
+        text-align: center;
+        justify-content: center;
 
         .fa-facebook {
             color: blue;
@@ -81,5 +92,52 @@ footer {
 }
 
 .Rights {
+    text-align: center;
     margin-top: -1rem;
+}
+
+@media screen and (max-width: 992px) {
+    footer {
+        margin: 1rem 1.5rem;
+    }
+    .footer-column-container {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    footer {
+        grid-template-columns: 1fr;
+        grid-template-rows: 5fr 2fr;
+        margin: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    footer {
+        grid-template-rows: 1fr 1fr;
+    }
+    .footer-column-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(2, 1fr);
+        row-gap: 1rem;
+    }
+    .footer-column {
+        text-align: center;
+
+        a {
+            width: 100%;
+            text-align: center;
+        }
+    }
+    .last {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 300px) {
+    .icons {
+        flex-wrap: wrap;
+    }
 }

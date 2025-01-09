@@ -1,4 +1,5 @@
 {% load static %}
+{% load change %}
 
 <!doctype html>
 <html lang="en">
@@ -21,19 +22,21 @@
 			<button class="continue-btn" type="button">Continue</button>
 			<div id="init-form-div">
 				<div class="image-input">
-					<p class="fs-5 fw-bold">Article Image</p>
-					<label for="img-input" id="label">
-						<input type="file" accept="image/*" id="img-input" hidden name="img">
-						<p id="img-text">drag and drop an image or <a class="link">browse</a></p>
-					</label>
-					<p class="image-error error d-none">please provide an image for the Article</p>
-				</div>
-				<div class="text-inputs">
 					<div class="mb-3">
+						<p class="fs-5 fw-bold">Article Image</p>
+						<label for="img-input" id="label">
+							<input type="file" accept="image/*" id="img-input" hidden name="img">
+							<p id="img-text">drag and drop an image or <a class="link">browse</a></p>
+						</label>
+						<p class="img-input-error error d-none">please provide an image for the Article</p>
+					</div>
+					<div>
 						<label for="headline">headline</label>
 						<input class="t-input" type="text" placeholder="Add a headline..." id="headline" name="headline">
 						<p class="headline-error error d-none">please provide a headline for the article</p>
 					</div>
+				</div>
+				<div class="text-inputs">
 					<div class="mb-3">
 						<label for="Sub_headline">Sub headline</label>
 						<input class="t-input" type="text" placeholder="Add a Sub headline..." id="Sub_headline" name="sub_headline">
@@ -49,13 +52,31 @@
 						</div>
 						<p class="category-error error d-none">Please chose a category</p>
 					</div>
+					<div class="mb-3">
+						<select name="sub_category" id="sub_category" class="t-input">
+							<option disabled selected class="light">Sub Category</option>
+							{% for cat_name, cat_dics in subs.items %}
+								{% for key, value in cat_dics.items %}
+									<option value="{{value}}" class="{{cat_name}}">{{value|change:"_ "}}</option>
+								{% endfor %}
+							{% endfor %}
+						</select>
+						<p class="category-error error d-none">Please specify a sub category</p>
+					</div>
 					<div class="tags">
 						<label for="tags-input">Add or change topics (up to 5) so readers know what your article is about</label>
 						<ul class="chosed-tags">
-							<input type="text" id="tags-input" placeholder="Add a topic..">
+							<input type="text" id="tags-input" placeholder="Add a topic.." list="subs">
+							<datalist id="subs">
+								{% for k, v in subs.items %}
+									{% for key, value in v.items %}
+										<option value="{{value}}">{{value|change:"_ "}}</option>
+									{% endfor %}
+								{% endfor %}
+							</datalist>
 						</ul>
 						<ul class="suggestions list-group"></ul>
-						<p class="tags-input-error error d-none"></p>
+						<p class="tags-input-error error d-none">you have to enter one tag at least.</p>
 					</div>
 				</div>
 			</div>

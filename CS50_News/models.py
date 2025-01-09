@@ -52,7 +52,6 @@ class New(models.Model):
             "AT": "Athletics",
             "CY": "Cycling",
         },
-        "B": None,
         "I": {
             "TECH": "Technology",
             "S&HE": "Science_&_Health",
@@ -80,7 +79,6 @@ class New(models.Model):
     image = models.ImageField(upload_to="CS50_News/static/CS50_News/cover" ,blank=True, null=True)
     content = models.TextField()
     views = models.IntegerField(default=0)
-    scroll = models.IntegerField(default=0)
     score = models.IntegerField(default=10)
     timestamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=50, choices=CATEGORYS)

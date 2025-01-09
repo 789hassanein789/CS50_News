@@ -456,6 +456,9 @@ editorForm.addEventListener('submit', (e) => {
 })
 
 function initSubmit() {
+	console.log(form.querySelector('.btn-check:checked'))
+	let select = form.sub_category; 
+ 	let selectedValue = select.options[select.selectedIndex].value;
 	errors.forEach(error => {
 		error.classList.add('d-none')
 	})
@@ -468,8 +471,14 @@ function initSubmit() {
 	else if (form.Sub_headline.value === '') {
 		errors[2].classList.remove('d-none')
 	}
-	else if (form.querySelector('li > p') == null) {
+	else if (!form.querySelector('.btn-check:checked')) {
 		errors[3].classList.remove('d-none')
+	}
+	else if (selectedValue == "Sub Category") {
+		errors[4].classList.remove('d-none')
+	}
+	else if (!form.querySelector('li > p')) {
+		errors[5].classList.remove('d-none')
 	}
 	else {
 		let body = new FormData(form)
@@ -493,30 +502,29 @@ function initSubmit() {
 }
 
 function finalSubmit(body) {
-	console.log(editor.getData())
-	console.log(body)
-    body.append('content', editor.getData())
-	fetch('/add', {
-		method: 'POST',
-		headers: {
-		'X-CSRFToken': getCookie('csrftoken'),
-		},
-		credentials: "same-origin",
-		body: body
-	})
-	.then(res => res.json())
-	.then(result => {
-		if (result.ok) {
-			// TODO: redirect
-			console.log(result)
-		}
-	})
-	/*
-	.catch (error => {
-		form.classList.remove('d-none')
-		document.body.innerHTML = `<div class="alert alert-danger" role="alert">${error.error}</div> ${document.body.innerHTML}`;
-		editorForm.classList.add('d-none')
-	})
-	*/
+	const content = editor.getData()
+	if (content === "") {
+		document.body.innerHTML = '<div class="alert alert-danger" role="alert">you should add content to your article!</div>' + body.innerHTML;
+	}
+	else {
+		body.append('content', content)
+		fetch('/add', {
+			method: 'POST',
+			headers: {
+			'X-CSRFToken': getCookie('csrftoken'),
+			},
+			credentials: "same-origin",
+			body: body,
+			redirect: "follow"
+		})
+		.then(result => {
+			window.location.href = result.url
+		})
+		.catch(error => {
+			form.classList.remove('d-none')
+			document.body.innerHTML = `<div class="alert alert-danger" role="alert">${error.error}</div> ${document.body.innerHTML}`;
+			editorForm.classList.add('d-none')
+		})
+	}  
 }
 

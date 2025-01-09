@@ -1,4 +1,5 @@
 {% extends "CS50_News/layout.html" %}
+{% load change %}
 {% load static %}
 
 {% block head %}
@@ -8,76 +9,44 @@
 {% block body %}
 
     <article class="main-container">
-        <div class="h1">
+        <div class="heading">
             <h1>
                 {{new.headline}}
             </h1>
+            <p class="time">
+                {{new.timestamp|timesince|timeformat|safe}}
+            </p>
+            <p class="auther">
+                {{new.auther.username}}
+            </p>
         </div>
         <div class="main-img">
             <img src="{{new.image.url}}" alt="">
         </div>
-        <div class="new-content">
-            {{new.content | safe}}
-            <!--
-            <p>
-                The Russian military is accelerating its gains along the front line in Ukraine at a crucial time for the conflict.
-            </p>
-            <p>
-                Data from the Institute for the Study of War (ISW) shows that Russia has gained almost six times as much territory in 2024 as it did in 2023, and is advancing towards key Ukrainian logistical hubs in the eastern Donbas region.
-            </p>
-            <p>
-                Meanwhile, Ukraine's surprise incursion into Russia's Kursk region is faltering. Russian troops have pushed Kyiv's offensive backwards. Experts have questioned the success of the offensive, with one calling it a "strategic catastrophe" given manpower shortages faced by Ukraine.
-            </p>
-            <p>
-                These developments come at a time of heightened uncertainty with a second Donald Trump administration looming. The US president-elect has vowed to bring the war to a close when he takes office in January, with some fearing he could cut future military aid to Ukraine.
-            </p>
-            <h2>
-                Russia advances in eastern Ukraine
-            </h2>
-            <p>
-                In the first few months of the war the front line moved quickly, with Russia gaining ground quickly before being pushed back by a Ukrainian counteroffensive. But in 2023 neither side made any major gains - with the conflict largely sliding into a stalemate.
-            </p>
-            <div>
-                <img src="https://ichef.bbci.co.uk/news/1024/cpsprodpb/33f7/live/38ec2400-a6a1-11ef-a4fe-a3e9a6c5d640.png.webp" alt="">
+        <article>
+            <div class="new-content">
+                {{new.content | safe}} <br>
+                {% for category in new.category.all %}
+                    <a href="">{{category.get_category_display}}</a>
+                {% endfor %}
             </div>
-            <h2>
-                Russia advances in eastern Ukraine
-            </h2>
-            <p>
-                In the first few months of the war the front line moved quickly, with Russia gaining ground quickly before being pushed back by a Ukrainian counteroffensive. But in 2023 neither side made any major gains - with the conflict largely sliding into a stalemate.
-            </p>
-             -->
-        </div>
+        </article>
         <aside>
             <div class="border"></div>
             <h5>
                 Related
             </h5>
             <div class="content">
-                <a class="link" href="">
-                    <h6>Biden agrees to give Ukraine anti-personnel mines</h6>
-                    <div class="secondary-div">
-                        <span>1.5 days ago</span>
-                        <div></div>
-                        <span>News</span>
-                    </div>
-                </a>
-                <a class="link" href="">
-                    <h6>Biden agrees to give Ukraine anti-personnel mines</h6>
-                    <div class="secondary-div">
-                        <span>1.5 days ago</span>
-                        <div></div>
-                        <span>News</span>
-                    </div>
-                </a>
-                <a class="link" href="">
-                    <h6>Biden agrees to give Ukraine anti-personnel mines</h6>
-                    <div class="secondary-div">
-                        <span>1.5 days ago</span>
-                        <div></div>
-                        <span>News</span>
-                    </div>
-                </a>
+                {% for related in RelatedNews %}
+                    <a class="link" href="{% url 'new' cat=related.category.all.0.get_category_display id=related.id  %}">
+                        <h6>{{related.headline}}</h6>
+                        <div class="secondary-div">
+                            <span>{{related.timestamp|timesince|timeformat|safe}}</span>
+                            <div></div>
+                            <span>{{related.category.all.0.get_category_display}}</span>
+                        </div>
+                    </a>
+                {% endfor %}
             </div>
         </aside>
         <div class="more">
@@ -91,13 +60,13 @@
                         <span class="small-font">17 min ago</span>
                     </div>
                     <div class="img-content">
+                        <div class="img">
+                            <img src="{{new.image.url}}" alt="">
+                        </div>
                         <div class="content">
                             <h6>{{new.headline}}</h6>
                             <p class="sub">{{new.sub_headline}}</p>
                             <p class="small-font">World</p>
-                        </div>
-                        <div class="img">
-                            <img src="{{new.image.url}}" alt="">
                         </div>
                     </div>
                 </a>
@@ -106,13 +75,13 @@
                         <span class="small-font">17 min ago</span>
                     </div>
                     <div class="img-content">
+                        <div class="img">
+                            <img src="{{new.image.url}}" alt="">
+                        </div>
                         <div class="content">
                             <h6>{{new.headline}}</h6>
                             <p class="sub">{{new.sub_headline}}</p>
                             <p class="small-font">World</p>
-                        </div>
-                        <div class="img">
-                            <img src="{{new.image.url}}" alt="">
                         </div>
                     </div>
                 </a>
@@ -121,43 +90,13 @@
                         <span class="small-font">17 min ago</span>
                     </div>
                     <div class="img-content">
+                        <div class="img">
+                            <img src="{{new.image.url}}" alt="">
+                        </div>
                         <div class="content">
                             <h6>{{new.headline}}</h6>
                             <p class="sub">{{new.sub_headline}}</p>
                             <p class="small-font">World</p>
-                        </div>
-                        <div class="img">
-                            <img src="{{new.image.url}}" alt="">
-                        </div>
-                    </div>
-                </a>
-                <a class="horizontal-new" href="">
-                    <div class="timestamp">
-                        <span class="small-font">17 min ago</span>
-                    </div>
-                    <div class="img-content">
-                        <div class="content">
-                            <h6>{{new.headline}}</h6>
-                            <p class="sub">{{new.sub_headline}}</p>
-                            <p class="small-font">World</p>
-                        </div>
-                        <div class="img">
-                            <img src="{{new.image.url}}" alt="">
-                        </div>
-                    </div>
-                </a>
-                <a class="horizontal-new" href="">
-                    <div class="timestamp">
-                        <span class="small-font">17 min ago</span>
-                    </div>
-                    <div class="img-content">
-                        <div class="content">
-                            <h6>{{new.headline}}</h6>
-                            <p class="sub">{{new.sub_headline}}</p>
-                            <p class="small-font">World</p>
-                        </div>
-                        <div class="img">
-                            <img src="{{new.image.url}}" alt="">
                         </div>
                     </div>
                 </a>
