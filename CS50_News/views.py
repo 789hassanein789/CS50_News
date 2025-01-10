@@ -28,17 +28,20 @@ def index(request, cat=None):
         sub_categories = None
     elif cat in ["News", "Sport", "Business", "Innovation", "Culture", "Art", "Travel", "Earth"]:
         news = New.objects.filter(category=cat[0]).order_by("score")
-        sub_categories = New.SUB_CATEGORIES[cat[0]]
+        if cat == "Business":
+            sub_categories = None
+        else:
+            sub_categories = New.SUB_CATEGORIES[cat[0]]
     else:
         short_name = short_category(cat)
-        news = New.objects.filter(category=short_name).order_by("score")
-        sub_categories = New.SUB_CATEGORIES[cat[0]]
+        news = New.objects.filter(sub_category=short_name[0]).order_by("score")
+        sub_categories = New.SUB_CATEGORIES[short_name[1]]
     hero = news.filter(section="H")
     side = news.filter(section="S")
     top_stories = news.filter(section="T")
     only = news.filter(section="O")
     featured = news.filter(section="F")
-    print(sub_categories)
+    print(news)
 
     return render(request, "CS50_News/index.html", {
         "news" : news,
@@ -95,7 +98,7 @@ def add_new(request):
         except:
             return HttpResponse({"error": "please provied an image"}, status=400)
         try:
-            new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name)
+            new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name[0])
             new.save()
             new.tags.add(tags)
             new.save()
@@ -170,9 +173,8 @@ def new(request, id, cat=None):
         news = New.objects.get(id=id)
     else:
         short_name = short_category(cat)
-        print(short_name)
-        news = New.objects.prefetch_related("category", "auther").get(id=id, category__category=short_name)
-        related =  New.objects.prefetch_related("category").filter(category__category=short_name).exclude(id=id).order_by('score')
+        news = New.objects.prefetch_related("category", "auther").get(id=id, category__category=short_name[0])
+        related =  New.objects.prefetch_related("category").filter(category__category=short_name[0]).exclude(id=id).order_by('score')
         Related = []
         score = 0
         for r in related:

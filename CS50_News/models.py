@@ -52,6 +52,9 @@ class New(models.Model):
             "AT": "Athletics",
             "CY": "Cycling",
         },
+        "B": {
+            "B": "Business"
+        },
         "I": {
             "TECH": "Technology",
             "S&HE": "Science_&_Health",
@@ -76,7 +79,7 @@ class New(models.Model):
     }
     headline = models.CharField(max_length=200)
     sub_headline = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="CS50_News/static/CS50_News/cover" ,blank=True, null=True)
+    image = models.ImageField(upload_to="CS50_News/static/CS50_News/cover")
     content = models.TextField()
     views = models.IntegerField(default=0)
     score = models.IntegerField(default=10)

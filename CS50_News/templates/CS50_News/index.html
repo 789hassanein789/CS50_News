@@ -15,7 +15,7 @@
                     {% for new in hero %}
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
                             <a class="link" href="{% url 'new' cat=new.category id=new.id %}">
-                                <img src="{{new.image}}" class="d-block w-100" alt="...">
+                                <img src="{{new.image.url}}" class="d-block w-100" alt="...">
                                 <div class="carousel-caption">
                                     <h5>{{new.headline}}</h5>
                                     <p>{{new.sub_headline}}</p>
@@ -38,7 +38,7 @@
             {% for new in side %}
                 <a class="side-new link" href="{% url 'new' cat=new.category id=new.id %}">
                     <div class="side-new-image-div">
-                        <img src="{{new.image}}" alt="">
+                        <img src="{{new.image.url}}" alt="">
                     </div>
                     <div class="side-new-text">
                         <h6 class="main-text">{{new.headline}}</h6>
@@ -59,7 +59,7 @@
         {% for new in news|slice:":7" %}
             <a class="new-container" href="{% url 'new' cat=new.get_category_display id=new.id %}">
                 <div class="new-image">
-                    <img src="{{new.image}}" alt="">
+                    <img src="{{new.image.url}}" alt="">
                 </div>
                 <div class="content">
                     <h6 class="content-heading">{{new.headline}}</h6>
@@ -80,7 +80,7 @@
         {% for new in only %}
             <a class="tn link" href="{% url 'new' cat=new.category id=new.id %}">
                 <div class="img">
-                    <img src="{{new.image}}" alt="">
+                    <img src="{{new.image.url}}" alt="">
                 </div>
                 <div class="content">
                     <h6 class="content-heading">{{new.headline}}</h6>
@@ -121,7 +121,7 @@
                 {% if forloop.first %}
                     <a class="main" href="{% url 'new' cat=new.category id=new.id %}">
                         <div class="img">
-                            <img src="{{new.image}}" alt="">
+                            <img src="{{new.image.url}}" alt="">
                         </div>
                         <div class="content">
                             <h6 class="content-heading">{{new.headline}}</h6>
@@ -136,7 +136,7 @@
                 {% else %}
                     <a href="{% url 'new' cat=new.category id=new.id %}" class="link column-side-new">
                         <div class="img">
-                            <img src="{{new.image}}" alt="">
+                            <img src="{{new.image.url}}" alt="">
                         </div>
                         <div>
                             <h6>{{new.headline}}</h6>
@@ -155,7 +155,7 @@
                 {% if forloop.first %}
                     <a class="main" href="{% url 'new' cat=new.category id=new.id %}">
                         <div class="img">
-                            <img src="{{new.image}}" alt="">
+                            <img src="{{new.image.url}}" alt="">
                         </div>
                         <div class="content">
                             <h6>{{new.headline}}</h6>
@@ -170,7 +170,7 @@
                 {% else %}
                     <a class="link column-side-new" href="{% url 'new' cat=new.category id=new.id %}">
                         <div class="img">
-                            <img src="{{new.image}}" alt="">
+                            <img src="{{new.image.url}}" alt="">
                         </div>
                         <div class="content">
                             <h6>{{new.headline}}</h6>
@@ -189,7 +189,7 @@
                 {% if forloop.first %}
                     <a class="main" href="{% url 'new' cat=new.category id=new.id %}">
                         <div class="img">
-                            <img src="{{new.image}}" alt="">
+                            <img src="{{new.image.url}}" alt="">
                         </div>
                         <div class="content">
                             <h6 class="content-heading">{{new.headline}}</h6>
@@ -380,7 +380,7 @@
                         {% if forloop.parentloop.first %}
                             <a class="main" href="{% url 'new' cat=new.category id=new.id %}">
                                 <div class="img">
-                                    <img src="{{new.image}}" alt="">
+                                    <img src="{{new.image.url}}" alt="">
                                 </div>
                                 <div class="content">
                                     <h6 class="content-heading">{{new.headline}}</h6>
