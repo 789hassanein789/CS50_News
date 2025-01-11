@@ -17,6 +17,7 @@ urlpatterns = [
     path("<str:cat>/", include([
         path("", views.index, name="cat_index"),
         path("<int:id>", views.new, name="new"),
+        path("<str:sub>", views.index, name="cat_index"),
     ])),
 ]
 

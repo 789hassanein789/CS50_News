@@ -21,13 +21,13 @@
             </p>
         </div>
         <div class="main-img">
-            <img src="{{new.image.url}}" alt="">
+            <img src="{{new.image.url}}" alt="main-img">
         </div>
         <article>
             <div class="new-content">
                 {{new.content | safe}} <br>
-                {% for category in new.category.all %}
-                    <a href="">{{category.get_category_display}}</a>
+                {% for tag in tags %}
+                    <a href="">{{tag}}</a>
                 {% endfor %}
             </div>
         </article>
@@ -37,13 +37,13 @@
                 Related
             </h5>
             <div class="content">
-                {% for related in RelatedNews %}
-                    <a class="link" href="{% url 'new' cat=related.category.all.0.get_category_display id=related.id  %}">
+                {% for related in relatedNews %}
+                    <a class="link" href="{% url 'new' cat=related.get_category_display id=related.id  %}">
                         <h6>{{related.headline}}</h6>
                         <div class="secondary-div">
                             <span>{{related.timestamp|timesince|timeformat|safe}}</span>
                             <div></div>
-                            <span>{{related.category.all.0.get_category_display}}</span>
+                            <span>{{related.get_category_display}}</span>
                         </div>
                     </a>
                 {% endfor %}

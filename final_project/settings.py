@@ -195,11 +195,11 @@ HEADLESS_FRONTEND_URLS = {
     "account_reset_password": "/account/password/reset",
     "account_reset_password_from_key": "/account/password/reset/key/{key}",
     "account_signup": "/account/signup",
-    "socialaccount_login_error": "/account/provider/callback"
+    "socialaccount_login_error": "/account/provider/callback",
 }
 
 #ACCOUNT_FORMS = {'signup': 'CS50_News.forms.signupForm'}
-#LOGIN_URL = '/'
+LOGIN_URL = '/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

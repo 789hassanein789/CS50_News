@@ -27,10 +27,10 @@ def Rescore(news):
 def short_category(cat):
     cat_dict = New.SUB_CATEGORIES
     cat.replace(' ', '_')
-    for k, v in cat_dict.items():
+    for v in cat_dict.values():
         for key, value in v.items():
             if value == cat:
-                return [key, k]
-    return [None, None]
+                return key
+    return
 
     

@@ -25,6 +25,7 @@ const loginError = document.querySelector('#conflict-login');
 const loginInputs = document.querySelectorAll('.login-input');
 const navLinks = document.querySelectorAll('.nav-link');
 const headingIcons = document.querySelectorAll('#main-header_content i');
+const continueBtn = document.querySelector('.signup-form-btn')
 /*
 const aaaa = document.querySelector('');
 const aaaa = document.querySelector('');
@@ -379,18 +380,13 @@ function inputError(name) {
 }
 
 function signup() {
-    const form = new FormData(document.querySelector('#signup-form'))
-    let empty = false
+    const form = new FormData(signupFrom)
     for (const value of form.entries()) {
         if (value[1] == '') {
             inputError(value[0])
-            empty = true
+            return
         }
     }
-    if (empty) {
-        return
-    }
-    const continueBtn = document.querySelector('.signup-form-btn')
     continueBtn.innerHTML = '<div class="spinner-border" role="status"></div>'
     fetch('/_allauth/browser/v1/auth/signup', {
         method: 'POST',

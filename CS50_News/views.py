@@ -21,27 +21,29 @@ from .utils import send_otp, Rescore, short_category
 
 
 # Create your views here.
-def index(request, cat=None):
+def index(request, cat=None, sub=None):
     Rescore(New.objects.all())
+    parent = None
+    sub_categories = None
     if cat == None:
         news = New.objects.all().order_by("score")
-        sub_categories = None
-    elif cat in ["News", "Sport", "Business", "Innovation", "Culture", "Art", "Travel", "Earth"]:
+    # make sure the cat is valid.
+    elif cat and not sub:
         news = New.objects.filter(category=cat[0]).order_by("score")
-        if cat == "Business":
-            sub_categories = None
-        else:
+        if cat != "Business":
             sub_categories = New.SUB_CATEGORIES[cat[0]]
     else:
-        short_name = short_category(cat)
-        news = New.objects.filter(sub_category=short_name[0]).order_by("score")
-        sub_categories = New.SUB_CATEGORIES[short_name[1]]
+        short_name = short_category(sub)
+        news = New.objects.filter(sub_category=short_name).order_by("score")
+        sub_categories = New.SUB_CATEGORIES[cat[0]]
+    # TODO: filter on category not just section
     hero = news.filter(section="H")
     side = news.filter(section="S")
     top_stories = news.filter(section="T")
     only = news.filter(section="O")
     featured = news.filter(section="F")
-    print(news)
+    #
+    print(sub_categories)
 
     return render(request, "CS50_News/index.html", {
         "news" : news,
@@ -50,7 +52,8 @@ def index(request, cat=None):
         "top_stories": top_stories,
         "only": only,
         "featured": featured,
-        "subs": sub_categories
+        "subs": sub_categories,
+        "parent": cat
     })
 
 def search(request):
@@ -168,28 +171,12 @@ def crop(request):
         return HttpResponse(200)
     return render(request, "CS50_News/crop.html")
 
-def new(request, id, cat=None):
-    if cat == None:
-        news = New.objects.get(id=id)
-    else:
-        short_name = short_category(cat)
-        news = New.objects.prefetch_related("category", "auther").get(id=id, category__category=short_name[0])
-        related =  New.objects.prefetch_related("category").filter(category__category=short_name[0]).exclude(id=id).order_by('score')
-        Related = []
-        score = 0
-        for r in related:
-            #check how many categories are related
-            i = 0
-            for cat in news.category.all():
-                if cat in r.category.all():
-                    i += 1
-            if i >= score:
-                score = i
-                Related.append(r)
-        print(Related)
-        print(Related[-3:])
+def new(request, cat, id):
+    news = New.objects.prefetch_related("auther").get(id=id, category=cat[0])
+    related =  news.tags.similar_objects()
 
     return render(request, "CS50_News/new.html", {
         "new": news,
-        "RelatedNews": Related[-3:]
+        "relatedNews": related,
+        "tags": news.tags.names()
     })
