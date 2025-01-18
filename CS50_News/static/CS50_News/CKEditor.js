@@ -78,6 +78,10 @@ const continueBtn = document.querySelector('.continue-btn');
 const editorForm = document.querySelector('#editor-form');
 const errors = document.querySelectorAll('.error');
 const tagsError = document.querySelector('.tags-input-error');
+const radioBtns = document.querySelectorAll('.btn-check')
+const select = document.querySelector('#sub_category')
+const suggestionsTags = suggestionsList.querySelectorAll('li')
+const cancelBtn = overlay.querySelector('.cancel-btn')
 let chosedTags;
 
 const LICENSE_KEY =
@@ -308,7 +312,13 @@ label.addEventListener('dragover', (e) => {
 label.addEventListener('drop', (e) => {
     e.preventDefault()
     input.files = e.dataTransfer.files
+	console.log(input.files[0].name)
     uploadImage()
+})
+
+//TODO: replace the datalist with a custom list, problem not with inputfield.
+document.querySelectorAll('datalist option').forEach(option => {
+	option.addEventListener('click', addTag)
 })
 
 tagsInput.addEventListener('keyup', addTag)
@@ -317,7 +327,7 @@ tagsInput.addEventListener('input', suggestions)
 /*
 tagsInput.addEventListener('blur', () => {
     setTimeout(() => {
-        suggestionsList.innerHTML = '';
+        suggestionsList.classList.add('d-none')
     }, 100);
 });
 */
@@ -337,12 +347,32 @@ downloadBtn.addEventListener('click', (e) => {
     input.src = imgURL;
     imgText.style.display = 'none';
     overlay.classList.add('d-none');
+	document.body.style.overflowY = 'auto';
 })
 
 form.addEventListener('submit', (e) => e.preventDefault())
 
+radioBtns.forEach(btn => {
+	btn.addEventListener('click', radioSelect)
+})
+
+suggestionsTags.forEach(li => {
+	li.addEventListener('click', () => {
+		createTag(li.firstChild.textContent)
+		suggestionsList.classList.add('d-none')
+        tagsInput.value = '';
+	})
+
+})
+
+cancelBtn.addEventListener('click', () => {
+	overlay.classList.add('d-none')
+	document.body.style.overflowY = 'auto';
+
+})
+
 function uploadImage() {
-    let imgURL = URL.createObjectURL(input.files[0]);
+	let imgURL = URL.createObjectURL(input.files[0]);
     let img = new Image()
     img.src = imgURL
     img.onload = () => {
@@ -358,17 +388,32 @@ function uploadImage() {
     }    
 }
 
+function enterAddTag(e) {
+	console.log("enterAddTag")
+	if (e.key == 'Enter') {
+		suggestionsList.classList.add('d-none')
+		let tag = e.target.value.replace(/\s+/g, ' ');
+		if (tag.length > 1 && !tags.includes(tag)) {
+			tag.split(',').forEach(tag => {
+				createTag(tag)
+			});
+		}
+		e.target.value = '';
+	}
+}
+
 function addTag(e) {
-    if (e.key == 'Enter') {
-		suggestionsList.innerHTML = '';
-        let tag = e.target.value.replace(/\s+/g, ' ');
-        if (tag.length > 1 && !tags.includes(tag)) {
-            tag.split(',').forEach(tag => {
-                createTag(tag)
-            });
-        }
-        e.target.value = '';
-    }
+	if (e.key == 'Enter') {
+		console.log('addTag')
+		suggestionsList.classList.add('d-none')
+		let tag = e.target.value.replace(/\s+/g, ' ');
+		if (tag.length > 1 && !tags.includes(tag)) {
+			tag.split(',').forEach(tag => {
+				createTag(tag)
+			});
+		}
+		e.target.value = '';
+	}
 }
 
 function createTag(tag) {
@@ -387,41 +432,54 @@ function createTag(tag) {
     li.appendChild(i)
     
     ul.insertBefore(li, tagsInput);
-    i.onclick = () => removeTag(i, tag);
+    i.onclick = () => removeTag(li, tag);
 }
 
 function removeTag(element, tag) {
     let index = tags.indexOf(tag);
     tags = [ ...tags.slice(0, index), ...tags.slice(index + 1)]
-    element.parentElement.remove()
+    element.remove()
 }
 
 // TODO:
 function suggestions() {
+	console.log('suggestions')
 	tagsError.classList.add('d-none')
+	suggestionsTags.forEach(tag => {
+		tag.classList.add('d-none')
+	})
     const query = this.value.trim().toLowerCase();
-    suggestionsList.innerHTML = '';
+    suggestionsList.classList.add('d-none')
+	suggestionsList.classList.remove('d-none')
     if (query) {
-        console.log(tags);
-		console.log(!tags.includes('hi'))
-		const filteredTags = availableTags.filter(tag => tag.includes(query) && !tags.includes(tag));
+		suggestionsTags.forEach(tag => {
+			if (tag.firstChild.textContent.includes(query) && !tags.includes(tag.firstChild.textContent)) {
+				tag.classList.remove('d-none')
+			}
+		})
+		/*
+		.filter(tag => tag.includes(query) && !tags.includes(tag));
 
         filteredTags.forEach(tag => {
+			tag.classList.remove('d-none')
         const li = document.createElement('li');
         li.textContent = tag;
         li.classList.add('list-group-item', 'list-group-item-action')
         li.addEventListener('click', () => {
             createTag(tag)
-            suggestionsList.innerHTML = '';
+            suggestionsList.classList.add('d-none')
             tagsInput.value = '';
         });
         suggestionsList.appendChild(li);
+		
         });
+		*/
     }
 };
 
 function crop(url) {
     overlay.classList.remove('d-none');
+	document.body.style.overflowY = 'hidden';
     customImg.setAttribute('src', url)
     let Reader = new FileReader();
     Reader.readAsDataURL(input.files[0]);
@@ -432,8 +490,9 @@ function crop(url) {
 		customCropper = new Cropper(customImg, {
 			viewMode: 2,
 			aspectRatio: 16/9,
+			background: false,
 			zoomable: false,
-		});   
+		});
     }
     fileName = input.files[0].name.split('.')[0]
 }
@@ -442,6 +501,24 @@ function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function radioSelect(e) {
+	select.querySelectorAll('option').forEach(option => {
+		option.classList.add('d-none')
+	})
+	select.selectedIndex = 0
+	if (e.target.id !== "Business") {
+		const selectedRadio = select.querySelectorAll(`.${e.target.id[0]}`)
+		selectedRadio.forEach(radio => {
+			radio.classList.remove('d-none')
+		})
+		select.firstElementChild.classList.remove('d-none')
+		select.disabled = false
+	}
+	else {
+		select.disabled = true
+	}
 }
 
 let initialData;
@@ -462,7 +539,7 @@ function initSubmit() {
 	errors.forEach(error => {
 		error.classList.add('d-none')
 	})
-	if (form.img.value === '') {
+	if (form.blob.value === '') {
 		errors[0].classList.remove('d-none')
 	}
 	else if (form.headline.value === '') {
@@ -482,17 +559,13 @@ function initSubmit() {
 	}
 	else {
 		let body = new FormData(form)
-		customCropper.getCroppedCanvas().toBlob((blob) => {
-			body.append('blob', blob)
-		})
+		if (customCropper) {
+			customCropper.getCroppedCanvas().toBlob((blob) => {
+				body.append('blob', blob)
+			})	
+		}
+		body.append('tags', tags)
 		const ps = document.querySelectorAll('ul p');
-		// TODO: tags immediately
-		let values = [];
-		tags.forEach(tag => {
-			values.push(tag);
-			console.log(values);
-		})
-		body.append('tags', values)
 		form.classList.add('d-none')
 		editorForm.classList.remove('d-none')
 		document.body.classList.add('overflow-y-hidden');
@@ -518,12 +591,18 @@ function finalSubmit(body) {
 			redirect: "follow"
 		})
 		.then(result => {
-			window.location.href = result.url
+			if (result.ok) {
+				window.location.href = result.url
+			}
+			else {
+				console.log(result)
+				form.classList.remove('d-none')
+				document.body.innerHTML = `<div class="alert alert-danger" role="alert">${result.message}</div> ${document.body.innerHTML}`;
+				editorForm.classList.add('d-none')
+			}
 		})
 		.catch(error => {
-			form.classList.remove('d-none')
-			document.body.innerHTML = `<div class="alert alert-danger" role="alert">${error.error}</div> ${document.body.innerHTML}`;
-			editorForm.classList.add('d-none')
+			
 		})
 	}  
 }

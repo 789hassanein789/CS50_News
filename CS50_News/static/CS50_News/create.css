@@ -12,9 +12,15 @@
   font-family: sans-serif;
   margin: 0 3rem;
 }
+#init-form-div > div {
+  height: 85%;
+}
 
 .image-input {
   flex-basis: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .image-input #label {
   width: 100%;
@@ -63,28 +69,60 @@
   outline: none;
 }
 
-.text-inputs {
+#text-inputs {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   flex-basis: 45%;
   position: relative;
 }
-.text-inputs select {
+#text-inputs select {
   padding: 1rem 13px;
+  padding-right: 1rem;
   height: auto;
   font-size: 0.9rem;
+  background-color: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0;
 }
-.text-inputs label {
+#text-inputs select::-moz-placeholder {
+  font-size: 0.85rem;
+}
+#text-inputs select::placeholder {
+  font-size: 0.85rem;
+}
+#text-inputs select:focus-visible {
+  outline: none;
+}
+#text-inputs div:first-child label {
+  margin-bottom: 1rem;
+}
+#text-inputs label {
   font-size: 16px;
   font-weight: 500;
   line-height: 20px;
+  margin-bottom: 0.5rem;
 }
-.text-inputs .categories {
+#text-inputs .categories {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
-.text-inputs .chosed-tags {
+#text-inputs .categories .category-btn {
+  display: flex;
+  list-style: none;
+  background-color: #f8f8f8;
+  padding: 0.5rem 1rem;
+  justify-content: center;
+  cursor: pointer;
+}
+#text-inputs .categories .category-btn:hover {
+  background-color: #f2f2f2;
+}
+#text-inputs .categories input:checked + .category-btn {
+  background-color: #e2e2e2;
+}
+#text-inputs .chosed-tags {
   display: flex;
   flex-wrap: wrap;
   padding: 7px;
@@ -93,7 +131,7 @@
   background-color: #fafafa;
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
-.text-inputs .chosed-tags li {
+#text-inputs .chosed-tags li {
   display: flex;
   list-style: none;
   margin: 4px 3px;
@@ -101,16 +139,16 @@
   padding: 5px 10px;
   justify-content: center;
 }
-.text-inputs .chosed-tags li p {
+#text-inputs .chosed-tags li p {
   margin: auto;
   margin-right: 4px;
 }
-.text-inputs .chosed-tags li i {
+#text-inputs .chosed-tags li i {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
-.text-inputs .chosed-tags input {
+#text-inputs .chosed-tags input {
   border: none;
   outline: none;
   flex: 1;
@@ -120,18 +158,25 @@
   font-size: 1rem;
   width: 100%;
 }
-.text-inputs .chosed-tags input::-moz-placeholder {
+#text-inputs .chosed-tags input::-moz-placeholder {
   font-size: 0.85rem;
 }
-.text-inputs .chosed-tags input::placeholder {
+#text-inputs .chosed-tags input::placeholder {
   font-size: 0.85rem;
 }
-.text-inputs .suggestions {
+#text-inputs .suggestions {
   width: 100%;
   position: absolute;
   top: 100%;
   left: 0;
   border-radius: 0;
+}
+#text-inputs .suggestions li {
+  display: flex;
+  justify-content: space-between;
+}
+#text-inputs .suggestions li span:last-child {
+  color: rgb(172, 172, 172);
 }
 
 .continue-btn {
@@ -169,7 +214,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1046;
+  z-index: 2;
   overflow: auto;
 }
 
@@ -186,8 +231,14 @@
 }
 .popup .img {
   width: 500px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
-.popup .img img {
+.popup .img > div {
+  margin: auto;
+}
+.popup .img > div img {
   width: 100%;
 }
 .popup .btns {
@@ -220,11 +271,32 @@
   color: white;
 }
 
-@media only screen and (max-width: 1000px) {
+@media screen and (max-width: 1024px) {
+  #init-form {
+    height: 100%;
+  }
   #init-form-div {
     display: block;
   }
+  #init-form-div > div {
+    height: auto;
+    gap: 1rem;
+  }
   .image-input {
     margin-bottom: 2rem;
+  }
+  .continue-btn {
+    position: static;
+    margin: 1rem 3rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  #init-form-div {
+    margin: 0 1.5rem;
+  }
+}
+@media screen and (max-width: 480px) {
+  #init-form-div {
+    margin: 0 0.5rem;
   }
 }/*# sourceMappingURL=create.css.map */

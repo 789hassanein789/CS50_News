@@ -12,7 +12,13 @@ from django.core import serializers
 from datetime import datetime, timezone
 from allauth.account.decorators import reauthentication_required, login_required, verified_email_required, secure_admin_login
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db.models import Count
 from PIL import Image
+from io import BytesIO
+from sys import getsizeof
+from math import isclose
+from taggit.models import Tag
 import pyotp
 import json
 
@@ -43,7 +49,6 @@ def index(request, cat=None, sub=None):
     only = news.filter(section="O")
     featured = news.filter(section="F")
     #
-    print(sub_categories)
 
     return render(request, "CS50_News/index.html", {
         "news" : news,
@@ -87,30 +92,65 @@ def add_new(request):
         sub_headline = request.POST.get("sub_headline")
         category = request.POST.get("category")
         sub_category = request.POST.get("sub_category")
-        tags = request.POST.get("tags")
+        tags = request.POST.get("tags").lower()
         content = request.POST.get("content")
         image = request.FILES.get("blob")
         short_name = short_category(sub_category)
-        try:
-            with Image.open(image) as img:
-                w, h = img.size
-                if w / h != 16 / 9:
-                    newh = w*9/16
-                    img.crop((0, (h/2-newh/2), w, (h/2+newh/2)))
-                    print("crop")
-        except:
-            return HttpResponse({"error": "please provied an image"}, status=400)
-        try:
-            new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name[0])
-            new.save()
-            new.tags.add(tags)
-            new.save()
-        except:
-           return HttpResponse({"error": "could not create the article"}, status=400)
+        if not sub_category in New.SUB_CATEGORIES[category[0]].values():
+            return HttpResponse("the provided sub category isn't part of the category provided", status=400)
+        #try:
+        with Image.open(image) as img:
+            w, h = img.size
+            aspect_ratio = 16 / 9
+            if isclose(w / h, aspect_ratio):
+                newh = h
+                neww = int(h * aspect_ratio)
+
+                if neww > w:
+                    neww = w
+                    newh = int(w / aspect_ratio)
+                
+                left = (w - neww) / 2
+                top = (h - newh) / 2
+                right = (w + neww) / 2
+                bottom = (h + newh) / 2
+                img = img.crop((left, top, right, bottom))
+
+                img_io = BytesIO()
+                img.save(img_io, format='PNG')  # Change format if necessary
+                img_io.seek(0)
+
+                cropped_image_file = InMemoryUploadedFile(
+                img_io,
+                field_name="image",
+                name=image.name,
+                content_type="image/png",
+                size=getsizeof(img_io),
+                charset=None
+                )
+                new = New(headline=headline, sub_headline=sub_headline, image=cropped_image_file, content=content, auther=request.user, category=category[0], sub_category=short_name)
+                new.save()
+            else:
+                new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name)
+                new.save()
+
+        #except:
+
+         #   return HttpResponse("could not open the image", status=400)
+        #try:
+        tags = tags.split(",")
+        print(tags)
+        for tag in tags:
+            new.tags.add(tag)
+        new.save()
+        #except:
+         #  return HttpResponse({"could not create the article"}, status=400)
         return HttpResponseRedirect(reverse("staff"))
+    suggestions = Tag.objects.all().annotate(num_tags=Count("new")).order_by("-num_tags")
     return render(request, "CS50_News/editor.html", {
         "categories": New.CATEGORYS.values(),
-        "subs": New.SUB_CATEGORIES
+        "subs": New.SUB_CATEGORIES,
+        "suggestions": suggestions
     })
 
 def passwordCheck(request):
@@ -166,13 +206,14 @@ def accountEdit(request):
 def crop(request):
     if request.method == 'POST':
         blob = request.FILES.get('blob')
-        print(blob)
-        print(blob.name)
         return HttpResponse(200)
     return render(request, "CS50_News/crop.html")
 
 def new(request, cat, id):
-    news = New.objects.prefetch_related("auther").get(id=id, category=cat[0])
+    try:
+        news = New.objects.prefetch_related("auther").get(id=id, category=cat[0])
+    except New.DoesNotExist:
+        return HttpResponse({"error": "there is no article with such id"}, status=400)
     related =  news.tags.similar_objects()
 
     return render(request, "CS50_News/new.html", {

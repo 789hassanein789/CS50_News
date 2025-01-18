@@ -46,14 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'taggit',
+    'taggit',  
     'allauth',
     'allauth.account',
     'allauth.headless',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.facebook'
+    'allauth.socialaccount.providers.facebook',
 
 ]
 

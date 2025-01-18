@@ -1,6 +1,7 @@
 {% load static %}
 {% load change %}
 
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -19,13 +20,12 @@
 	</head>
 	<body>
 		<form enctype="multipart/form-data" method="post" action="" id="init-form">
-			<button class="continue-btn" type="button">Continue</button>
 			<div id="init-form-div">
 				<div class="image-input">
-					<div class="mb-3">
+					<div>
 						<p class="fs-5 fw-bold">Article Image</p>
 						<label for="img-input" id="label">
-							<input type="file" accept="image/*" id="img-input" hidden name="img">
+							<input type="file" accept="image/*" id="img-input" hidden name="blob">
 							<p id="img-text">drag and drop an image or <a class="link">browse</a></p>
 						</label>
 						<p class="img-input-error error d-none">please provide an image for the Article</p>
@@ -36,28 +36,28 @@
 						<p class="headline-error error d-none">please provide a headline for the article</p>
 					</div>
 				</div>
-				<div class="text-inputs">
-					<div class="mb-3">
+				<div id="text-inputs">
+					<div>
 						<label for="Sub_headline">Sub headline</label>
 						<input class="t-input" type="text" placeholder="Add a Sub headline..." id="Sub_headline" name="sub_headline">
 						<p class="Sub_headline-error error d-none">please provide a sub headline for the article</p>
 					</div>
-					<div class="mb-3">
+					<div>
 						<label>Chose a category for your article</label> <br>
 						<div class="categories">
 							{% for category in categories %}
 								<input type="radio" id="{{category}}" value="{{category}}" name="category" class="btn-check" autocomplete="off">
-								<label for="{{category}}" class="btn btn-outline-secondary">{{category}}</label>
+								<label for="{{category}}" class="category-btn">{{category}}</label>
 							{% endfor %}
 						</div>
 						<p class="category-error error d-none">Please chose a category</p>
 					</div>
-					<div class="mb-3">
-						<select name="sub_category" id="sub_category" class="t-input">
-							<option disabled selected class="light">Sub Category</option>
+					<div>
+						<select name="sub_category" id="sub_category" class="t-input form-select" disabled>
+							<option disabled selected class="light" id="first">Sub Category</option>
 							{% for cat_name, cat_dics in subs.items %}
 								{% for key, value in cat_dics.items %}
-									<option value="{{value}}" class="{{cat_name}}">{{value|change:"_ "}}</option>
+									<option value="{{value}}" class="{{cat_name}} d-none">{{value|change:"_ "}}</option>
 								{% endfor %}
 							{% endfor %}
 						</select>
@@ -68,18 +68,19 @@
 						<ul class="chosed-tags">
 							<input type="text" id="tags-input" placeholder="Add a topic.." list="subs">
 							<datalist id="subs">
-								{% for k, v in subs.items %}
-									{% for key, value in v.items %}
-										<option value="{{value}}">{{value|change:"_ "}}</option>
-									{% endfor %}
-								{% endfor %}
+								
 							</datalist>
 						</ul>
-						<ul class="suggestions list-group"></ul>
+						<ul class="suggestions list-group">
+							{% for tag in suggestions %}
+								<li class="list-group-item list-group-item-action d-none"><span>{{tag}}</span><span>{{tag.num_tags}}</span></li>
+							{% endfor %}
+						</ul>
 						<p class="tags-input-error error d-none">you have to enter one tag at least.</p>
 					</div>
 				</div>
 			</div>
+			<button class="continue-btn" type="button">Continue</button>
         </form>
 		<form class="main-container d-none" method="post" id="editor-form">
 			<button class="publish-btn">publish</button>
@@ -97,7 +98,9 @@
 		<div class="overlay d-none">
 			<div class="popup">
 				<div class="img">
-					<img class="custom-img"/>
+					<div>
+						<img class="custom-img"/>
+					</div>
 				</div>
 				<div class="btns">
 					<button class="popup-btn crop-btn">Crop</button>
@@ -107,7 +110,6 @@
 		</div>
 		<script src="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.umd.js" crossorigin></script>
 		<script src="{% static 'CS50_News/CKEditor.js' %}"></script>
-		
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 		<script src="https://kit.fontawesome.com/a8cedb277e.js" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
