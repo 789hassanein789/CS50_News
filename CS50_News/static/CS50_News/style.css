@@ -11,9 +11,9 @@
     --elements-background:#fff;
     --pg-border: #e5e5e5;
     --page-text: #121212;
-    --page-secondary: #aeb0b5;
+    --page-secondary: #505050;
     --icon-color: #000;
-    --bg-hover: #dedbdb;
+    --bg-hover: #f4f4f4;
     --opacity: 0.8;
 }
 
@@ -161,11 +161,11 @@ header {
   color: var(--page-text);
 }
 
-#search-button {
+.search-button {
   background-color: var(--elements-background);
 }
 
-#search-button:hover {
+.search-button:hover {
   color: var(--page-text);
 }
 
@@ -558,8 +558,8 @@ li.nav-dd-item:hover::after {
 
 .btn-close.setting-btn {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 24px;
+  right: 24px;
 }
 
 .popup-brand {
@@ -631,22 +631,22 @@ li.nav-dd-item:hover::after {
   transition: .3s ease-in-out;
 }
 
-#continue-btn {
+.continue-btn {
   background-color: #FC0;
   color: var(--page-background);
 }
 
-#continue-btn:hover {
+.continue-btn:hover {
   background-color: black;
   color: white;
 }
 
-#done-btn, #delete-btn {
+.done-btn, #delete-btn {
   background-color: #30f;
   color: white;
 }
 
-#done-btn:hover, #delete-btn:hover {
+.done-btn:hover, #delete-btn:hover {
   background-color: #2b00d9;
 }
 
@@ -946,6 +946,12 @@ input[type="number"] {
 }
 .custom-hide {
   display: none;
+}
+
+.overlay .back-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
 }
 
 @media screen and (max-width: 1024px) {

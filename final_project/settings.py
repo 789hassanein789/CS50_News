@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 '''
 
 from pathlib import Path
+from dotenv import load_dotenv
+from os import environ
+
+load_dotenv()
 
 ACCOUNT_RATE_LIMITS = False
 
@@ -27,14 +31,12 @@ MEDIA_URL = ''
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%$p9mdw7275ei8rn6%rz@p57-h16-@@v(=2fo(7c0)tbn9*!b%'
+SECRET_KEY = environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -63,33 +65,23 @@ SOCIALACCOUNT_PROVIDERS= {
             'profile',
             'email'
         ],
-        'AUTH_PARAMS': {'access_type': 'online'}
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'APP': {
+            'client_id': environ.get("GOOGLE_OAUTH_CLIENT_ID"),
+            'secret': environ.get("GOOGLE_SECRET"),
+            'key': ''
+        }
     },
     'github' : {
         'SCOPE': [
             'user'
         ],
-    },
-    'facebook':
-       {'METHOD': 'oauth2',
-        'SCOPE': ['email','public_profile'],
-        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-        'FIELDS': [
-            'id',
-            'email',
-            'name',
-            'first_name',
-            'last_name',
-            'verified',
-            'locale',
-            'timezone',
-            'link',
-            'gender',
-            'updated_time'],
-        'EXCHANGE_TOKEN': True,
-        'LOCALE_FUNC': lambda request: 'kr_KR',
-        'VERIFIED_EMAIL': False,
-        'VERSION': 'v2.4'}
+        'APP': {
+            'client_id': environ.get("GITHUB_OAUTH_CLIENT_ID"),
+            'secret': environ.get("GITHUB_SECRET"),
+            'key': ''
+        }
+    }
 }
 
 MIDDLEWARE = [
@@ -105,6 +97,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'final_project.urls'
 
+DOMAIN = '127.0.0.1'
+CSRF_COOKIE_DOMAIN = DOMAIN
+SESSION_COOKIE_DOMAIN = DOMAIN
 
 TEMPLATES = [
     {
@@ -181,7 +176,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
 EMAIL_HOST_USER = 'hassanein582@gmail.com'
-EMAIL_HOST_PASSWORD = 'twai yujq zhna envx'
+EMAIL_HOST_PASSWORD = environ.get("EMAIL_PASSWORD")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
@@ -191,12 +186,14 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 HEADLESS_FRONTEND_URLS = {
-    "account_confirm_email": "/account/verify-email/{key}",
+    "account_confirm_email": "/auth/{key}",
     "account_reset_password": "/account/password/reset",
-    "account_reset_password_from_key": "/account/password/reset/key/{key}",
+    "account_reset_password_from_key": "/auth/{key}?auth=new-password",
     "account_signup": "/account/signup",
-    "socialaccount_login_error": "/account/provider/callback",
+    "socialaccount_login_error": "/full/",
 }
+
+ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:8000']
 
 #ACCOUNT_FORMS = {'signup': 'CS50_News.forms.signupForm'}
 LOGIN_URL = '/'
@@ -204,13 +201,17 @@ LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+ACCOUNT_ADAPTER = 'CS50_News.adapters.MyAccountAdapter'
+
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_EMAIL_REQUIRED = True
-
-ACCOUNT_USERNAME_REQUIRED = False
-HEADLESS_ONLY = True
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_REAUTHENTICATION_REQUIRED = True
 ACCOUNT_REAUTHENTICATION_TIMEOUT = 900
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+ACCOUNT_CHANGE_EMAIL = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
