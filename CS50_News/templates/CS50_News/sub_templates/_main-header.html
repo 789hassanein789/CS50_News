@@ -1,0 +1,56 @@
+<div id="main-header">
+    <div class="main-header_search d-none">
+        <form action="{% url 'search' %}" class="min-search-form">
+            <div class="input-group">
+                <button class="btn btn-outline-secondary search-button" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                </button>
+                <input type="text" class="form-control" name="q" placeholder="search" autocomplete="off">
+            </div>
+        </form>
+        <div class="icon-div">
+            <button class="icon-btn" id="backBtn">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    <div id="main-header_content">
+        <a class="navbar-brand" id="brand" href="{% url 'index' %}" style="font-family: 'Pirata One', system-ui;">CS50 News</a>
+        <div id="navbar-content">
+            {% if user.is_staff %}
+                <div class="icon-div" id="admin-div">
+                    <a class="icon-btn" href="{% url 'staff' %}">
+                        <i class="fa-solid fa-user-tie"></i>                    
+                    </a>
+                </div>
+            {% endif %}
+            <div class="icon-div" id="toggle-div">
+                <button class="icon-btn" id="toggle-button">
+                    <i class="fa-solid fa-circle-half-stroke fa-rotate-180"></i>
+                </button>
+            </div>
+            <div class="icon-div" id="min-search-btn">
+                <button class="icon-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+            <form action="{% url 'search' %}" method="get" id="navbar-form">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="q" placeholder="search" autocomplete="off">
+                    <button class="btn btn-outline-secondary search-button" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+            <div class="icon-div">
+                <button class="icon-btn" id="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                   <i class="fa-solid fa-bars fa-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

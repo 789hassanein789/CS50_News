@@ -1,0 +1,107 @@
+<footer>
+    <div class="footer-column-container">
+        <div class="footer-column">
+            <a class="main-link">About Us</a>
+            <a class="footer-link">About Us</a>
+            <a class="footer-link">Terms of Use</a>
+            <a class="footer-link">Privacy Policy</a>
+            <a class="footer-link">Cookies</a>
+            <a class="footer-link">Accessibility</a>
+            <a class="footer-link">Work for CS50 News</a>
+        </div>
+        <div class="footer-column">
+            <a class="main-link">Contact Us</a>
+            <a class="footer-link">Contact CS50 News</a>
+            <a class="footer-link">Contact Technical support </a>
+            <a class="footer-link">Advertise with Us</a>
+            <a class="footer-link">Newsletters</a>
+        </div>
+        <div class="footer-column last">
+            <a class="main-link">Categories</a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' %}">
+                <li class="list-group-item" data-target="News">News</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Sport' %}">
+                <li class="list-group-item" data-target="Sport">Sport</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Business' %}">
+                <li class="list-group-item" data-target="Business">Business</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Innovation' %}">
+                <li class="list-group-item" data-target="Innovation">Innovation</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Culture' %}">
+                <li class="list-group-item" data-target="Culture">Culture</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Travel' %}">
+                <li class="list-group-item" data-target="Travel">Travel</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Earth' %}">
+                <li class="list-group-item" data-target="Earth">Earth</li>
+            </a>
+        </div>
+        <div class="footer-column last">
+            <a class="main-link nav-link" href="{% url 'cat_index' cat='News' %}">
+                <li class="list-group-item" data-target="News">News</li>
+            </a>
+            <a class="footer-link nav-link" herf="{% url 'cat_index' cat='Ukraine-Russia_war' %}">
+                <li class="list-group-item" data-target="Ukraine-Russia_war">Ukraine-Russia War</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Iraq' %}">
+                <li class="list-group-item" data-target="Iraq">Iraq</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='US_&_Canada' %}">
+                <li class="list-group-item" data-target="US_&_Canada">US_&_Canada</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Middle_East' %}">
+                <li class="list-group-item" data-target="Middle_East">Middle_East</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Europe' %}">
+                <li class="list-group-item" data-target="Europe">Europe</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Asia' %}">
+                <li class="list-group-item" data-target="Asia">Asia</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Africa' %}">
+                <li class="list-group-item" data-target="Africa">Africa</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Australia' %}">
+                <li class="list-group-item" data-target="Australia">Australia</li>
+            </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='>Latin_America' %}">
+                <li class="list-group-item" data-target="Latin_America">Latin_America</li>
+            </a>
+        </div>
+    </div>
+    <div class="footer-main">
+        <div class="media">
+            <div class="follow">
+                <p>Follow CS50 News on:</p>
+            </div>
+            <div class="icons">
+                <div>
+                    <a class="link me-4" href="">
+                        <i class="fa-brands fa-2x fa-facebook"></i>
+                    </a>
+                    <a class="link" href="">
+                        <i class="fa-brands fa-2x fa-youtube"></i>
+                    </a>
+                </div>
+                <div>
+                    <a class="link me-4" href="">
+                        <i class="fa-brands fa-2x fa-x-twitter"></i>
+                    </a>
+                    <a class="link" href="">
+                        <i class="fa-brands fa-2x fa-telegram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="logo">
+            <a class="footer-brand" href="{% url 'index' %}" style="font-family: 'Pirata One', system-ui;">CS50 News</a>
+        </div>
+        <div class="Rights">
+            Copyright 2024 CS50 News. All rights reserved.
+        </div>
+    </div>
+</footer>

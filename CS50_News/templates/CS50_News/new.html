@@ -7,7 +7,12 @@
 {% endblock %}
 
 {% block body %}
-
+    <header>
+        {% include "CS50_News/sub_templates/_main-header.html" %}
+        {% include "CS50_News/sub_templates/_navbar.html" %}
+    </header>
+    {% include "CS50_News/sub_templates/_subnav.html" %}
+    {% include "CS50_News/sub_templates/_offcanvas.html" %}
     <article class="main-container">
         <div class="heading">
             <h1>
@@ -103,5 +108,6 @@
             </div>
         </div>
     </article>
-
+    {% include "CS50_News/sub_templates/_overlay.html" %}
+    {% include "CS50_News/sub_templates/_footer.html" %}
 {% endblock %}
