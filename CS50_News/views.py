@@ -22,6 +22,7 @@ from allauth.account.views import ConfirmEmailVerificationCodeView
 from taggit.models import Tag
 import pyotp
 import json
+from markdown2 import Markdown
 
 from .models import User, New
 from .utils import send_otp, Rescore, short_category
@@ -221,8 +222,10 @@ def new(request, cat, id):
         news = New.objects.prefetch_related("auther").get(id=id, category=cat[0])
     except New.DoesNotExist:
         return HttpResponse({"error": "there is no article with such id"}, status=400)
-    related =  news.tags.similar_objects()
-
+    related =  news.tags.similar_objects()[:3]
+    markdown = Markdown()
+    if news.content:
+        news.content = markdown.convert(news.content)
     return render(request, "CS50_News/new.html", {
         "new": news,
         "relatedNews": related,
@@ -248,6 +251,16 @@ def check(request):
 
 def settings(request):
     return render(request, "CS50_News/setting.html")
+
+def tag(request, tag):
+    news = New.objects.filter(tags__name__in=[tag]).order_by("timestamp")
+    pagenator = Paginator(news, 10)
+    pagenum = request.GET.get("p")
+    news = pagenator.get_page(pagenum)
+    return render(request, "CS50_News/search.html", {
+        "news": news,
+        "tag": tag
+    })
 
 class CustomConfirmCode(ConfirmEmailVerificationCodeView):
     def form_valid(self, form):

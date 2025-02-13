@@ -7,107 +7,58 @@
 {% endblock %}
 
 {% block body %}
-    <header>
-        {% include "CS50_News/sub_templates/_main-header.html" %}
-        {% include "CS50_News/sub_templates/_navbar.html" %}
-    </header>
-    {% include "CS50_News/sub_templates/_subnav.html" %}
-    {% include "CS50_News/sub_templates/_offcanvas.html" %}
-    <article class="main-container">
-        <div class="heading">
-            <h1>
-                {{new.headline}}
-            </h1>
-            <p class="time">
-                {{new.timestamp|timesince|timeformat|safe}}
-            </p>
-            <p class="auther">
-                {{new.auther.username}}
-            </p>
-        </div>
-        <div class="main-img">
-            <img src="{{new.image.url}}" alt="main-img">
-        </div>
-        <article>
-            <div class="new-content">
-                {{new.content | safe}} <br>
-                {% for tag in tags %}
-                    <a href="">{{tag}}</a>
-                {% endfor %}
+<header>
+    {% include "CS50_News/sub_templates/_main-header.html" %}
+    {% include "CS50_News/sub_templates/_navbar.html" %}
+</header>
+{% include "CS50_News/sub_templates/_subnav.html" %}
+{% include "CS50_News/sub_templates/_offcanvas.html" %}
+    <div class="body-content">
+        <article class="main-container">
+            <div class="heading">
+                <p class="min-font">{{new.get_category_display|change:"_ "}} | {{new.get_sub_category_display|change:"_ "}}</p>
+                <h1>
+                    {{new.headline}}
+                </h1>
+                <p class="time">
+                    {{new.timestamp|timesince|timeformat|safe}}
+                </p>
+                <p class="auther">
+                    {{new.auther.username}}
+                </p>
             </div>
+            <div class="main-img">
+                <img src="{{new.image.url}}" alt="main-img">
+            </div>
+            <article>
+                <div class="new-content">
+                    {{new.content | safe}} <br>
+                    {% for tag in tags %}
+                        <a href="{% url 'tags' tag=tag %}?p=1" class="link">{{tag}}</a>
+                    {% endfor %}
+                </div>
+            </article>
+            <aside>
+                <div class="border"></div>
+                <h5>
+                    Related
+                </h5>
+                <div class="content">
+                    {% for related in relatedNews %}
+                        <a class="link" href="{% url 'new' cat=related.get_category_display id=related.id  %}">
+                            <h6>{{related.headline}}</h6>
+                            <div class="secondary-div">
+                                <span>{{related.timestamp|timesince|timeformat|safe}}</span>
+                                <div></div>
+                                <span>{{related.get_category_display}}</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </aside>
         </article>
-        <aside>
-            <div class="border"></div>
-            <h5>
-                Related
-            </h5>
-            <div class="content">
-                {% for related in relatedNews %}
-                    <a class="link" href="{% url 'new' cat=related.get_category_display id=related.id  %}">
-                        <h6>{{related.headline}}</h6>
-                        <div class="secondary-div">
-                            <span>{{related.timestamp|timesince|timeformat|safe}}</span>
-                            <div></div>
-                            <span>{{related.get_category_display}}</span>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
-        </aside>
-        <div class="more">
-            <div class="border"></div>
-            <h5 class="fw-semibold">
-                More
-            </h5>
-            <div class="new-container">
-                <a class="horizontal-new" href="">
-                    <div class="timestamp">
-                        <span class="small-font">17 min ago</span>
-                    </div>
-                    <div class="img-content">
-                        <div class="img">
-                            <img src="{{new.image.url}}" alt="">
-                        </div>
-                        <div class="content">
-                            <h6>{{new.headline}}</h6>
-                            <p class="sub">{{new.sub_headline}}</p>
-                            <p class="small-font">World</p>
-                        </div>
-                    </div>
-                </a>
-                <a class="horizontal-new" href="">
-                    <div class="timestamp">
-                        <span class="small-font">17 min ago</span>
-                    </div>
-                    <div class="img-content">
-                        <div class="img">
-                            <img src="{{new.image.url}}" alt="">
-                        </div>
-                        <div class="content">
-                            <h6>{{new.headline}}</h6>
-                            <p class="sub">{{new.sub_headline}}</p>
-                            <p class="small-font">World</p>
-                        </div>
-                    </div>
-                </a>
-                <a class="horizontal-new" href="">
-                    <div class="timestamp">
-                        <span class="small-font">17 min ago</span>
-                    </div>
-                    <div class="img-content">
-                        <div class="img">
-                            <img src="{{new.image.url}}" alt="">
-                        </div>
-                        <div class="content">
-                            <h6>{{new.headline}}</h6>
-                            <p class="sub">{{new.sub_headline}}</p>
-                            <p class="small-font">World</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </article>
+    </div>
+    
     {% include "CS50_News/sub_templates/_overlay.html" %}
     {% include "CS50_News/sub_templates/_footer.html" %}
 {% endblock %}

@@ -48,10 +48,6 @@ $secondary: hsl(210, 2%, 34%);
     display: grid;
     grid-template-columns: calc(2 * (100% / 3)) 1fr;
 }
-
-.content {
-    margin: 1rem 0;
-}
     
 .side-div {
     display: grid;
@@ -338,13 +334,15 @@ $secondary: hsl(210, 2%, 34%);
         text-decoration: underline;
     }
 }
-
-.carousel-caption {
-    background-color: rgba(0, 0, 0, 0.7);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+#body {
+    .carousel-caption {
+        background-color: rgba(0, 0, 0, 0.7);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+    }
+    
 }
 
 @media screen and (max-width: 1024px) {

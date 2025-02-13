@@ -15,7 +15,7 @@ $secondary: hsl(210, 2%, 34%);
     margin-bottom: 1.5rem;
     padding-bottom: .5rem;
     border-bottom: 1px solid hsl(0, 0%, 90%);
-}
+} 
 
 .heading {
     margin: 1.5rem auto;
@@ -186,13 +186,15 @@ aside {
     }
 }
 
-.secondary-div {
+
+.x-secondary-div {
     display: flex;
     gap: 4px;
     align-items: center;
     color: $secondary;
     font-size: 12px;
     font-weight: 300;
+    margin-bottom: 4px;
     div {
         background-color: $secondary;
         height: 1rem;
@@ -222,7 +224,7 @@ aside {
 }
 
 @media screen and (max-width: 480px) {
-
+    
 }
 
 @media screen and (max-width: 300px) {

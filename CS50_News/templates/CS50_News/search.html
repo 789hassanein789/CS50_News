@@ -1,4 +1,10 @@
 {% extends "CS50_News/layout.html" %}
+{% load static %}
+{% load change %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'CS50_News/new.css' %}">
+{% endblock %}
 
 {% block body %}
     <header>
@@ -9,11 +15,24 @@
     {% include "CS50_News/sub_templates/_offcanvas.html" %}
     <div class="main-search-div">
         <div class="sub-main-search-div">
+            {% if tag %}
+                <h2 id="main-tag">{{tag}}</h2>
+            {% else %}
+                <form action="{% url 'search' %}" class="top-search-form">
+                    <input autocomplete="off" type="text" class="top-search-input" name="q" value={{request.GET.q}}>
+                    <button class="top-search-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                    </button>
+                    <input type="hidden" name="p" value="1">
+                </form>
+            {% endif %}
         {% for new in news %}
-            <a class="h-card">
+            <a class="h-card" href="{% url 'new' cat=new.get_category_display id=new.id %}">
                 <div class="h-card-main-image-div">
                     <div class="h-card-sub-image-div">
-                        <img src="{{new.image}}" class="h-card-image">
+                        <img src="{{new.image.url}}" class="h-card-image">
                     </div>
                 </div>
                 <div class="h-card-content">
@@ -21,9 +40,10 @@
                     <div class="sub-headline-div">
                         <h6 class="sub-headline">{{new.sub_headline}}</h6>
                     </div>
-                    <div class="secondaryText-div">
-                        <p class="timestampDiv secondaryText">{{new.timestamp}}</p>
-                        <p class="categoryDiv secondaryText">{{new.category}}</p>
+                    <div class="x-secondary-div side-secondary">
+                        <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                        <div></div>
+                        <span>{{new.get_sub_category_display|change:"_ "}}</span>
                     </div>
                 </div>
             </a>
@@ -33,35 +53,51 @@
     <nav>
         <ul class="pagination">
             {% if news.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?q={{input}}&p={{news.previous_page_number}}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <a class="page-link" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
+                {% if input %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{input}}&p={{news.previous_page_number}}" aria-label="Previous">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{news.previous_page_number}}" aria-label="Previous">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                    </li>
+                {% endif %}
             {% endif %}
 
             {% for i in news.paginator.page_range %}
-                <i class="page-item"><a class="page-link" href="?q={{input}}&p={{i}}">{{i}}</a></i>
+                {% if input %}
+                    {% if request.GET.p|add:"0" == i %}
+                        <i class="page-item active" aria-current="page"><a class="page-link" href="?q={{input}}&p={{i}}">{{i}}</a></i>
+                    {% else %}    
+                        <i class="page-item"><a class="page-link" href="?q={{input}}&p={{i}}">{{i}}</a></i>
+                    {% endif %}
+                {% else %}
+                    {% if request.GET.p|add:"0" == i %}
+                    <i class="page-item active" aria-current="page"><a class="page-link" href="?p={{i}}">{{i}}</a></i>
+                    {% else %}    
+                        <i class="page-item"><a class="page-link" href="?p={{i}}">{{i}}</a></i>
+                    {% endif %}
+                {% endif %}
             {% endfor %}
 
             {% if news.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?q={{input}}&p={{news.next_page_number}}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% else %}
-                <li class="page-item">
-                    <a class="page-link disabled" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
+                {% if input %}
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{news.next_page_number}}" aria-label="Next">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{input}}&p={{news.next_page_number}}" aria-label="Next">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
             {% endif %}
         </ul>
     </nav>

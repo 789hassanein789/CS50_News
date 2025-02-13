@@ -527,7 +527,45 @@ li.nav-dd-item:hover::after {
 }
 
 .pagination {
-  justify-content: center
+  justify-content: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#main-tag {
+  width: 100%;
+  font-size: 2rem;
+  font-weight: 600;
+  border-bottom: 3px solid var(--page-text);
+  text-align: center;
+}
+
+.top-search-form {
+  display: flex;
+  justify-content: center;
+}
+
+.top-search-input {
+  width: 80%;
+  height: 40px;
+  border: 1px solid var(--page-secondary);
+  border-right: none;
+  padding-left: .5rem;
+  font-size: 1.25rem;
+}
+
+.top-search-input:focus-visible {
+  outline: none;
+}
+
+.top-search-btn {
+  border: 1px solid var(--page-secondary);
+  height: 40px;
+  width: 40px;
+  background-color: transparent;
+}
+
+.top-search-btn:hover {
+  background-color: var(--bg-hover);
 }
 
 .overlay {
@@ -782,9 +820,14 @@ li.nav-dd-item:hover::after {
   min-height: 3rem;
 }
 
+.dark-mode .Google-login {
+  border: none;
+}
+
 .Google-login {
   background-color: #fff;
   color: #262421;
+  border: 1px #e2e2e2 solid;
 }
 
 .Google-login:hover {
@@ -973,11 +1016,19 @@ input[type="number"] {
   #navbar-form {
     display: none;
   }
+  .h-card-main-image-div {
+    width: 100%;
+  }
+  .sub-main-search-div {
+    width: 90%;
+  }
 }
 
 @media screen and (max-width: 480px) {
   #offcanvasNavbar {
     width: 100%;
+    float: none;
+    margin-left: 0;
   }
   #admin-div {
     display: none;
@@ -989,6 +1040,7 @@ input[type="number"] {
   #brand {
     font-size: 1.75rem;
   }
+  
 }
 
 @media screen and (max-width: 300px) {

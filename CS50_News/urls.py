@@ -18,6 +18,7 @@ urlpatterns = [
     path("reauthenticate", views.reauthenticate_decision, name="reauthenticate"),
     path("auth", views.index, name="auth"),
     path("auth/<str:key>", views.index, name="new-password"),
+    path("tags/<str:tag>", views.tag, name="tags"),
     path("<str:cat>/", include([
         path("", views.index, name="cat_index"),
         path("<int:id>", views.new, name="new"),

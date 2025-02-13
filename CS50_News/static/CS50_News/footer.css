@@ -34,14 +34,14 @@ footer {
   background-color: transparent;
 }
 
-.footer-link {
+#body .footer-link {
   text-decoration: none;
   cursor: pointer;
   color: hsl(0, 0%, 35%);
   width: -moz-fit-content;
   width: fit-content;
 }
-.footer-link:hover {
+#body .footer-link:hover {
   text-decoration: underline;
   color: black;
 }
@@ -59,9 +59,13 @@ footer {
 }
 .media .icons {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.25rem;
   text-align: center;
   justify-content: center;
+}
+.media .icons div {
+  display: flex;
+  gap: 1.25rem;
 }
 .media .icons .fa-facebook {
   color: blue;

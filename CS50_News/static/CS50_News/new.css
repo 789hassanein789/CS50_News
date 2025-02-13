@@ -166,15 +166,16 @@ aside .content h6 {
   width: 100%;
 }
 
-.secondary-div {
+.x-secondary-div {
   display: flex;
   gap: 4px;
   align-items: center;
   color: hsl(210, 2%, 34%);
   font-size: 12px;
   font-weight: 300;
+  margin-bottom: 4px;
 }
-.secondary-div div {
+.x-secondary-div div {
   background-color: hsl(210, 2%, 34%);
   height: 1rem;
   width: 1px;
