@@ -250,7 +250,7 @@ header {
   font-weight: 600;
 }
 
-.account-btn {
+#account-btn {
   width: 100%;
   height: 100%;
 }
@@ -294,6 +294,11 @@ header {
 .a-dp-btn:hover {
   background-color: var(--page-text);
   color: var(--page-background);
+}
+
+.a-dp-btn i {
+  width: 20px;
+  text-align: center;
 }
 
 #navbar {

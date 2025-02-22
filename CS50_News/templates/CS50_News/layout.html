@@ -29,9 +29,19 @@
     <title>CS50 News</title>
 </head>
 <body id="body">
-    {% block body %}
-    {% endblock %}
+    <header>
+        {% include "CS50_News/sub_templates/_main-header.html" %}
+        {% include "CS50_News/sub_templates/_navbar.html" %}
+    </header>
+    {% include "CS50_News/sub_templates/_subnav.html" %}
+    {% include "CS50_News/sub_templates/_offcanvas.html" %}
+    <div class="body-content">
+        {% block body %}
+        {% endblock %}
+    </div>
     {% csrf_token %}
+    {% include "CS50_News/sub_templates/_overlay.html" %}
+    {% include "CS50_News/sub_templates/_footer.html" %}
     <script src="{% static 'CS50_News/index.js' %}"></script>
     <script src="{% static 'CS50_News/bootstrap.bundle.min.js' %}"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>

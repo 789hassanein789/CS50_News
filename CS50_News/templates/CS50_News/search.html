@@ -7,12 +7,6 @@
 {% endblock %}
 
 {% block body %}
-    <header>
-        {% include "CS50_News/sub_templates/_main-header.html" %}
-        {% include "CS50_News/sub_templates/_navbar.html" %}
-    </header>
-    {% include "CS50_News/sub_templates/_subnav.html" %}
-    {% include "CS50_News/sub_templates/_offcanvas.html" %}
     <div class="main-search-div">
         <div class="sub-main-search-div">
             {% if tag %}
@@ -29,7 +23,7 @@
                 </form>
             {% endif %}
         {% for new in news %}
-            <a class="h-card" href="{% url 'new' cat=new.get_category_display id=new.id %}">
+            <a class="h-card" href="{% url 'new' cat=new.get_category_display slug=new.slug %}">
                 <div class="h-card-main-image-div">
                     <div class="h-card-sub-image-div">
                         <img src="{{new.image.url}}" class="h-card-image">
@@ -101,6 +95,4 @@
             {% endif %}
         </ul>
     </nav>
-    {% include "CS50_News/sub_templates/_overlay.html" %}
-    {% include "CS50_News/sub_templates/_footer.html" %}
 {% endblock %}

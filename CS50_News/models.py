@@ -7,6 +7,7 @@ from taggit.managers import TaggableManager, TaggedItem
 
 # Create your models here.
 class User(AbstractUser):
+    saved_articles = models.ManyToManyField("New")
     validation_date = models.DateTimeField(null=True, blank=True)
     otp_date = models.DateTimeField(null=True, blank=True)
     def __str__(self):
@@ -77,7 +78,7 @@ class New(models.Model):
             "WE&C": "Weather_&_Climate",
         }
     }
-    headline = models.CharField(max_length=200)
+    headline = models.CharField(max_length=100)
     sub_headline = models.CharField(max_length=200)
     image = models.ImageField(upload_to="CS50_News/static/CS50_News/cover")
     content = models.TextField()
@@ -89,6 +90,7 @@ class New(models.Model):
     section = models.CharField(max_length=50, choices=SECTIONS, null=True, blank=True)
     auther = models.ForeignKey(User, on_delete=models.CASCADE, related_name="publishes")
     tags = TaggableManager(through=TaggedItem)
+    slug = models.SlugField(default="" , null=False, unique=True, max_length=100)
 
     def timesince(self):
         return (self.timestamp - datetime.datetime.now(tz=pytz.UTC)).total_seconds()

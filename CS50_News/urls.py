@@ -8,6 +8,12 @@ urlpatterns = [
     path("settings", views.settings, name="settings"),
     path("staff", views.admin_view, name="staff"),
     path("add", views.add_new, name="add"),
+    path("update/<slug:slug>", views.edit_new, name="update"),
+    path("deletenew/", views.delete_new, name="delete-new"),
+    path("save/", include([
+        path("", views.save_new, name="show-saved"),
+        path("<slug:headline>", views.save_new, name="save"),
+    ])),
     path("crop", views.crop, name="crop"),
     path("search", views.search, name="search"),
     path("logout", views.logout_view, name="logout"),
@@ -21,7 +27,7 @@ urlpatterns = [
     path("tags/<str:tag>", views.tag, name="tags"),
     path("<str:cat>/", include([
         path("", views.index, name="cat_index"),
-        path("<int:id>", views.new, name="new"),
+        path("<slug:slug>", views.new, name="new"),
         path("<str:sub>", views.index, name="cat_index"),
     ])),
     path("password/reset/key/<str:key>", views.reset, name="password_reset"),

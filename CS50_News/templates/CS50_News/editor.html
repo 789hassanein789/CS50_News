@@ -24,40 +24,66 @@
 				<div class="image-input">
 					<div>
 						<p class="fs-5 fw-bold">Article Image</p>
-						<label for="img-input" id="label">
-							<input type="file" accept="image/*" id="img-input" hidden name="blob">
-							<p id="img-text">drag and drop an image or <a class="link">browse</a></p>
-						</label>
+							<label for="img-input" id="label">
+								{% if new %}
+									<input type="file" accept="image/*" id="img-input" hidden name="blob" value="{{new.image.url}}">
+									<img src="{{new.image.url}}" alt="" class="d-none" id="new-img-input">
+								{% else %}
+									<input type="file" accept="image/*" id="img-input" hidden name="blob">
+								{% endif %}
+								<p id="img-text">drag and drop an image or <a class="link">browse</a></p>
+							</label>
 						<p class="img-input-error error d-none">please provide an image for the Article</p>
 					</div>
 					<div>
 						<label for="headline">headline</label>
-						<input class="t-input" type="text" placeholder="Add a headline..." id="headline" name="headline">
+						{% if new %}
+							<input class="t-input" type="text" placeholder="Add a headline..." value="{{new.headline}}" id="headline" name="headline">
+						{% else %}
+							<input class="t-input" type="text" placeholder="Add a headline..." id="headline" name="headline">
+						{% endif %}
 						<p class="headline-error error d-none">please provide a headline for the article</p>
 					</div>
 				</div>
 				<div id="text-inputs">
 					<div>
 						<label for="Sub_headline">Sub headline</label>
-						<input class="t-input" type="text" placeholder="Add a Sub headline..." id="Sub_headline" name="sub_headline">
+						{% if new %}
+							<input class="t-input" type="text" value="{{new.sub_headline}}" placeholder="Add a Sub headline..." id="Sub_headline" name="sub_headline">
+						{% else %}
+							<input class="t-input" type="text" placeholder="Add a Sub headline..." id="Sub_headline" name="sub_headline">
+						{% endif %}
 						<p class="Sub_headline-error error d-none">please provide a sub headline for the article</p>
 					</div>
 					<div>
 						<label>Chose a category for your article</label> <br>
 						<div class="categories">
 							{% for category in categories %}
-								<input type="radio" id="{{category}}" value="{{category}}" name="category" class="btn-check" autocomplete="off">
+								{% if category == new.get_category_display %}
+									<input type="radio" id="{{category}}" value="{{category}}" name="category" class="btn-check" checked autocomplete="off">
+								{% else %}
+									<input type="radio" id="{{category}}" value="{{category}}" name="category" class="btn-check"  autocomplete="off">
+								{% endif %}
 								<label for="{{category}}" class="category-btn">{{category}}</label>
 							{% endfor %}
 						</div>
 						<p class="category-error error d-none">Please chose a category</p>
 					</div>
 					<div>
+					{% if new %}
+						<select name="sub_category" id="sub_category" class="t-input form-select">
+								<option disabled class="light" id="first">Sub Category</option>
+					{% else %}
 						<select name="sub_category" id="sub_category" class="t-input form-select" disabled>
 							<option disabled selected class="light" id="first">Sub Category</option>
+					{% endif %}
 							{% for cat_name, cat_dics in subs.items %}
 								{% for key, value in cat_dics.items %}
-									<option value="{{value}}" class="{{cat_name}} d-none">{{value|change:"_ "}}</option>
+									{% if value == new.get_sub_category_display %}
+										<option value="{{value}}" class="{{cat_name}} d-none" selected >{{value|change:"_ "}}</option>
+									{% else %}
+										<option value="{{value}}" class="{{cat_name}} d-none">{{value|change:"_ "}}</option>
+									{% endif %}
 								{% endfor %}
 							{% endfor %}
 						</select>
@@ -66,6 +92,12 @@
 					<div class="tags">
 						<label for="tags-input">Add or change topics (up to 5) so readers know what your article is about</label>
 						<ul class="chosed-tags">
+							{% for tag in new.tags.names %}
+								<li>
+									<p>{{tag}}</p>
+									<i class="fa-solid fa-x" data-tag={{tag}}></i>
+								</li>
+							{% endfor %}
 							<input type="text" id="tags-input" placeholder="Add a topic.." list="subs">
 							<datalist id="subs">
 								
@@ -83,13 +115,19 @@
 			<button class="continue-btn" type="button">Continue</button>
         </form>
 		<form class="main-container d-none" method="post" id="editor-form">
-			<button class="publish-btn">publish</button>
+			<div class="top-btns">
+				<button class="publish-btn">publish</button>
+				<button class="icon-btn back-btn" type="button">
+					<i class="fa-solid fa-arrow-right fa-xl"></i>
+				</button>
+			</div>
+				
 			<div class="editor-container editor-container_document-editor editor-container_include-word-count" id="editor-container">
 				<div class="editor-container__menu-bar" id="editor-menu-bar"></div>
 				<div class="editor-container__toolbar" id="editor-toolbar"></div>
 				<div class="editor-container__editor-wrapper">
 					<div class="editor-container__editor">
-						<div id="editor"></div>
+						<div id="editor">{% if new %} {{new.content}} {% endif %}</div>
 					</div>
 				</div>
 				<div class="editor_container__word-count" id="editor-word-count"></div>

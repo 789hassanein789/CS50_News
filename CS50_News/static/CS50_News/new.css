@@ -14,9 +14,26 @@
   font-size: 0.75rem;
   color: hsl(210, 2%, 34%);
 }
-.heading .auther {
+.heading .min-info {
+  display: flex;
+  justify-content: space-between;
+}
+.heading .min-info .auther {
   font-size: 1.25rem;
   font-weight: 600;
+  margin: 0;
+}
+.heading .min-info .buttons {
+  font-size: 14px;
+  color: hsl(210, 2%, 34%);
+}
+.heading .min-info .buttons a {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.heading .min-info .buttons a:hover {
+  text-decoration: underline;
 }
 
 .main-img {
@@ -91,16 +108,16 @@ aside .content h6 {
   font-weight: 500;
 }
 
-.link {
+.new-page-link {
   text-decoration: none;
   color: inherit;
   margin-right: 1rem;
   cursor: pointer;
 }
-.link:hover img {
+.new-page-link:hover img {
   opacity: 0.8;
 }
-.link:hover h6 {
+.new-page-link:hover h6 {
   text-decoration: underline;
 }
 

@@ -82,6 +82,10 @@ const radioBtns = document.querySelectorAll('.btn-check')
 const select = document.querySelector('#sub_category')
 const suggestionsTags = suggestionsList.querySelectorAll('li')
 const cancelBtn = overlay.querySelector('.cancel-btn')
+const editImg = document.getElementById('new-img-input') 
+const closeTags = document.querySelectorAll('.chosed-tags .fa-x')
+const deleteNew = document.querySelector('#delete-new')
+const backBtn = document.querySelector('.back-btn');
 let chosedTags;
 
 const LICENSE_KEY =
@@ -354,6 +358,16 @@ form.addEventListener('submit', (e) => e.preventDefault())
 
 radioBtns.forEach(btn => {
 	btn.addEventListener('click', radioSelect)
+	if (btn.checked) {
+		console.log(btn)
+		if (btn.value !== "Business") {
+			const selectedRadio = select.querySelectorAll(`.${btn.id[0]}`)
+			selectedRadio.forEach(radio => {
+				radio.classList.remove('d-none')
+			})
+			select.firstElementChild.classList.remove('d-none')
+		}
+	}
 })
 
 suggestionsTags.forEach(li => {
@@ -368,10 +382,40 @@ suggestionsTags.forEach(li => {
 cancelBtn.addEventListener('click', () => {
 	overlay.classList.add('d-none')
 	document.body.style.overflowY = 'auto';
+})
 
+if (editImg && editImg) {
+	if (editImg.src !== '') {
+		label.style.backgroundImage = `url(${editImg.src})`;
+		imgText.style.display = 'none';
+		document.querySelectorAll('.chosed-tags li').forEach(li => tags.push(li.firstElementChild.textContent))
+	}
+	if (editImg.src && editImg.src !== window.location.href) {
+		fetch(editImg.src)
+			.then(res => res.blob())
+			.then(blob => {
+				const file = new File([blob], "image.png", { type: blob.type });
+				const dataTransfer = new DataTransfer();
+				dataTransfer.items.add(file);
+				input.files = dataTransfer.files;
+			})
+			.catch(error => console.error("Error loading image:", error));
+	}
+}
+
+closeTags.forEach(closeBtn => {
+	closeBtn.addEventListener('click', () => {
+		removeTag(closeBtn.parentElement, closeBtn.getAttribute('data-tag'))
+	})
+})
+
+backBtn.addEventListener('click', () => {
+	editorForm.classList.add('d-none')
+	form.classList.remove('d-none')
 })
 
 function uploadImage() {
+	console.log('hi')
 	let imgURL = URL.createObjectURL(input.files[0]);
     let img = new Image()
     img.src = imgURL
@@ -534,15 +578,16 @@ editorForm.addEventListener('submit', (e) => {
 
 function initSubmit() {
 	console.log(form.querySelector('.btn-check:checked'))
-	let select = form.sub_category; 
  	let selectedValue = select.options[select.selectedIndex].value;
 	errors.forEach(error => {
 		error.classList.add('d-none')
 	})
-	if (form.blob.value === '') {
-		errors[0].classList.remove('d-none')
+	if (!editImg) {
+		if (form.blob.value === '') {
+			errors[0].classList.remove('d-none')
+		}
 	}
-	else if (form.headline.value === '') {
+	if (form.headline.value === '') {
 		errors[1].classList.remove('d-none')
 	}
 	else if (form.Sub_headline.value === '') {
@@ -551,7 +596,7 @@ function initSubmit() {
 	else if (!form.querySelector('.btn-check:checked')) {
 		errors[3].classList.remove('d-none')
 	}
-	else if (selectedValue == "Sub Category") {
+	else if (selectedValue === "Sub Category") {
 		errors[4].classList.remove('d-none')
 	}
 	else if (!form.querySelector('li > p')) {
@@ -562,8 +607,9 @@ function initSubmit() {
 		if (customCropper) {
 			customCropper.getCroppedCanvas().toBlob((blob) => {
 				body.append('blob', blob)
-			})	
+			})
 		}
+		console.log(tags)
 		body.append('tags', tags)
 		const ps = document.querySelectorAll('ul p');
 		form.classList.add('d-none')
@@ -581,7 +627,7 @@ function finalSubmit(body) {
 	}
 	else {
 		body.append('content', content)
-		fetch('/add', {
+		fetch(window.location.href, {
 			method: 'POST',
 			headers: {
 			'X-CSRFToken': getCookie('csrftoken'),
@@ -591,6 +637,7 @@ function finalSubmit(body) {
 			redirect: "follow"
 		})
 		.then(result => {
+			result.text().then(text => console.log(text))
 			if (result.ok) {
 				window.location.href = result.url
 			}
@@ -604,6 +651,4 @@ function finalSubmit(body) {
 		.catch(error => {
 			
 		})
-	}  
-}
-
+	}}

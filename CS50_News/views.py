@@ -83,7 +83,7 @@ def logout_view(request):
 @secure_admin_login
 def admin_view(request):
     return render(request, "CS50_News/admin.html", {
-        "news": New.objects.filter(auther=request.user),
+        "news": New.objects.filter(auther=request.user).order_by("-timestamp"),
         "users": User.objects.all()
     })
 
@@ -97,46 +97,45 @@ def add_new(request):
         tags = request.POST.get("tags").lower()
         content = request.POST.get("content")
         image = request.FILES.get("blob")
+        
         short_name = short_category(sub_category)
         if not sub_category in New.SUB_CATEGORIES[category[0]].values():
             return HttpResponse("the provided sub category isn't part of the category provided", status=400)
-        try:
-            with Image.open(image) as img:
-                w, h = img.size
-                aspect_ratio = 16 / 9
-                if isclose(w / h, aspect_ratio):
-                    newh = h
-                    neww = int(h * aspect_ratio)
+        with Image.open(image) as img:
+            w, h = img.size
+            aspect_ratio = 16 / 9
+            if isclose(w / h, aspect_ratio):
+                newh = h
+                neww = int(h * aspect_ratio)
 
-                    if neww > w:
-                        neww = w
-                        newh = int(w / aspect_ratio)
-                    
-                    left = (w - neww) / 2
-                    top = (h - newh) / 2
-                    right = (w + neww) / 2
-                    bottom = (h + newh) / 2
-                    img = img.crop((left, top, right, bottom))
+                if neww > w:
+                    neww = w
+                    newh = int(w / aspect_ratio)
+                
+                left = (w - neww) / 2
+                top = (h - newh) / 2
+                right = (w + neww) / 2
+                bottom = (h + newh) / 2
+                img = img.crop((left, top, right, bottom))
 
-                    img_io = BytesIO()
-                    img.save(img_io, format='PNG')  # Change format if necessary
-                    img_io.seek(0)
+                img_io = BytesIO()
+                img.save(img_io, format='PNG')  # Change format if necessary
+                img_io.seek(0)
 
-                    cropped_image_file = InMemoryUploadedFile(
-                    img_io,
-                    field_name="image",
-                    name=image.name,
-                    content_type="image/png",
-                    size=getsizeof(img_io),
-                    charset=None
-                    )
-                    new = New(headline=headline, sub_headline=sub_headline, image=cropped_image_file, content=content, auther=request.user, category=category[0], sub_category=short_name)
-                    new.save()
-                else:
-                    new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name)
-                    new.save()
-        except:
-           return HttpResponse("could not open the image", status=400)
+                cropped_image_file = InMemoryUploadedFile(
+                img_io,
+                field_name="image",
+                name=image.name,
+                content_type="image/png",
+                size=getsizeof(img_io),
+                charset=None
+                )
+                new = New(headline=headline, sub_headline=sub_headline, image=cropped_image_file, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-"))
+                new.save()
+            else:
+                new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-"))
+                new.save()
+        
         try:
             tags = tags.split(",")
             for tag in tags:
@@ -149,8 +148,97 @@ def add_new(request):
     return render(request, "CS50_News/editor.html", {
         "categories": New.CATEGORYS.values(),
         "subs": New.SUB_CATEGORIES,
-        "suggestions": suggestions
-    })
+        "suggestions": suggestions,
+    }
+)
+
+@secure_admin_login
+def edit_new(request, slug=None):
+    if request.method == "POST":
+        new = New.objects.get(slug=slug)
+        user = User.objects.get(id=request.user.id)
+        if new.auther != request.user and not user.is_superuser:
+            return HttpResponse(status=403)
+        headline = request.POST.get("headline")
+        sub_headline = request.POST.get("sub_headline")
+        category = request.POST.get("category")
+        sub_category = request.POST.get("sub_category")
+        tags = request.POST.get("tags").lower()
+        content = request.POST.get("content")
+        image = request.FILES.get("blob")
+        
+        short_name = short_category(sub_category)
+        if not sub_category in New.SUB_CATEGORIES[category[0]].values():
+            return HttpResponse("the provided sub category isn't part of the category provided", status=400)
+        with Image.open(image) as img:
+            w, h = img.size
+            aspect_ratio = 16 / 9
+            if isclose(w / h, aspect_ratio):
+                newh = h
+                neww = int(h * aspect_ratio)
+
+                if neww > w:
+                    neww = w
+                    newh = int(w / aspect_ratio)
+                
+                left = (w - neww) / 2
+                top = (h - newh) / 2
+                right = (w + neww) / 2
+                bottom = (h + newh) / 2
+                img = img.crop((left, top, right, bottom))
+
+                img_io = BytesIO()
+                img.save(img_io, format='PNG')  # Change format if necessary
+                img_io.seek(0)
+
+                cropped_image_file = InMemoryUploadedFile(
+                img_io,
+                field_name="image",
+                name=image.name,
+                content_type="image/png",
+                size=getsizeof(img_io),
+                charset=None
+                )
+                new.image=cropped_image_file 
+            else:
+                new.image=image
+        new.headline=headline
+        new.sub_headline=sub_headline
+        new.content=content
+        new.auther=request.user
+        new.category=category[0]
+        new.sub_category=short_name
+        new.slug=headline.replace(" ", "-")
+        new.save()
+        try:
+            tags = tags.split(",")
+            for tag in tags:
+                new.tags.add(tag)
+            new.save()
+        except:
+           return HttpResponse({"could not Edit the article"}, status=400)
+        return HttpResponseRedirect(reverse("staff"))
+    new = New.objects.get(slug=slug)
+    suggestions = Tag.objects.all().annotate(num_tags=Count("new")).order_by("-num_tags")
+    return render(request, "CS50_News/editor.html", {
+        "categories": New.CATEGORYS.values(),
+        "subs": New.SUB_CATEGORIES,
+        "suggestions": suggestions,
+        "new": new
+    }
+)
+
+@secure_admin_login
+def delete_new(request):
+    if request.method == "POST":
+        try:
+            id = request.POST.get("id")
+            new = New.objects.get(id=id)
+            new.delete()
+        except:
+            return HttpResponse(status=404)
+        return HttpResponseRedirect(reverse("index"))
+    return HttpResponse(status=405)
 
 def passwordCheck(request):
     user = User.objects.get(id=request.user.id)
@@ -217,19 +305,21 @@ def crop(request):
         return HttpResponse(200)
     return render(request, "CS50_News/crop.html")
 
-def new(request, cat, id):
+def new(request, cat, slug):
     try:
-        news = New.objects.prefetch_related("auther").get(id=id, category=cat[0])
+        news = New.objects.prefetch_related("auther").get(slug=slug, category=cat[0])
     except New.DoesNotExist:
-        return HttpResponse({"error": "there is no article with such id"}, status=400)
+        return HttpResponse({"error": "there is no such article"}, status=404)
     related =  news.tags.similar_objects()[:3]
     markdown = Markdown()
+    print(User.objects.get(id=request.user.id).saved_articles.filter(id=news.id).exists())
     if news.content:
         news.content = markdown.convert(news.content)
     return render(request, "CS50_News/new.html", {
         "new": news,
         "relatedNews": related,
-        "tags": news.tags.names()
+        "tags": news.tags.names(),
+        "saved": User.objects.get(id=request.user.id).saved_articles.filter(id=news.id).exists()
     })
 
 def reset(request, key):
@@ -269,3 +359,23 @@ class CustomConfirmCode(ConfirmEmailVerificationCodeView):
             "message": "Email confirmed successfully!",
             "redirect_url": reverse('home') + "?auth=confirm-email"
         })
+    
+def save_new(request, headline=None):
+    if request.method == "POST":
+        if headline == None:
+            return HttpResponse(status=400)
+        user = User.objects.get(id=request.user.id)
+        article = New.objects.get(slug=headline)
+        if user.saved_articles.filter(id=article.id).exists():
+            user.saved_articles.remove(article)
+        else:
+            user.saved_articles.add(article)
+        return HttpResponse(status=200)
+    news = User.objects.get(id=request.user.id).saved_articles.all()
+    paginator = Paginator(news, 10)
+    num = request.GET.get("p")
+    news = paginator.get_page(num)
+    return render(request, "CS50_News/search.html", {
+        "news": news,
+        "tag": "saved"
+    })

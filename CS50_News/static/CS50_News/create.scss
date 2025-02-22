@@ -182,6 +182,8 @@
     }
     .suggestions {
         width: 100%;
+        height: calc(40.67px * 4);
+        overflow-y: auto;
         position: absolute;
         top: 100%;
         left: 0;
@@ -205,14 +207,6 @@
     position: absolute;
     top: 1rem;
     right: 3rem
-}
-
-.publish-btn {
-    @include btn;
-    width: 90px;
-    height: 30px;
-    margin-top: 1rem;
-    float: right;
 }
 
 .error {
@@ -286,6 +280,39 @@
         color: white;
     }
 }
+
+.top-btns {
+    display: flex;
+    justify-content: end;
+    gap: 1rem;
+    margin: .75rem;
+
+    .icon-btn {
+        background-color: transparent;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        
+        &:hover {
+            background-color: #cbcbcb;
+
+        }
+    }
+    .publish-btn {
+        @include btn;
+        width: 90px;
+        height: 40px;
+    }    
+}
+
+.icon-div {
+    display: flex;
+    padding: 0 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
 @media screen and (max-width: 1024px) {
     #init-form {
         height: 100%;

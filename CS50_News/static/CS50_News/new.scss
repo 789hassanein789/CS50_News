@@ -32,9 +32,26 @@ $secondary: hsl(210, 2%, 34%);
         font-size: .75rem;
         color: $secondary;    
     }
-    .auther {
-        font-size: 1.25rem;
-        font-weight: 600;
+    .min-info {
+        display: flex;
+        justify-content: space-between;
+
+        .auther {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .buttons {
+            font-size: 14px;
+            color: $secondary;
+
+            a {
+                user-select: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+        }
     }
 }
 
@@ -115,7 +132,7 @@ aside {
     }
 }
 
-.link {
+.new-page-link {
     text-decoration: none;
     color: inherit;
     margin-right: 1rem;

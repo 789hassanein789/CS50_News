@@ -220,6 +220,10 @@
                                 </button>
                             </form>
                         {% endif %}
+                        <a class="a-dp-btn setting-btn link" href="{% url 'show-saved' %}?p=1">
+                            <i class="fa-regular fa-bookmark fa-lg"></i>
+                            Save
+                        </a>
                         <form id="logout-form">
                             <button class="a-dp-btn">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
@@ -229,12 +233,11 @@
                                 Sign out
                             </button>
                         </form>
-                        
                     </div>
                 </div>
                 {% if user.is_staff %}
                     <div class="mt-3">
-                        <a class="a-dp-btn" href="{% url 'staff' %}">
+                        <a class="a-dp-btn link" href="{% url 'staff' %}">
                             <i class="fa-solid fa-user-tie fa-lg"></i>
                             admin page                    
                         </a>

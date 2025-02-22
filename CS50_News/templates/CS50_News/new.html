@@ -7,58 +7,86 @@
 {% endblock %}
 
 {% block body %}
-<header>
-    {% include "CS50_News/sub_templates/_main-header.html" %}
-    {% include "CS50_News/sub_templates/_navbar.html" %}
-</header>
-{% include "CS50_News/sub_templates/_subnav.html" %}
-{% include "CS50_News/sub_templates/_offcanvas.html" %}
-    <div class="body-content">
-        <article class="main-container">
-            <div class="heading">
-                <p class="min-font">{{new.get_category_display|change:"_ "}} | {{new.get_sub_category_display|change:"_ "}}</p>
-                <h1>
-                    {{new.headline}}
-                </h1>
-                <p class="time">
-                    {{new.timestamp|timesince|timeformat|safe}}
-                </p>
+    <article class="main-container">
+        <div class="heading">
+            <p class="min-font">{{new.get_category_display|change:"_ "}} | {{new.get_sub_category_display|change:"_ "}}</p>
+            <h1>
+                {{new.headline}}
+            </h1>
+            <p class="time">
+                {{new.timestamp|timesince|timeformat|safe}}
+            </p>
+            <div class="min-info">
                 <p class="auther">
                     {{new.auther.username}}
                 </p>
-            </div>
-            <div class="main-img">
-                <img src="{{new.image.url}}" alt="main-img">
-            </div>
-            <article>
-                <div class="new-content">
-                    {{new.content | safe}} <br>
-                    {% for tag in tags %}
-                        <a href="{% url 'tags' tag=tag %}?p=1" class="link">{{tag}}</a>
-                    {% endfor %}
+                <div class="buttons">
+                    <a class="new-page-link" id="save-link" data-slug={{new.slug}}>
+                        {% if saved %}
+                            <i class="fa-solid fa-check"></i>
+                             Saved
+                        {% else %}
+                            <i class="fa-solid fa-plus"></i>
+                             Save
+                        {% endif %}
+                    </a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'update' slug=new.slug %}" class="new-page-link"><i class="fa-solid fa-pen fa-sm"></i> Edit</a>
+                        <a class="new-page-link" id="delete-new" data-id={{new.id}}><i class="fa-solid fa-trash fa-sm"></i> Delete</a>
+                    {% endif %}
                 </div>
-            </article>
-            <aside>
-                <div class="border"></div>
-                <h5>
-                    Related
-                </h5>
-                <div class="content">
-                    {% for related in relatedNews %}
-                        <a class="link" href="{% url 'new' cat=related.get_category_display id=related.id  %}">
-                            <h6>{{related.headline}}</h6>
-                            <div class="secondary-div">
-                                <span>{{related.timestamp|timesince|timeformat|safe}}</span>
-                                <div></div>
-                                <span>{{related.get_category_display}}</span>
-                            </div>
-                        </a>
-                    {% endfor %}
-                </div>
-            </aside>
+            </div>
+        </div>
+        <div class="main-img">
+            <img src="{{new.image.url}}" alt="main-img">
+        </div>
+        <article>
+            <div class="new-content">
+                {{new.content | safe}} <br>
+                {% for tag in tags %}
+                    <a href="{% url 'tags' tag=tag %}?p=1" class="new-page-link">{{tag}}</a>
+                {% endfor %}
+            </div>
         </article>
+        <aside>
+            <div class="border"></div>
+            <h5>
+                Related
+            </h5>
+            <div class="content">
+                {% for related in relatedNews %}
+                    <a class="new-page-link" href="{% url 'new' cat=new.get_category_display slug=new.slug %}">
+                        <h6>{{related.headline}}</h6>
+                        <div class="secondary-div">
+                            <span>{{related.timestamp|timesince|timeformat|safe}}</span>
+                            <div></div>
+                            <span>{{related.get_category_display}}</span>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </aside>
+    </article>
+</div>
+<div class="overlay d-none">
+    <div class="popup">
+        <div class="popup-block">
+            <form action="{% url 'delete-new' %}" method="post" class="popup-form">
+                <input type="hidden" value="{{new.id}}" name="id">
+                {% csrf_token %}
+                <p class="fs-4 fw-bold m-0">Are you sure?</p>
+                <p>By deleting this article, no one will be able to see this article or recover it</p>
+                <button class="popup-btn done-btn">
+                    Yes, delete this article
+                </button>
+                <button class="popup-btn close-btn" type="button">
+                    No, I'll keep it
+                </button>
+                {% if error %}
+                    <p class="error-p">{{error}}</p>
+                {% endif %}
+            </form>
+        </div>
     </div>
-    
-    {% include "CS50_News/sub_templates/_overlay.html" %}
-    {% include "CS50_News/sub_templates/_footer.html" %}
+    <script src="{% static 'CS50_News/news.js' %}"></script>
 {% endblock %}

@@ -7,16 +7,12 @@
 {% endblock %}
 
 {% block body %}
-    <header>
-        {% include "CS50_News/sub_templates/_main-header.html" %}
-    </header>
-    {% include "CS50_News/sub_templates/_offcanvas.html" %}
     <div class="news-container" data-mouse-down-at="0" data-percentage="0">
-        <a class="create" href="{% url 'add' %}" draggable="false">
+        <a class="create link" href="{% url 'add' %}" draggable="false">
             +
-        </a>
+        </a> 
         {% for new in news %}
-            <a class="created" draggable="false">
+            <a href="{% url 'new' cat=new.get_category_display slug=new.slug %}" class="created link" draggable="false">
                 <div class="img">
                     <img src="{{new.image}}" alt="" draggable="false">
                 </div>
@@ -26,7 +22,7 @@
                     <div class="secondary-div">
                         <span>{{new.timestamp|timesince|timeformat|safe}}</span>
                         <div></div>
-                        <span>{{new.category.all.0.get_category_display}}</span>
+                        <span>{{new.get_sub_category_display}}</span>
                     </div>
                 </div>
             </a>
@@ -50,7 +46,5 @@
             </tr>
         {% endfor %}
     </table>
-    {% include "CS50_News/sub_templates/_overlay.html" %}
-    {% include "CS50_News/sub_templates/_footer.html" %}
     <script src="{% static 'CS50_News/admin.js' %}"></script>
 {% endblock %}
