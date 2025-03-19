@@ -1,0 +1,19 @@
+{% load change %}
+
+<section class="trending">
+    <h3 class="trending-section-heading">Most read</h3>
+    <div>
+        {% for placement in section.articles.all %}
+            <div class="trend">
+                <a class="link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                    <span>
+                        {{forloop.counter}}
+                    </span>
+                    <h6>
+                        {{placement.article.headline}}
+                    </h6>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</section>

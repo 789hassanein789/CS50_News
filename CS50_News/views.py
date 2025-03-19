@@ -24,42 +24,38 @@ import pyotp
 import json
 from markdown2 import Markdown
 
-from .models import User, New
+from .models import User, New, Page, Section, Placement
 from .utils import send_otp, Rescore, short_category
 
+section_names = Section.SECTIONS
 
 def index(request, cat=None, sub=None, key=None):
     Rescore(New.objects.all())
-    parent = None
     sub_categories = None
     if cat == None:
-        news = New.objects.all().order_by("score")
+        page = Page.objects.get(slug="Home")
+        sections = page.sections.prefetch_related("articles__article")
     # make sure the cat is valid.
     elif cat and not sub:
-        news = New.objects.filter(category=cat[0]).order_by("score")
+        page = Page.objects.get(slug=cat)
+        sections = page.sections.prefetch_related("articles__article")
         if cat != "Business":
             sub_categories = New.SUB_CATEGORIES[cat[0]]
     else:
-        short_name = short_category(sub)
-        news = New.objects.filter(sub_category=short_name).order_by("score")
+        page = Page.objects.get(slug=sub)
+        print(page)
+        sections = page.sections.prefetch_related("articles__article")
         sub_categories = New.SUB_CATEGORIES[cat[0]]
-    # TODO: filter on category not just section
-    hero = news.filter(section="H")
-    side = news.filter(section="S")
-    top_stories = news.filter(section="T")
-    only = news.filter(section="O")
-    featured = news.filter(section="F")
-    #
+    # TODO: filter on section not just category.
+    
+    for section in sections:
+        section.include_name = f"CS50_News/sections/_{section_names[section.name]}.html"
 
     return render(request, "CS50_News/index.html", {
-        "news" : news,
-        "hero": hero,
-        "side": side,
-        "top_stories": top_stories,
-        "only": only,
-        "featured": featured,
+        "sections" : sections,
         "subs": sub_categories,
         "parent": cat,
+        "sub_category": sub,
         "key": key
     })
 
@@ -84,7 +80,8 @@ def logout_view(request):
 def admin_view(request):
     return render(request, "CS50_News/admin.html", {
         "news": New.objects.filter(auther=request.user).order_by("-timestamp"),
-        "users": User.objects.all()
+        "users": User.objects.all(),
+        "sections": Page.objects.get(name="Home").sections.prefetch_related("articles__article")
     })
 
 @secure_admin_login
@@ -305,21 +302,23 @@ def crop(request):
         return HttpResponse(200)
     return render(request, "CS50_News/crop.html")
 
-def new(request, cat, slug):
+def new(request, cat, sub, slug):
     try:
         news = New.objects.prefetch_related("auther").get(slug=slug, category=cat[0])
     except New.DoesNotExist:
         return HttpResponse({"error": "there is no such article"}, status=404)
+    user = None
+    if request.user.is_authenticated:
+        user = User.objects.get(id=request.user.id).saved_articles.filter(id=news.id).exists()
     related =  news.tags.similar_objects()[:3]
     markdown = Markdown()
-    print(User.objects.get(id=request.user.id).saved_articles.filter(id=news.id).exists())
     if news.content:
         news.content = markdown.convert(news.content)
     return render(request, "CS50_News/new.html", {
         "new": news,
         "relatedNews": related,
         "tags": news.tags.names(),
-        "saved": User.objects.get(id=request.user.id).saved_articles.filter(id=news.id).exists()
+        "saved": user,
     })
 
 def reset(request, key):
@@ -378,4 +377,71 @@ def save_new(request, headline=None):
     return render(request, "CS50_News/search.html", {
         "news": news,
         "tag": "saved"
+    })
+
+def admin_pop(request):
+    cat_list = New.SUB_CATEGORIES
+    for name, category in cat_list.items():
+        if name == "B":
+            continue
+        for cat in category:
+            p = Page(name=category[cat], slug=category[cat].replace(" ", "-"))
+            p.save()
+    return HttpResponse(status=200)
+
+def page(request, cat=None, sub=None):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        section_title = None
+        if data['section-title']:
+            section_title = data['section-title']
+        for key, value in section_names.items():
+            if value == data['section-name']:
+                name = key
+        if not cat:
+            new_section = Section(page=Page.objects.get(slug="Home"), name=name, title=section_title)
+        elif cat and not sub:
+            new_section = Section(page=Page.objects.get(slug=cat), name=name, title=section_title)
+        else:
+            new_section = Section(page=Page.objects.get(slug=sub), name=name, title=section_title)
+        new_section.save()
+        i = 0
+        for id in data["ids"]:
+            Placement.objects.create(article=New.objects.get(id=int(id)), section=new_section, position=i)
+            i += 1
+        return HttpResponse(status=200)
+    sub_categories = None
+    parent = None
+    if not cat:
+        page = Page.objects.get(slug="Home")
+        sections = page.sections.prefetch_related("articles__article")
+    elif cat and not sub:
+        page = Page.objects.get(slug=cat)
+        sections = page.sections.prefetch_related("articles__article")
+        parent = cat
+        if cat != "Business":
+            sub_categories = New.SUB_CATEGORIES[cat[0]]
+    else:
+        page = Page.objects.get(slug=sub)
+        sections = page.sections.prefetch_related("articles__article")
+        sub_categories = New.SUB_CATEGORIES[cat[0]]
+        parent = cat
+    q = request.GET.get("q")
+    if (q):
+        q = q.capitalize().strip()
+        news = New.objects.filter(headline__contains=q)
+    else:
+        news = New.objects.all()
+    Paginators = Paginator(news, 10)
+    pagenumber = request.GET.get("p")
+    all_news = Paginators.get_page(pagenumber)
+    for section in sections:
+        section.include = f"CS50_News/designs/_{section_names[section.name]}.html"
+        section.include_name = f"CS50_News/sections/_{section_names[section.name]}.html"
+    return render(request, "CS50_News/pages.html", {
+        "sections": sections,
+        "subs": sub_categories,
+        "parent": parent,
+        "all": [f"CS50_News/designs/_{name}.html" for name in section_names.values()],
+        "news": all_news,
     })

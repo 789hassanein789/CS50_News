@@ -1,0 +1,54 @@
+{% load change %}
+{% load static %}
+
+<section class="main-container" id="carousel-section">
+    <div class="carousel-div">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            </div>
+            <div class="carousel-inner">
+                {% for i in '0123'|make_list %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %} article" data-chosen="" data-num="{{forloop.counter}}">
+                    <a class="link article">
+                        <img src="{% static 'CS50_News/cover/test-img.jpg' %}" class="d-block w-100" alt="...">
+                        <div class="carousel-caption">
+                            <h5>headline</h5>
+                            <p>sub headline</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    <div class="side-div">
+        {% for placement in '0123'|make_list %}
+            <a class="side-new link article article-{{forloop.counter}}" data-chosen="" data-num="2{{forloop.counter}}">
+                <div class="side-new-image-div">
+                    <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                </div>
+                <div class="side-new-text">
+                    <h6 class="content-heading">headline</h6>
+                    <p>sub headline</p>
+                    <div class="secondary-div">
+                        <span>1d ago</span>
+                        <div></div> 
+                        <span>category</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</section>

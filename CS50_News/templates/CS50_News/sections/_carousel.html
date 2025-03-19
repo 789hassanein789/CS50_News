@@ -1,0 +1,54 @@
+{% load change %}
+
+<section class="main-container carousel-section">
+    <div class="carousel-div">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            </div>
+            <div class="carousel-inner">
+                {% for placement in sections.0.articles.all %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <a class="link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                        <img src="{{placement.article.image.url}}" class="d-block w-100" alt="...">
+                        <div class="carousel-caption">
+                            <h5>{{placement.article.headline}}</h5>
+                            <p>{{placement.article.sub_headline}}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    <div class="side-div">
+        {% for placement in section.articles.all %}
+            <a class="side-new link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                <div class="side-new-image-div">
+                    <img src="{{placement.article.image.url}}" alt="">
+                </div>
+                <div class="side-new-text">
+                    <h6 class="main-text">{{placement.article.headline}}</h6>
+                    <div class="secondary-div side-secondary">
+                        <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                        <div></div>
+                        <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+<div class="light-seperator"></div>

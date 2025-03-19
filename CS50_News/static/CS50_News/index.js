@@ -51,6 +51,11 @@ const passwordResetLink = document.querySelector('#password-reset-link')
 const newPasswordForm = document.querySelector('#new-password-form')
 const successForm = document.querySelector('#success-form')
 const newPasswordContinueBtn = document.querySelector('#new-password-block .continue-btn')
+const scrollBtns = document.querySelector('#scroll-heading .buttons')
+const scrollDiv = document.querySelector('.scroll-div')
+const scrollRightBtn = document.querySelector('.scroll-right')
+const scrollLeftBtn = document.querySelector('.scroll-left')
+const scrollLinks = document.querySelectorAll('.scroll-div > a')
 
 
 const popupContent = popup.innerHTML;
@@ -199,7 +204,6 @@ iconSize(media);
 passwordForm && passwordForm.addEventListener('submit', (e) => {
     e.preventDefault()
     const form = new FormData(passwordForm)
-    console.log(form.get('current-password'))
     if (form.get('current-password')) {
         changePassword(form)
     }
@@ -294,6 +298,59 @@ if (auth) {
     settings()
 }
 
+let holding = false
+
+scrollDiv && scrollDiv.addEventListener('mousedown', (e) => {
+    scrollDiv.dataset.mousePosition = e.clientX;
+    holding = false
+})
+
+window.addEventListener('mouseup', (e) => {
+    scrollDiv.dataset.mousePosition = "0";
+    scrollDiv.dataset.percentage = scrollDiv.dataset.new
+})
+
+scrollDiv && scrollDiv.addEventListener('mousemove', (e) => {
+    if (scrollDiv.dataset.mousePosition === "0") return
+
+    holding = true
+
+    const delta = parseFloat(scrollDiv.dataset.mousePosition) - e.clientX;
+    const maxDelta = window.innerWidth / 2
+
+    let percentage = (delta / maxDelta) * -100,
+          newPercentage = parseFloat(scrollDiv.dataset.percentage) + percentage
+    newPercentage = Math.min(newPercentage, 0)
+    newPercentage = Math.max(newPercentage, -100)
+
+    scrollDiv.dataset.new = newPercentage
+
+    scrollDiv.animate({
+        transform: `translate(${newPercentage}%, 0%)`
+    }, {duration: 1200, fill: 'forwards'})
+})
+
+scrollRightBtn && scrollRightBtn.addEventListener('click', () => {
+    scrollDiv.dataset.percentage = "-100"
+    scrollDiv.animate({
+        transform: `translate(${scrollDiv.dataset.percentage}%, 0%)`
+    }, {duration: 500, fill: 'forwards'})
+})
+
+scrollLeftBtn && scrollLeftBtn.addEventListener('click', () => {
+    scrollDiv.dataset.percentage = "0"
+    scrollDiv.animate({
+        transform: `translate(${scrollDiv.dataset.percentage}%, 0%)`
+    }, {duration: 500, fill: 'forwards'})
+})
+
+scrollLinks && scrollLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        if (holding) {
+            e.preventDefault()
+        }
+    })
+})
 
 function enableDarkMode() {
     document.body.classList.add('dark-mode');
@@ -376,7 +433,6 @@ function reauthenticate() {
         }
    })
    .catch((error) => {
-        console.log(error)
         errorPar.classList.remove('d-none');
         errorPar.textContent = error.errors[0].message
         passwordInput.classList.add('is-invalid');
@@ -701,7 +757,6 @@ function verifyEmail() {
 }
 
 function iconSize(x) {
-    console.log('full')
     if (x.matches) {
         headingIcons.forEach(i => {
             if (i.classList.contains('fa-bars')) {
@@ -725,9 +780,7 @@ function iconSize(x) {
 }
 
 function requestPasswordReset(form) {
-    console.log('hi')
     let newForm = new FormData(form);
-    console.log(resentContinueBtn)
     resentContinueBtn.innerHTML = '<div class="spinner-border" role="status"></div>'
     fetch('/_allauth/browser/v1/auth/password/request', {
         method: 'POST',
@@ -807,7 +860,6 @@ function changePassword(form) {
         }
     })
     .catch((error) => {
-        console.log(error)
         const passwordError = document.getElementById(error.errors[0].param)
         passwordError.textContent = error.errors[0].message
         passwordError.classList.remove('d-none')
@@ -852,7 +904,6 @@ function changeProviderPassword(form) {
 
 function changeEmail() {
     const form = new FormData(emailForm)
-    console.log(form.get('email'))
     const emailDoneBtn = document.querySelector('#email-block .done-btn')
     emailDoneBtn.innerHTML = '<div class="spinner-border" role="status"></div>'
     fetch('/_allauth/browser/v1/account/email', {
@@ -884,7 +935,6 @@ function changeEmail() {
 }
 
 function resendOtp() {
-    console.log(sessionStorage.getItem('email'))
     fetch('/_allauth/browser/v1/account/email', {
         method: 'PUT',
         headers: {
@@ -911,7 +961,6 @@ function resendOtp() {
 
 function reset(e) {
     e.preventDefault()
-    console.log('hi')
     const newForm = new FormData(newPasswordForm)
     newPasswordContinueBtn.innerHTML = '<div class="spinner-border" role="status"></div>'
     fetch('/_allauth/browser/v1/auth/password/reset', {
@@ -935,7 +984,6 @@ function reset(e) {
         }
     })
     .catch(error => {
-        console.log(error)
         newPasswordContinueBtn.textContent = 'continue'
     })
 }

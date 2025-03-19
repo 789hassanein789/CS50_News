@@ -25,11 +25,17 @@ urlpatterns = [
     path("auth", views.index, name="auth"),
     path("auth/<str:key>", views.index, name="new-password"),
     path("tags/<str:tag>", views.tag, name="tags"),
+    path("page/", include([
+        path("", views.page, name="page"),
+        path("<str:cat>", views.page, name="page"),
+        path("<str:cat>/<str:sub>", views.page, name="page"),
+    ])),
     path("<str:cat>/", include([
         path("", views.index, name="cat_index"),
-        path("<slug:slug>", views.new, name="new"),
         path("<str:sub>", views.index, name="cat_index"),
+        path("<str:sub>/<slug:slug>", views.new, name="new"),
     ])),
     path("password/reset/key/<str:key>", views.reset, name="password_reset"),
+    path("hi", views.admin_pop),
 ]
 

@@ -1,0 +1,94 @@
+{% load change %}
+{% load static %}
+
+<section id="hero-section">
+    <div class="main-container">
+        <div class="left-side">
+            <a class="side-img-article link article" data-chosen="" data-num="0">
+                <div class="content">
+                    <h6 class="content-heading">headline</h6>
+                    <p>sub headline</p>
+                    <div class="secondary-div side-secondary">
+                        <span>1d ago</span>
+                        <div></div>
+                        <span>category</span>
+                    </div>
+                </div>
+                <div class="img">
+                    <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                </div>
+            </a>
+            <div class="light-seperator"></div>
+            <div class="bottom">
+                <div class="only-div">
+                    {% for i in '01'|make_list %}
+                        <a class="tn link article" data-chosen="" data-num="2{{forloop.counter}}">
+                            <div class="img">
+                                <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                            </div>
+                            <div class="content">
+                                <h6 class="content-heading">headline</h6>
+                                <p>sub headline</p>
+                                <div class="secondary-div">
+                                    <span>1d ago</span>
+                                    <div></div>
+                                    <span>category</span>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="news-div">
+                    {% for i in '0123'|make_list %}
+                        <a class="new-container link article" data-chosen="" data-num="3{{forloop.counter}}">
+                            <div class="new-image">
+                                <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                            </div>
+                            <div class="content">
+                                <h6 class="content-heading">headline</h6>
+                                <p>sub headline</p>
+                                <div class="secondary-div">
+                                    <span>1d ago</span>
+                                    <div></div> 
+                                    <span>category</span>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="column-section">
+            {% for i in '0123'|make_list %}
+                {% if forloop.first %}
+                        <a class="main article" data-chosen="" data-num="4{{forloop.counter}}">
+                            <div class="img">
+                                <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                            </div>
+                            <div class="content">
+                                <h6 class="content-heading">headline</h6>
+                                <p>sub headline</p>
+                                <div class="secondary-div">
+                                    <span>1d ago</span>
+                                    <div></div>
+                                    <span>category</span>
+                                </div>
+                            </div>
+                        </a>
+                {% else %}
+                    <a class="link column-side-new article" data-chosen="" data-num="3{{forloop.counter}}">
+                        <div>
+                            <h6>headline</h6>
+                            <p>sub headline</p>
+                            <div class="secondary-div">
+                                <span>1d ago</span>
+                                <div></div>
+                                <span>category</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>

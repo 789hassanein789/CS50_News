@@ -1,0 +1,107 @@
+{% load change %}
+{% load static %}
+
+<section id="stories-section">
+    <h3 class="stories-section-heading">Section Title</h3>
+    <div>
+        <div class="side column-section">
+            {% for placement in '0123'|make_list %}
+                {% if forloop.first %}
+                    <a class="main link" data-chosen="" data-num="{{forloop.counter}}">
+                        <div class="img">
+                            <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">headline</h6>
+                            <p>sub headline</p>
+                            <div class="secondary-div">
+                                <span>time</span>
+                                <div></div>
+                                <span>category</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <a class="link column-side-new" data-chosen="" data-num="{{forloop.counter}}">
+                        <div class="img">
+                            <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                        </div>
+                        <div>
+                            <h6>headline</h6>
+                            <div class="secondary-div">
+                                <span>time</span>
+                                <div></div>
+                                <span>category</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="middle">
+            {% for placement in '01'|make_list %}
+                {% if forloop.first %}
+                    <a class="main link" data-chosen="" data-num="2{{forloop.counter}}">
+                        <div class="img">
+                            <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6>headline</h6>
+                            <p>sub headline</p>
+                            <div class="secondary-div">
+                                <span>time</span>
+                                <div></div>
+                                <span>category</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <a class="link column-side-new" data-chosen="" data-num="2{{forloop.counter}}">
+                        <div class="img">
+                            <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6>headline</h6>
+                            <div class="side-secondary secondary-div">
+                                <span>time</span>
+                                <div></div>
+                                <span>category</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="side column-section">
+            {% for placement in '0123'|make_list %}
+                {% if forloop.first %}
+                    <a class="main link article" data-chosen="" data-num="3{{forloop.counter}}">
+                        <div class="img">
+                            <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">headline</h6>
+                            <p>sub headline</p>
+                            <div class="secondary-div">
+                                <span>time</span>
+                                <div></div>
+                                <span>category</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <a class="link column-side-placement article" data-chosen="" data-num="3{{forloop.counter}}">
+                        <div>
+                            <h6>headline</h6>
+                            <div class="secondary-div">
+                                <span>time</span>
+                                <div></div>
+                                <span>category</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>

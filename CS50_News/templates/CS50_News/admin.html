@@ -7,44 +7,51 @@
 {% endblock %}
 
 {% block body %}
-    <div class="news-container" data-mouse-down-at="0" data-percentage="0">
-        <a class="create link" href="{% url 'add' %}" draggable="false">
-            +
-        </a> 
-        {% for new in news %}
-            <a href="{% url 'new' cat=new.get_category_display slug=new.slug %}" class="created link" draggable="false">
-                <div class="img">
-                    <img src="{{new.image}}" alt="" draggable="false">
-                </div>
-                <div class="content">
-                    <h6 class="content-heading">{{new.headline}}</h6>
-                    <p>{{new.sub_headline}}</p>
-                    <div class="secondary-div">
-                        <span>{{new.timestamp|timesince|timeformat|safe}}</span>
-                        <div></div>
-                        <span>{{new.get_sub_category_display}}</span>
-                    </div>
-                </div>
+    <div id="admin-container">
+        <div class="news-container" data-mouse-down-at="0" data-percentage="0">
+            <a class="create link" href="{% url 'add' %}" draggable="false">
+                +
             </a>
-        {% endfor %}
-    </div>
-    <table>
-        <tr>
-            <th>User</th>
-            <th>Email</th>
-            <th>Admin</th>
-            <th>Active</th>
-            <th>Since</th>
-        </tr>
-        {% for user in users %}
+            {% for new in news %}
+                <a href="{% url 'new' cat=new.get_category_display slug=new.slug %}" class="created link" draggable="false">
+                    <div class="img">
+                        <img src="{{new.image}}" alt="" draggable="false">
+                    </div>
+                    <div class="content">
+                        <h6 class="content-heading">{{new.headline}}</h6>
+                        <p>{{new.sub_headline}}</p>
+                        <div class="secondary-div">
+                            <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                            <div></div>
+                            <span>{{new.get_sub_category_display}}</span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        <table>
             <tr>
-                <td>{{user.username}}</td>
-                <td>{{user.email}}</td>
-                <td>{{user.is_staff}}</td>
-                <td>{{user.is_active}}</td>
-                <td>{{user.date_joined}}</td>
+                <th>User</th>
+                <th>Email</th>
+                <th>Admin</th>
+                <th>Active</th>
+                <th>Since</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for user in users %}
+                <tr>
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.is_staff}}</td>
+                    <td>{{user.is_active}}</td>
+                    <td>{{user.date_joined}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div id="distribution-container">
+            {% for section in sections %}
+                {% include section.include_name %}
+            {% endfor %}
+        </div>
+    </div>
     <script src="{% static 'CS50_News/admin.js' %}"></script>
 {% endblock %}

@@ -25,3 +25,4 @@ container.addEventListener('mousemove', (e) => {
         transform: `translate(${newPercentage}%, 0%)`
     }, {duration: 1200, fill: 'forwards'})
 })
+

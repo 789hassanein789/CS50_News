@@ -1,12 +1,18 @@
 $opacity: 0.8;
 
+#admin-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0 1rem;
+}
+
 .news-container {
+    grid-column: 1 / 3;
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 270px;
     gap: .75rem;
     user-select: none;
-    
 } 
 
 .create {
@@ -74,5 +80,136 @@ $opacity: 0.8;
                 -webkit-box-orient: vertical;
             }
         }
+    }
+}
+
+#distribution-container {
+    
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: left;
+    margin: 1rem;
+}
+
+#pages-body {
+    display: grid;
+    
+}
+
+#main-page {
+    .page-layout {
+        margin: 1rem;
+        .create {
+            width: 100%;
+        }
+    }
+}
+
+
+#edit-page > div {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    .section-container {
+        position: relative;
+        .select-btn {
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            display: none;
+            button {
+                background-color: white;
+                color: black;
+                width: 70px;
+                height: 30px;
+                border-radius: 5px;
+                border: 1px solid gray;
+                transition: .3s ease-in-out;
+                &:hover {
+                    background-color: black;
+                    color: white;
+                }
+            }
+        }
+        &:hover {
+            .select-btn {
+                display: block;
+            }
+        }
+        #carousel-section {
+        position: relative;
+        grid-template-columns: 1fr;
+        .side-div .side-new .side-new-image-div  {
+            flex-basis: 35%;
+        }
+        .buttons {
+            position: absolute;
+            left: 24px;
+            bottom: 24px;
+        }
+    }
+    .carousel-div {
+        margin-bottom: 1rem;
+    }
+    .side-div {
+        margin: 0;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+    #scroll-section {
+        overflow: hidden;
+    }
+}}
+
+#placements-page {
+    & > div {
+        display: flex;
+        justify-content: space-between;
+        margin: 1rem;
+    }
+    .news-search {
+        border-right: 1px solid gray;
+    }
+    #distribution-form {
+        .btn {
+            margin-left: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+.icon-btn {
+    width: 2.4rem;
+    height: 2.4rem;
+    background: none;
+    border: none;
+    border-radius: 1.2rem;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background-color: rgb(244, 244, 244);
+}
+
+.t-input {
+    width: 50%;
+    height: 27px;
+    padding: 1.5rem 24px;
+    font-size: 1.5rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, .15);
+
+    &::placeholder {
+        font-size: 1.5rem;
+    }
+
+    &:focus-visible {
+        outline: none;
     }
 }

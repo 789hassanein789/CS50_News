@@ -1,0 +1,25 @@
+{% load change %}
+
+<section class="news-section">
+    <h3 class="news-section-heading">News</h3>
+    <div class="news-div">
+        {% for placement in section.articles.all %}
+            <a class="new-container link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                <div class="new-image">
+                    <img src="{{placement.article.image.url}}" alt="">
+                </div>
+                <div class="content">
+                    <h6 class="content-heading">{{placement.article.headline}}</h6>
+                    <p>{{placement.article.sub_headline}}</p>
+                    <div class="secondary-div">
+                        <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                        <div></div>
+                        <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+<div class="bold-seperator"></div>

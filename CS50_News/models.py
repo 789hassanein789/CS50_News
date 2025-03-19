@@ -14,13 +14,6 @@ class User(AbstractUser):
         return f"{self.username}"
     
 class New(models.Model):
-    SECTIONS =  {
-        "H": "hero",
-        "S": "side",
-        "T": "top_stories",
-        "F": "featured",
-        "O": "only"
-    }
     CATEGORYS = {
         "N": "News",
         "S": "Sport",
@@ -85,12 +78,52 @@ class New(models.Model):
     views = models.IntegerField(default=0)
     score = models.IntegerField(default=10)
     timestamp = models.DateTimeField(auto_now_add=True)
-    category = models.CharField(max_length=50, choices=CATEGORYS)
-    sub_category = models.CharField(max_length=50, choices=SUB_CATEGORIES)
-    section = models.CharField(max_length=50, choices=SECTIONS, null=True, blank=True)
+    category = models.CharField(max_length=50, choices=CATEGORYS, null=True, blank=True)
+    sub_category = models.CharField(max_length=50, choices=SUB_CATEGORIES, null=True, blank=True)
     auther = models.ForeignKey(User, on_delete=models.CASCADE, related_name="publishes")
     tags = TaggableManager(through=TaggedItem)
     slug = models.SlugField(default="" , null=False, unique=True, max_length=100)
 
     def timesince(self):
         return (self.timestamp - datetime.datetime.now(tz=pytz.UTC)).total_seconds()
+    
+class Page(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(default="", unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Section(models.Model):
+    SECTIONS = {
+        "H": "hero",
+        "C": "carousel",
+        "F": "featured",
+        "L": "left",
+        "N": "news",
+        "O": "only",
+        "R": "right",
+        "S": "scroll",
+        "M": "more",
+        "T": "trending",
+    }
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name="sections")
+    name = models.CharField(max_length=100, choices=SECTIONS, null=True, blank=True)
+    title = models.CharField(max_length=100, null=True, blank=True)
+    position = models.PositiveIntegerField(default=0)  # Order within the page
+
+    class Meta:
+        ordering = ["position"]
+
+    def __str__(self):
+        return f"{self.page.name} - {self.SECTIONS[self.name]}"
+
+
+class Placement(models.Model):
+    article = models.ForeignKey("New", on_delete=models.CASCADE, related_name="placements")
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name="articles")
+    position = models.PositiveIntegerField(default=0)  # Order within the section
+
+    class Meta:
+        ordering = ["position"]

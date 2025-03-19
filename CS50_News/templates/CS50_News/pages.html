@@ -1,0 +1,186 @@
+{% load static %}
+{% load change %}
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>CSN</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    
+    	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
+		<link rel="apple-touch-icon" sizes="180x180" href="{% static 'CS50_News/bundles/favicon_io/apple-touch-icon.png' %}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{% static 'CS50_News/bundles/favicon_io/favicon-32x32.png' %}">
+		<link rel="icon" type="image/png" sizes="16x16" href="{% static 'CS50_News/bundles/favicon_io/favicon-16x16.png' %}">
+		<link rel="manifest" href="{% static 'CS50_News/bundles/favicon_io/site.webmanifest' %}">
+		<script src="https://kit.fontawesome.com/a8cedb277e.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static 'CS50_News/index.css' %}">
+        <link rel="stylesheet" href="{% static 'CS50_News/staff.css' %}">
+        <link rel="stylesheet" href="{% static 'CS50_News/style.css' %}">
+		<link rel="stylesheet" href="{% static 'CS50_News/new.css' %}">
+	</head>
+	<body id="pages-body">
+		<div class="page page-num-0" id="main-page">
+			<header>
+				<nav id="navbar">
+					<ul id="navbar-ul">
+						<a class="nav-link" href="{% url 'page' %}"><li class="p-2" data-target="Home" id="nav-Home">Home</li></a>
+						<a class="nav-link" href="{% url 'page' cat='News' %}"><li class="p-2" data-target="News" id="nav-News">News</li></a>
+						<a class="nav-link" href="{% url 'page' cat='Sport' %}"><li class="p-2" data-target="Sport"  id="nav-Sport">Sport</li></a>
+						<a class="nav-link" href="{% url 'page' cat='Business' %}"><li class="p-2" data-target="Business" id="nav-Business">Business</li></a>
+						<a class="nav-link" href="{% url 'page' cat='Innovation' %}"><li class="p-2" data-target="Innovation" id="nav-Innovation">Innovation</li></a>
+						<a class="nav-link" href="{% url 'page' cat='Culture' %}"><li class="p-2" data-target="Culture" id="nav-Culture">Culture</li></a>
+						<a class="nav-link" href="{% url 'page' cat='Travel' %}"><li class="p-2" data-target="Travel" id="nav-Travel">Travel</li></a>
+						<a class="nav-link" href="{% url 'page' cat='Earth' %}"><li class="p-2" data-target="Earth" id="nav-Earth">Earth</li></a>
+					</ul>
+				</nav>
+			</header>
+			{% if subs %}
+				<nav id="sub_nav">
+					{% for key, value in subs.items %}
+						<a href="{% url 'page' cat=parent sub=value %}" class="nav-link">
+							<li class="list-group-item" data-target="{{value}}"  id="sub-nav-{{value}}" >{{ value|change:"_ " }}</li>
+						</a>
+					{% endfor %}
+				</nav>
+			{% endif %}
+			<div class="page-layout">
+				{% for section in sections %}
+					<div>
+						<div class="buttons">
+							<button class="btn btn-danger">Delete</button>
+							<button class="btn btn-info">Edit</button>
+						</div>
+						{% include section.include_name %}
+					</div>
+				{% endfor %}
+				<a class="create link" draggable="false">
+					+
+				</a>
+			</div>
+		</div>
+
+		<div class="page m-3 page-num-1 d-none" id="edit-page">
+			<div>
+				<button class="icon-btn back-btn" type="button">
+					<i class="fa-solid fa-arrow-left fa-xl"></i>
+				</button>
+			</div>
+			<div>
+				{% for section in all %}
+					<div class="section-container">
+						{% include section %}
+						<div class="select-btn">
+							<button>select</button>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+
+		<div class="page d-none page-num-2" id="placements-page">
+			<div>
+				<button class="icon-btn back-btn" type="button">
+					<i class="fa-solid fa-arrow-left fa-xl"></i>
+				</button>
+				<button class="btn btn-success">submit</button>
+			</div>
+			<form method="post" id="distribution-form">
+			</form>
+		</div>
+
+		<div class="news-search page d-none page-num-3" id="search-page">
+			<div class="buttons">
+				<button class="icon-btn back-btn" type="button">
+					<i class="fa-solid fa-arrow-left fa-xl"></i>
+				</button>
+			</div>
+			<div class="main-search-div">
+				<div class="sub-main-search-div">
+					<form action="" class="top-search-form">
+						<input autocomplete="off" type="text" class="top-search-input" name="q" value={{request.GET.q}}>
+						<button class="top-search-btn">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
+								<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+							</svg> 
+						</button>
+						<input type="hidden" name="page" value="search-page">
+						<input type="hidden" name="p" value="1">
+					</form>
+				{% for new in news %}
+					<a class="h-card" data-id="{{new.id}}" draggable="true">
+						<div class="h-card-main-image-div">
+							<div class="h-card-sub-image-div">
+								<img src="{{new.image.url}}" class="h-card-image" draggable="false">
+							</div>
+						</div>
+						<div class="h-card-content">
+							<h4 class="headline">{{new.headline}}</h4>
+							<div class="sub-headline-div">
+								<h6 class="sub-headline">{{new.sub_headline}}</h6>
+							</div>
+							<div class="x-secondary-div side-secondary">
+								<span>{{new.timestamp|timesince|timeformat|safe}}</span>
+								<div></div>
+								<span>{{new.get_sub_category_display|change:"_ "}}</span>
+							</div>
+						</div>
+					</a>
+				{% endfor %}
+				</div>
+			</div>
+			<nav>
+				<ul class="pagination">
+					{% if news.has_previous %}
+						{% if input %}
+							<li class="page-item">
+								<a class="page-link" href="?q={{input}}&p={{news.previous_page_number}}" aria-label="Previous">
+									<i class="fa-solid fa-chevron-left"></i>
+								</a>
+							</li>
+						{% else %}
+							<li class="page-item">
+								<a class="page-link" href="?p={{news.previous_page_number}}" aria-label="Previous">
+									<i class="fa-solid fa-chevron-left"></i>
+								</a>
+							</li>
+						{% endif %}
+					{% endif %}
+		
+					{% for i in news.paginator.page_range %}
+						{% if input %}
+							{% if request.GET.p|add:"0" == i %}
+								<i class="page-item active" aria-current="page"><a class="page-link" href="?q={{input}}&p={{i}}">{{i}}</a></i>
+							{% else %}    
+								<i class="page-item"><a class="page-link" href="?q={{input}}&p={{i}}">{{i}}</a></i>
+							{% endif %}
+						{% else %}
+							{% if request.GET.p|add:"0" == i %}
+							<i class="page-item active" aria-current="page"><a class="page-link" href="?p={{i}}">{{i}}</a></i>
+							{% else %}    
+								<i class="page-item"><a class="page-link" href="?p={{i}}">{{i}}</a></i>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+		
+					{% if news.has_next %}
+						{% if input %}
+							<li class="page-item">
+								<a class="page-link" href="?p={{news.next_page_number}}" aria-label="Next">
+									<i class="fa-solid fa-chevron-right"></i>
+								</a>
+							</li>
+						{% else %}
+							<li class="page-item">
+								<a class="page-link" href="?q={{input}}&p={{news.next_page_number}}" aria-label="Next">
+									<i class="fa-solid fa-chevron-right"></i>
+								</a>
+							</li>
+						{% endif %}
+					{% endif %}
+				</ul>
+			</nav>
+		</div>
+	</body>
+	<script src="{% static 'CS50_News/staff.js' %}"></script>
+</html>

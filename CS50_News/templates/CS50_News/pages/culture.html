@@ -1,0 +1,8 @@
+{% extends "CS50_News/layout.html" %}
+{% load change %}
+
+{% block body %}
+    {% for section in sections %}
+        {% include section.include_name %}
+    {% endfor %}
+{% endblock %}

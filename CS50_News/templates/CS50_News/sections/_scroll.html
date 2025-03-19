@@ -1,0 +1,29 @@
+{% load change %}
+
+<section class="scroll-section">
+    <div id="scroll-heading">
+        <h3>hi</h3>
+        <div class="buttons">
+            <button class="btn scroll-left"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="btn scroll-right"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+    <div class="scroll-div" data-mouse-position="0" data-percentage="0">
+        {% for placement in section.articles.all %}
+            <a class="new-container link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" draggable="false">
+                <div class="new-image">
+                    <img src="{{placement.article.image.url}}" alt="" draggable="false">
+                </div>
+                <div class="content">
+                    <h6 class="content-heading">{{placement.article.headline}}</h6>
+                    <p>{{placement.article.sub_headline}}</p>
+                    <div class="secondary-div">
+                        <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                        <div></div>
+                        <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</section>

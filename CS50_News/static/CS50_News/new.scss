@@ -42,7 +42,10 @@ $secondary: hsl(210, 2%, 34%);
             margin: 0;
         }
         .buttons {
+            display: flex;
+            align-items: center;
             font-size: 14px;
+            gap: 1rem;
             color: $secondary;
 
             a {
@@ -92,7 +95,6 @@ $secondary: hsl(210, 2%, 34%);
         padding: .6rem .7rem;
         background-color: rgb(240, 240, 240);
         font-family: Arial, Helvetica, sans-serif;
-        margin-right: 1rem;
 
         &:hover {
             background-color: $secondary;
@@ -228,6 +230,14 @@ aside {
     .main-img {
         width: 100%;
     }
+    .new-content {
+        margin: 1rem 2rem;
+        width: auto;
+    }
+    .heading {
+        margin: 1rem;
+        width: auto;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -241,7 +251,16 @@ aside {
 }
 
 @media screen and (max-width: 480px) {
-    
+    .heading {
+        margin: 1rem .5rem;
+        h1 {
+            font-size: 1.75rem;
+        }
+        .buttons {
+            flex-direction: column;
+            gap: .5rem;
+        }
+    }
 }
 
 @media screen and (max-width: 300px) {

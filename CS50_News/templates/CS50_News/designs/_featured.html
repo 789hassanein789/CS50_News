@@ -1,0 +1,112 @@
+{% load change %}
+{% load static %}
+
+<section id="featured-section">
+    <h3 class="featured-section-heading">Section Title</h3>
+    <div class="Featured">
+        <div class="column-section">
+            <h4 class="Featured-sub_heading">Category</h4>
+            {% for placement in '01234'|make_list %}
+                {% if forloop.first %}
+                    <a class="main link article" data-chosen="" data-num="{{forloop.counter}}">
+                        <div class="img">
+                            <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">headline</h6>
+                            <p>sub headline</p>
+                            <div class="secondary-div">
+                                <span>1d ago</span>
+                                <div></div> 
+                                <span>category</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    {% if placement.article.get_category_display == 'News' %}
+                        <a class="link column-side-new article" data-chosen="" data-num="{{forloop.counter}}">
+                            <div>
+                                <h6 class="content-heading">headline</h6>
+                                <p>sub headline</p>
+                                <div class="secondary-div">
+                                    <span>1d ago</span>
+                                    <div></div> 
+                                    <span>category</span>
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="column-section">
+            <h4 class="Featured-sub_heading">Category</h4>
+            {% for placement in '01234'|make_list %}
+                {% if forloop.first %}
+                    <a class="main link article" data-chosen="" data-num="2{{forloop.counter}}">
+                        <div class="img">
+                            <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">headline</h6>
+                            <p>sub headline</p>
+                            <div class="secondary-div">
+                                <span>1d ago</span>
+                                <div></div> 
+                                <span>category</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    {% if placement.article.get_category_display == 'News' %}
+                        <a class="link column-side-new article" data-chosen="" data-num="2{{forloop.counter}}">
+                            <div>
+                                <h6 class="content-heading">headline</h6>
+                                <p>sub headline</p>
+                                <div class="secondary-div">
+                                    <span>1d ago</span>
+                                    <div></div> 
+                                    <span>category</span>
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="column-section">
+            <h4 class="Featured-sub_heading">category</h4>
+            {% for placement in '01234'|make_list %}
+                {% if forloop.first %}
+                    <a class="main link article" data-chosen="" data-num="3{{forloop.counter}}">
+                        <div class="img">
+                            <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">headline</h6>
+                            <p>sub headline</p>
+                            <div class="secondary-div">
+                                <span>1d ago</span>
+                                <div></div> 
+                                <span>category</span>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    {% if placement.article.get_category_display == 'News' %}
+                        <a class="link column-side-new article" data-chosen="" data-num="3{{forloop.counter}}">
+                            <div>
+                                <h6 class="content-heading">headline</h6>
+                                <p>sub headline</p>
+                                <div class="secondary-div">
+                                    <span>1d ago</span>
+                                    <div></div> 
+                                    <span>category</span>
+                                </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+</section>

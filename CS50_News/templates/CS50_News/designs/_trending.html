@@ -1,0 +1,20 @@
+{% load change %}
+{% load static %}
+ 
+<section id="trending-section">
+    <h3 class="trending-section-heading">Section Title</h3>
+    <div>
+        {% for placement in '0123456789'|make_list %}
+            <div class="trend">
+                <a class="link article" data-chosen="" data-num="{{forloop.counter}}">
+                    <span>
+                        {{forloop.counter}}
+                    </span>
+                    <h6>
+                        article main headline
+                    </h6>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</section>

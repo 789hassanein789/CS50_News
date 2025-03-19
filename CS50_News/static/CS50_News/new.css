@@ -24,7 +24,10 @@
   margin: 0;
 }
 .heading .min-info .buttons {
+  display: flex;
+  align-items: center;
   font-size: 14px;
+  gap: 1rem;
   color: hsl(210, 2%, 34%);
 }
 .heading .min-info .buttons a {
@@ -73,7 +76,6 @@
   padding: 0.6rem 0.7rem;
   background-color: rgb(240, 240, 240);
   font-family: Arial, Helvetica, sans-serif;
-  margin-right: 1rem;
 }
 .new-content a:hover {
   background-color: hsl(210, 2%, 34%);
@@ -203,11 +205,31 @@ aside .content h6 {
   .main-img {
     width: 100%;
   }
+  .new-content {
+    margin: 1rem 2rem;
+    width: auto;
+  }
+  .heading {
+    margin: 1rem;
+    width: auto;
+  }
 }
 @media screen and (max-width: 768px) {
   aside .content {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, 1fr);
     gap: 0;
+  }
+}
+@media screen and (max-width: 480px) {
+  .heading {
+    margin: 1rem 0.5rem;
+  }
+  .heading h1 {
+    font-size: 1.75rem;
+  }
+  .heading .buttons {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }/*# sourceMappingURL=new.css.map */
