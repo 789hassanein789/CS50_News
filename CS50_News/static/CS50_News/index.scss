@@ -2,12 +2,33 @@ $opacity: 0.8;
 $secondary: hsl(210, 2%, 34%);
 $hover: hsl(0, 0%, 96%);
 
+:root {
+    --page-background: #fff;
+    --elements-background:#fff;
+    --pg-border: hsl(210, 9%, 91%);
+    --page-text: #121212;
+    --page-secondary: hsl(210, 2%, 34%);
+    --icon-color: #000;
+    --bg-hover: #f4f4f4;
+    --opacity: 0.8;
+}
+
+.dark-mode {
+    --page-background: #272727;
+    --elements-background:#424242;
+    --pg-border: hsla(0, 0%, 100%, 0.1);
+    --page-text: #dee2e6;
+    --page-secondary: hsl(223, 5%, 70%);
+    --icon-color: #727272;
+    --bg-hover: #393939;
+    --opacity: 0.5;
+}
 
 @mixin new-hover {
     cursor: pointer;
     &:hover {
         img {
-            opacity: $opacity;
+            opacity: var(--opacity);
         }
         h6 {
             text-decoration: underline;
@@ -31,13 +52,18 @@ $hover: hsl(0, 0%, 96%);
     margin: 1rem 0;
     height: $bold;
     width: 100%;
-    background-color: $secondary;
+    background-color: var(--page-secondary);
 }
 
 @mixin border {
     margin-bottom: .5rem;
     padding-bottom: .5rem;
-    border-bottom: 1px solid hsl(210, 9%, 91%);
+    border-bottom: 1px solid var(--pg-border);
+}
+
+body {
+    color: var(--page-text);
+    background-color: var(--page-background)
 }
 
 #category-title {
@@ -53,7 +79,7 @@ section {
 }
 
 .link {
-    color: black;
+    color: inherit;
     text-decoration: none;
 }
 
@@ -88,7 +114,7 @@ section {
         .side-new-image-div {
             position: relative;
             float: left;
-            background-color: white;
+            background-color: inherit;
             flex-basis: 25%;
             aspect-ratio: 1/1;
             margin-right: 1rem;
@@ -112,13 +138,13 @@ section {
     display: flex;
     gap: 4px;
     align-items: center;
-    color: $secondary;
-    font-size: 10px;
+    color: inherit;
+    font-size: .7em;
     font-weight: 300;
     white-space: nowrap;
 
     div {
-        background-color: $secondary;
+        background-color: var(--page-text);
         height: 1rem;
         width: 1px;
         margin: auto 2px;
@@ -128,7 +154,7 @@ section {
 .section-seperator {
     margin: 1rem 0;
     height: 3px;
-    background-color: black;
+    background-color: inherit;
 }
 
 .content-heading {
@@ -152,7 +178,6 @@ section {
         @include new-hover;
 
         .new-image {
-            background-color: white;
             width: 100%;
 
             img {
@@ -205,7 +230,7 @@ section {
 }
 
 
-#trending-section {
+#trending-section, #trending-section-design {
     .trending-section-heading {
         @include section-heading(hsl(204, 86%, 57%));
     }
@@ -224,7 +249,7 @@ section {
             }
             span {
                 font-size: 2.5rem;
-                color: $secondary;
+                color: var(--page-secondary);
             }
         }
     }
@@ -236,7 +261,7 @@ section {
 }
 
 .Featured-sub_heading {
-    @include section-heading(black)
+    @include section-heading(var(--page-text))
 }
 
 .Featured {
@@ -260,19 +285,23 @@ section {
             }
         }
         h6 {
-            font-size: 1.25rem;
+            font-size: 1.25em;
         }
         p {
-            font-size: .9rem;
+            font-size: .9em;
         }
     }
     .column-side-new:last-child {
         border-bottom: none;
     }
+    h6 {
+        font-size: 1em;
+    }
+    
 }
 
-#stories-section {
-    .stories-section-heading {
+#more-section, #more-section-design {
+    .more-section-heading {
         @include section-heading(black);
     }
     & > div {
@@ -282,8 +311,10 @@ section {
 
         .middle {
             width: calc(50% - ((24px* 2) / 3));
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
             
-
             .main {
                 .img {
                     width: 100%;
@@ -296,7 +327,7 @@ section {
                 }
                 h6 {
                     margin: 1rem 0;
-                    font-size: 1.5rem;
+                    font-size: 1.5em;
                     font-weight: 700;
                 }
             }
@@ -304,15 +335,20 @@ section {
         .column-side-new {
             .img {
                 flex: none;
-                width: 125px;
+                width: 50%;
                 aspect-ratio: 16 / 9;
             }
         }
         .side {
             width: calc(25% - ((24px * 2) / 3));
+            display: flex;
+            flex-direction: column;
         }
         .column-side-new:last-child {
             border: none;
+        }
+        .main {
+            @include border;
         }
     }
 }
@@ -345,7 +381,7 @@ section {
 }
 #body {
     .carousel-caption {
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: rgba(0, 0, 0, .5);
         position: absolute;
         bottom: 0;
         left: 0;
@@ -354,7 +390,7 @@ section {
     
 }
 
-#scroll-section {
+#scroll-section, #scroll-section-design {
     margin-right: 0;
     margin-bottom: 1rem;
 }
@@ -367,7 +403,7 @@ section {
         height: 35px;
         width: 35px;
         &:hover {
-            background-color: $hover;
+            background-color: var(--bg-hover);
         }
     }
 }
@@ -415,12 +451,12 @@ section {
         position: relative;
 
         h6 {
-            font-size: 1.70rem;
+            font-size: 1.7em;
         }
     }
 }
 
-#hero-section {
+#hero-section, #hero-section-design {
     & > div {
         grid-template-columns: 75% 1fr;
         gap: .5rem;
@@ -451,12 +487,34 @@ section {
     }
 }
 
+#body .carousel .carousel-caption {
+    p, h5 {
+        color: white;
+    }
+}
+
+#body {
+    h6, p {
+        color: inherit;
+    }
+}
+
+.article {
+    color: inherit;
+    text-decoration: none;
+    @include new-hover;
+}
+
+.d-none {
+    display: none !important; 
+}
+
 @media screen and (max-width: 1024px) {
     #news-section {
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(4, 1fr);
     }
-    #hero-section > div {
+    #hero-section, #hero-section-design > div {
         grid-template-columns: 1fr;
     }
 }
@@ -477,7 +535,7 @@ section {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
     }
-    #stories-section {
+    #more-section {
         & > div {
             .middle {
                 width: 100%;
@@ -550,7 +608,7 @@ section {
     .Featured {
         grid-template-columns: 1fr;
     }
-    #hero-section .side-img-article {
+    #hero-section, #hero-section-design .side-img-article {
         flex-direction: column-reverse;
 
         & > div {

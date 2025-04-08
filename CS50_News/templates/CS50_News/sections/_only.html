@@ -1,12 +1,12 @@
 {% load change %}
 
-<section class="only-section">
+<section class="only-section" id="only-section">
     {% if section.title %}
         <h3 class="only-section-heading">{{section.title}}</h3>
     {% endif %}
     <div class="only-div">
     {% for placement in section.articles.all %}
-        <a class="tn link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+        <a class="article tn link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
             <div class="img">
                 <img src="{{placement.article.image.url}}" alt="">
             </div>
@@ -25,4 +25,3 @@
 </section>
 
 <div class="bold-seperator"></div>
-

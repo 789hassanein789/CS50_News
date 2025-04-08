@@ -1,13 +1,15 @@
 {% load change %}
 
-<section class="featured-section">
-    <h3 class="Featured-section-heading">Featured Sections</h3>
+<section class="featured-section" id="featured-section">
+    {% if section.title %}
+        <h3 class="Featured-section-heading">{{section.title}}</h3>
+    {% endif %}
     <div class="Featured">
-        <div class="column-section science">
-            <h4 class="Featured-sub_heading">Science</h4>
-            {% for placement in section.articles.all %}
+        <div class="column-section">
+            {% for placement in section.articles.all|slice:":4" %}
                 {% if forloop.first %}
-                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="main link">
+                    <h4 class="Featured-sub_heading">{{placement.article.get_category_display}}</h4>
+                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article main link">
                         <div class="img">
                             <img src="{{placement.article.image.url}}" alt="">
                         </div>
@@ -17,137 +19,89 @@
                             <div class="secondary-div">
                                 <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{placement.article.get_category_display}}</span>
+                                <span>{{placement.article.get_sub_category_display}}</span>
                             </div>
                         </div>
                     </a>
                 {% else %}
-                    {% if placement.article.get_category_display == 'News' %}
-                        <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="link column-side-new">
+                        <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article link column-side-new">
                             <div>
                                 <h6>{{placement.article.headline}}</h6>
                                 <div class="secondary-div">
                                     <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
                                     <div></div>
-                                    <span>{{placement.article.category.all.0.get_category_display}}</span>
+                                    <span>{{placement.article.get_sub_category_display}}</span>
                                 </div>
                             </div>
                         </a>
-                    {% endif %}
                 {% endif %}
             {% endfor %}
         </div>
-        <div class="column-section Travel">
-            <h4 class="Featured-sub_heading">Travel</h4>
-            {% for placement in section.articles.all %}
+        <div class="column-section">
+            {% for placement in section.articles.all|slice:"4:8" %}
                 {% if forloop.first %}
-                    <div class="main">
-                        <a class="link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                            <div class="img">
-                                <img src="{{placement.article.image.url}}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">{{placement.article.headline}}</h6>
-                            </div>
-                        </a>
-                    </div>
-                {% else %}
-                    <a class="link column-side-new" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                        <div>
-                            <h6>{{placement.article.headline}}/h6>
+                    <h4 class="Featured-sub_heading">{{placement.article.get_category_display}}</h4>
+                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article main link">
+                        <div class="img">
+                            <img src="{{placement.article.image.url}}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">{{placement.article.headline}}</h6>
+                            <p>{{placement.article.sub_headline}}</p>
                             <div class="secondary-div">
                                 <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{placement.article.category.all.0.get_category_display}}</span>
+                                <span>{{placement.article.get_sub_category_display}}</span>
                             </div>
                         </div>
                     </a>
+                {% else %}
+                        <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article link column-side-new">
+                            <div>
+                                <h6>{{placement.article.headline}}</h6>
+                                <div class="secondary-div">
+                                    <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                                    <div></div>
+                                    <span>{{placement.article.get_sub_category_display}}</span>
+                                </div>
+                            </div>
+                        </a>
                 {% endif %}
             {% endfor %}
         </div>
-        <div class="column-section style">
-            <h4 class="Featured-sub_heading">Style</h4>
-            {% for placement in section.articles.all %}
+        <div class="column-section">
+            {% for placement in section.articles.all|slice:"8:" %}
                 {% if forloop.first %}
-                    <div class="main">
-                        <a class="link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                            <div class="img">
-                                <img src="{{placement.article.image.url}}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">{{placement.article.headline}}</h6>
-                            </div>
-                        </a>
-                    </div>
-                {% else %}
-                    <a class="link column-side-new" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                        <div>
-                            <h6>{{placement.article.headline}}/h6>
+                    <h4 class="Featured-sub_heading">{{placement.article.get_category_display}}</h4>
+                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article main link">
+                        <div class="img">
+                            <img src="{{placement.article.image.url}}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">{{placement.article.headline}}</h6>
+                            <p>{{placement.article.sub_headline}}</p>
                             <div class="secondary-div">
                                 <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{placement.article.category.all.0.get_category_display}}</span>
+                                <span>{{placement.article.get_sub_category_display}}</span>
                             </div>
                         </div>
                     </a>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="column-section Sport">
-            <h4 class="Featured-sub_heading">Sport</h4>
-            {% for placement in section.articles.all %}
-                {% if forloop.first %}
-                    <div class="main">
-                        <a class="link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                            <div class="img">
-                                <img src="{{placement.article.image.url}}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">{{placement.article.headline}}</h6>
+                {% else %}
+                        <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article link column-side-new">
+                            <div>
+                                <h6>{{placement.article.headline}}</h6>
+                                <div class="secondary-div">
+                                    <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                                    <div></div>
+                                    <span>{{placement.article.get_sub_category_display}}</span>
+                                </div>
                             </div>
                         </a>
-                    </div>
-                {% else %}
-                    <a class="link column-side-new" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                        <div>
-                            <h6>{{placement.article.headline}}/h6>
-                            <div class="secondary-div">
-                                <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
-                                <div></div>
-                                <span>{{placement.article.category.all.0.get_category_display}}</span>
-                            </div>
-                        </div>
-                    </a>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="column-section Travel">
-            <h4 class="Featured-sub_heading">Travel</h4>
-            {% for placement in section.articles.all %}
-                {% if forloop.first %}
-                    <div class="main">
-                        <a class="link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                            <div class="img">
-                                <img src="{{placement.article.image.url}}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">{{placement.article.headline}}</h6>
-                            </div>
-                        </a>
-                    </div>
-                {% else %}
-                    <a class="link column-side-new" href="">
-                        <div>
-                            <h6>{{placement.article.headline}}/h6>
-                            <div class="secondary-div">
-                                <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
-                                <div></div>
-                                <span>{{placement.article.category.all.0.get_category_display}}</span>
-                            </div>
-                        </div>
-                    </a>
                 {% endif %}
             {% endfor %}
         </div>
     </div>
 </section>
+
+<div class="light-seperator"></div>

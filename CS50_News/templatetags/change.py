@@ -16,5 +16,9 @@ def timeformat(value):
             return f"{value[:i]}&nbspago"
     return f"{value}&nbspago"
 
+def create_list(string):
+    return string.split()
+
 register.filter("change", change)
 register.filter("timeformat", timeformat)
+register.filter("create_list", create_list)

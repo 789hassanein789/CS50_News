@@ -1,3 +1,25 @@
+:root {
+  --page-background: #fff;
+  --elements-background:#fff;
+  --pg-border: #e5e5e5;
+  --page-text: hsl(0, 0%, 0%);
+  --page-secondary: #505050;
+  --icon-color: #000;
+  --bg-hover: #f4f4f4;
+  --opacity: 0.8;
+}
+
+.dark-mode {
+  --page-background: #272727;
+  --elements-background:#424242;
+  --pg-border: hsla(0, 0%, 100%, 0.1);
+  --page-text: hsl(0, 0%, 100%);
+  --page-secondary: #aeb0b5;
+  --icon-color: #727272;
+  --bg-hover: #393939;
+  --opacity: 0.5;
+}
+
 footer {
   display: grid;
   grid-template-columns: 6fr 2fr;
@@ -43,7 +65,7 @@ footer {
 }
 #body .footer-link:hover {
   text-decoration: underline;
-  color: black;
+  color: var(--page-text);
 }
 
 .footer-main {
@@ -85,7 +107,7 @@ footer {
 }
 
 .footer-brand {
-  color: black;
+  color: var(--page-text);
   text-decoration: none;
   font-size: 2.5rem;
   font-weight: 600;

@@ -78,10 +78,13 @@ def logout_view(request):
 
 @secure_admin_login
 def admin_view(request):
+    sections = Page.objects.get(name="Home").sections.prefetch_related("articles__article")
+    for section in sections:
+        section.include = f"CS50_News/designs/_{section_names[section.name]}.html"
     return render(request, "CS50_News/admin.html", {
         "news": New.objects.filter(auther=request.user).order_by("-timestamp"),
         "users": User.objects.all(),
-        "sections": Page.objects.get(name="Home").sections.prefetch_related("articles__article")
+        "sections": sections
     })
 
 @secure_admin_login
@@ -140,7 +143,7 @@ def add_new(request):
             new.save()
         except:
            return HttpResponse({"could not create the article"}, status=400)
-        return HttpResponseRedirect(reverse("staff"))
+        return HttpResponseRedirect(reverse("admin"))
     suggestions = Tag.objects.all().annotate(num_tags=Count("new")).order_by("-num_tags")
     return render(request, "CS50_News/editor.html", {
         "categories": New.CATEGORYS.values(),
@@ -214,7 +217,7 @@ def edit_new(request, slug=None):
             new.save()
         except:
            return HttpResponse({"could not Edit the article"}, status=400)
-        return HttpResponseRedirect(reverse("staff"))
+        return HttpResponseRedirect(reverse("admin"))
     new = New.objects.get(slug=slug)
     suggestions = Tag.objects.all().annotate(num_tags=Count("new")).order_by("-num_tags")
     return render(request, "CS50_News/editor.html", {
@@ -389,12 +392,39 @@ def admin_pop(request):
             p.save()
     return HttpResponse(status=200)
 
+@secure_admin_login
 def page(request, cat=None, sub=None):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        section_title = None
+        if data['section-title']:
+            section_title = data['section-title']
+            data = json.loads(request.body)
+        section_title = None
+        if data['section-title']:
+            section_title = data['section-title']
+        if not cat:
+            section = Section.objects.get(page=Page.objects.get(slug="Home"), id=data['section-id'])
+        elif cat and not sub:
+            section = Section.objects.get(page=Page.objects.get(slug=cat), id=data['section-id'])
+        else:
+            section = Section.objects.get(page=Page.objects.get(slug=sub), id=data['section-id'])
+        i = 0
+        for id in data["ids"]:
+            try:
+                placement = Placement.objects.get(section=section, position=i)
+                placement.article=New.objects.get(id=int(id))
+                placement.save()
+            except:
+                Placement.objects.create(article=New.objects.get(id=int(id)), section=section, position=i)
+            i += 1
+        return HttpResponse(status=200)
     if request.method == "POST":
         data = json.loads(request.body)
         section_title = None
         if data['section-title']:
             section_title = data['section-title']
+        
         for key, value in section_names.items():
             if value == data['section-name']:
                 name = key
@@ -409,7 +439,7 @@ def page(request, cat=None, sub=None):
         for id in data["ids"]:
             Placement.objects.create(article=New.objects.get(id=int(id)), section=new_section, position=i)
             i += 1
-        return HttpResponse(status=200)
+        return HttpResponseRedirect(reverse("page"))
     sub_categories = None
     parent = None
     if not cat:
@@ -426,6 +456,10 @@ def page(request, cat=None, sub=None):
         sections = page.sections.prefetch_related("articles__article")
         sub_categories = New.SUB_CATEGORIES[cat[0]]
         parent = cat
+    
+    for section in sections:
+        section.include = f"CS50_News/designs/_{section_names[section.name]}.html"
+        section.include_name = f"CS50_News/sections/_{section_names[section.name]}.html"
     q = request.GET.get("q")
     if (q):
         q = q.capitalize().strip()
@@ -435,13 +469,70 @@ def page(request, cat=None, sub=None):
     Paginators = Paginator(news, 10)
     pagenumber = request.GET.get("p")
     all_news = Paginators.get_page(pagenumber)
-    for section in sections:
-        section.include = f"CS50_News/designs/_{section_names[section.name]}.html"
-        section.include_name = f"CS50_News/sections/_{section_names[section.name]}.html"
     return render(request, "CS50_News/pages.html", {
         "sections": sections,
         "subs": sub_categories,
         "parent": parent,
-        "all": [f"CS50_News/designs/_{name}.html" for name in section_names.values()],
+        "all": [{"name": name, "include": f"CS50_News/designs/_{name}.html"}  for name in section_names.values()],
         "news": all_news,
     })
+@secure_admin_login
+def delete_section(request, id):
+    if request.method == "POST":
+        try:
+            section = Section.objects.get(id=id)
+            section.delete()
+        except:
+            return HttpResponse(status=400)
+        return HttpResponseRedirect(reverse('page'))
+    return HttpResponse(status=405)
+
+def select_section(request):
+    if request.method == "GET":
+        return render(request, "CS50_News/pages.html")
+    return HttpResponse(status=405)
+
+def placements(request, name, cat="Home", sub=None):
+    dict_name = list(section_names.keys())[list(section_names.values()).index(name)]
+    if sub:
+        cat = sub
+    if request.method == "POST":
+        if request.POST.get("method") == "put":
+            edit_section = Section.objects.get(page=Page.objects.get(name=cat), name=dict_name, position=request.POST.get("position"))
+            if request.POST.get('title'):
+                edit_section.title = request.POST.get('title')
+            i = 0
+            edit_section.save()
+            while request.POST.get(str(i)):
+                placement = Placement.objects.get(section=edit_section, position=i)
+                placement.article=New.objects.get(id=request.POST.get(str(i)))
+                placement.save()
+                i += 1
+            return HttpResponseRedirect(reverse("page"))
+        else:
+            new_section = Section(page=Page.objects.get(slug=cat), name=dict_name, title=request.POST.get("title"), position=request.POST.get("position"))
+            new_section.save()
+            i = 0
+            while request.POST.get(str(i)):
+                Placement.objects.create(article=New.objects.get(id=request.POST.get(str(i))), section=new_section, position=i)
+                i += 1
+            return HttpResponseRedirect(reverse("page"))
+    q = request.GET.get("q")
+    if (q):
+        q = q.capitalize().strip()
+        news = New.objects.filter(headline__contains=q)
+    else:
+        news = New.objects.all()
+        Paginators = Paginator(news, 10)
+        pagenumber = request.GET.get("p")
+        all_news = Paginators.get_page(pagenumber)
+        if request.GET.get("edit"):
+            section = Section.objects.get(page=Page.objects.get(name=cat), name=dict_name, position=request.GET.get("position"))
+            section.include = f"CS50_News/designs/_{name}.html"
+        else:
+            section = {"include": f"CS50_News/designs/_{name}.html"}
+        return render(request, "CS50_News/placements.html", {
+            "section": section,
+            "news": all_news,
+    })
+    

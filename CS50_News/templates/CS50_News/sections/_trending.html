@@ -1,11 +1,13 @@
 {% load change %}
 
-<section class="trending">
-    <h3 class="trending-section-heading">Most read</h3>
+<section class="trending" id="trending-section">
+    {% if section.title %}
+        <h3 class="trending-section-heading">{{section.title}}</h3>
+    {% endif %}
     <div>
         {% for placement in section.articles.all %}
             <div class="trend">
-                <a class="link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                <a class="article link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
                     <span>
                         {{forloop.counter}}
                     </span>
@@ -17,3 +19,5 @@
         {% endfor %}
     </div>
 </section>
+
+<div class="light-seperator"></div>

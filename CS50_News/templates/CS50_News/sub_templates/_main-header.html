@@ -21,8 +21,13 @@
         <a class="navbar-brand" id="brand" href="{% url 'index' %}" style="font-family: 'Pirata One', system-ui;">CS50 News</a>
         <div id="navbar-content">
             {% if user.is_staff %}
+                <div class="icon-div" id="page-div">
+                    <a class="icon-btn" href="{% url 'page' %}">
+                        <i class="fa-solid fa-pen"></i>                    
+                    </a>
+                </div>
                 <div class="icon-div" id="admin-div">
-                    <a class="icon-btn" href="{% url 'staff' %}">
+                    <a class="icon-btn" href="{% url 'admin' %}">
                         <i class="fa-solid fa-user-tie"></i>                    
                     </a>
                 </div>

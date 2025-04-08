@@ -1,12 +1,14 @@
 {% load change %}
 
-<section class="stories-section">
-    <h3 class="stories-section-heading">MORE TOP STORIES</h3>
+<section class="more-section" id="more-section">
+    {% if section.title %}
+        <h3 class="more-section-heading">{{section.title}}</h3>
+    {% endif %}
     <div>
         <div class="side column-section">
-            {% for placement in section.articles.all %}
+            {% for placement in section.articles.all|slice:":4" %}
                 {% if forloop.first %}
-                    <a class="main link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                    <a class="article main link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
                         <div class="img">
                             <img src="{{placement.article.image.url}}" alt="">
                         </div>
@@ -21,7 +23,7 @@
                         </div>
                     </a>
                 {% else %}
-                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="link column-side-new">
+                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article link column-side-new">
                         <div class="img">
                             <img src="{{placement.article.image.url}}" alt="">
                         </div>
@@ -30,7 +32,7 @@
                             <div class="secondary-div">
                                 <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{placement.article.category.all.0.get_category_display}}</span>
+                                <span>{{placement.article.get_sub_category_display}}</span>
                             </div>
                         </div>
                     </a>
@@ -38,9 +40,9 @@
             {% endfor %}
         </div>
         <div class="middle">
-            {% for placement in section.articles.all %}
+            {% for placement in section.articles.all|slice:"4:6" %}
                 {% if forloop.first %}
-                    <a class="main link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                    <a class="article main link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
                         <div class="img">
                             <img src="{{placement.article.image.url}}" alt="">
                         </div>
@@ -50,12 +52,12 @@
                             <div class="secondary-div">
                                 <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
                                 <div></div>
-                                <span>{{placement.article.sub_category}}</span>
+                                <span>{{placement.article.get_sub_category_display}}</span>
                             </div>
                         </div>
                     </a>
                 {% else %}
-                    <a class="link column-side-new" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                    <a class="article link column-side-new" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
                         <div class="img">
                             <img src="{{placement.article.image.url}}" alt="">
                         </div>
@@ -72,9 +74,9 @@
             {% endfor %}
         </div>
         <div class="side column-section">
-            {% for placement in section.articles.all %}
+            {% for placement in section.articles.all|slice:"6:" %}
                 {% if forloop.first %}
-                    <a class="main link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                    <a class="article main link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
                         <div class="img">
                             <img src="{{placement.article.image.url}}" alt="">
                         </div>
@@ -89,7 +91,7 @@
                         </div>
                     </a>
                 {% else %}
-                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="link column-side-placement.article">
+                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article link column-side-new">
                         <div>
                             <h6>{{placement.article.headline}}</h6>
                             <div class="secondary-div">
@@ -104,3 +106,5 @@
         </div>
     </div>
 </section>
+
+<div class="light-seperator"></div>

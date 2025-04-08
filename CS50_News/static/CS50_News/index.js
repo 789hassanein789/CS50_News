@@ -298,64 +298,65 @@ if (auth) {
     settings()
 }
 
-let holding = false
+if (scrollDiv) {
+    let holding = false
 
-scrollDiv && scrollDiv.addEventListener('mousedown', (e) => {
-    scrollDiv.dataset.mousePosition = e.clientX;
-    holding = false
-})
-
-window.addEventListener('mouseup', (e) => {
-    scrollDiv.dataset.mousePosition = "0";
-    scrollDiv.dataset.percentage = scrollDiv.dataset.new
-})
-
-scrollDiv && scrollDiv.addEventListener('mousemove', (e) => {
-    if (scrollDiv.dataset.mousePosition === "0") return
-
-    holding = true
-
-    const delta = parseFloat(scrollDiv.dataset.mousePosition) - e.clientX;
-    const maxDelta = window.innerWidth / 2
-
-    let percentage = (delta / maxDelta) * -100,
-          newPercentage = parseFloat(scrollDiv.dataset.percentage) + percentage
-    newPercentage = Math.min(newPercentage, 0)
-    newPercentage = Math.max(newPercentage, -100)
-
-    scrollDiv.dataset.new = newPercentage
-
-    scrollDiv.animate({
-        transform: `translate(${newPercentage}%, 0%)`
-    }, {duration: 1200, fill: 'forwards'})
-})
-
-scrollRightBtn && scrollRightBtn.addEventListener('click', () => {
-    scrollDiv.dataset.percentage = "-100"
-    scrollDiv.animate({
-        transform: `translate(${scrollDiv.dataset.percentage}%, 0%)`
-    }, {duration: 500, fill: 'forwards'})
-})
-
-scrollLeftBtn && scrollLeftBtn.addEventListener('click', () => {
-    scrollDiv.dataset.percentage = "0"
-    scrollDiv.animate({
-        transform: `translate(${scrollDiv.dataset.percentage}%, 0%)`
-    }, {duration: 500, fill: 'forwards'})
-})
-
-scrollLinks && scrollLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        if (holding) {
-            e.preventDefault()
-        }
+    scrollDiv && scrollDiv.addEventListener('mousedown', (e) => {
+        scrollDiv.dataset.mousePosition = e.clientX;
+        holding = false
     })
-})
+
+    window.addEventListener('mouseup', (e) => {
+        scrollDiv.dataset.mousePosition = "0";
+        scrollDiv.dataset.percentage = scrollDiv.dataset.new
+    })
+
+    scrollDiv && scrollDiv.addEventListener('mousemove', (e) => {
+        if (scrollDiv.dataset.mousePosition === "0") return
+
+        holding = true
+
+        const delta = parseFloat(scrollDiv.dataset.mousePosition) - e.clientX;
+        const maxDelta = window.innerWidth / 2
+
+        let percentage = (delta / maxDelta) * -100,
+            newPercentage = parseFloat(scrollDiv.dataset.percentage) + percentage
+        newPercentage = Math.min(newPercentage, 0)
+        newPercentage = Math.max(newPercentage, -100)
+
+        scrollDiv.dataset.new = newPercentage
+
+        scrollDiv.animate({
+            transform: `translate(${newPercentage}%, 0%)`
+        }, {duration: 1200, fill: 'forwards'})
+    })
+
+    scrollRightBtn && scrollRightBtn.addEventListener('click', () => {
+        scrollDiv.dataset.percentage = "-100"
+        scrollDiv.animate({
+            transform: `translate(${scrollDiv.dataset.percentage}%, 0%)`
+        }, {duration: 500, fill: 'forwards'})
+    })
+
+    scrollLeftBtn && scrollLeftBtn.addEventListener('click', () => {
+        scrollDiv.dataset.percentage = "0"
+        scrollDiv.animate({
+            transform: `translate(${scrollDiv.dataset.percentage}%, 0%)`
+        }, {duration: 500, fill: 'forwards'})
+    })
+
+    scrollLinks && scrollLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            if (holding) {
+                e.preventDefault()
+            }
+        })
+    })
+}
 
 function enableDarkMode() {
     document.body.classList.add('dark-mode');
     document.body.setAttribute('data-bs-theme', 'dark');
-    
     localStorage.setItem('darkmode', 'enabled');
 }
 

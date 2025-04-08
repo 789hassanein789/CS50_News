@@ -1,8 +1,28 @@
-$opacity: 0.8;
+:root {
+    --page-background: #fff;
+    --elements-background:#fff;
+    --pg-border: #e5e5e5;
+    --page-text: #121212;
+    --page-secondary: #505050;
+    --icon-color: #000;
+    --bg-hover: #f4f4f4;
+    --opacity: 0.8;
+}
+
+.dark-mode {
+    --page-background: #272727;
+    --elements-background:#424242;
+    --pg-border: hsla(0, 0%, 100%, 0.1);
+    --page-text: #dee2e6;
+    --page-secondary: #aeb0b5;
+    --icon-color: #727272;
+    --bg-hover: #393939;
+    --opacity: 0.5;
+}
 
 #admin-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1.25fr .75fr;
     margin: 0 1rem;
 }
 
@@ -13,24 +33,30 @@ $opacity: 0.8;
     grid-auto-columns: 270px;
     gap: .75rem;
     user-select: none;
-} 
+}
 
 .create {
-    width: 270px;
+    width: 100%;
     aspect-ratio: 16 / 9;
-    border: 2px solid rgb(224, 224, 224);
+    border: 2px solid var(--bg-hover);
     border-radius: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: .3s ease-in-out;
     font-size: 3rem;
-    color: rgb(224, 224, 224);
+    color: var(--bg-hover);
+    cursor: pointer;
 
     &:hover {
-        border-color: rgb(190, 190, 190);
-        color: rgb(190, 190, 190);
+        border-color: var(--page-secondary);
+        color: var(--page-secondary);
     }
+}
+
+#main-page .create {
+    width: calc(100% - 2rem);
+    margin: 0 1rem;
 }
 
 .created {
@@ -39,7 +65,7 @@ $opacity: 0.8;
 
     &:hover {
         img {
-            opacity: $opacity;
+            opacity: var(--opacity);
         }
         h6 {
             text-decoration: underline;
@@ -83,85 +109,109 @@ $opacity: 0.8;
     }
 }
 
-#distribution-container {
-    
-}
-
 .buttons {
-    display: flex;
     gap: 1rem;
     justify-content: left;
     margin: 1rem;
 }
 
 #pages-body {
-    display: grid;
-    
+    overflow-x: hidden;
 }
 
 #main-page {
     .page-layout {
-        margin: 1rem;
-        .create {
-            width: 100%;
+        .buttons {
+            display: flex;
+            a, button {
+                background: none;
+                border: 3px solid var(--page-text);
+                grid-template-columns: auto 1fr;
+                align-items: center;
+                justify-items: left;
+                display: grid;
+                padding: 12px 13px;
+                gap: .5rem;
+                width: 100px;
+
+                &:hover {
+                    background-color: var(--page-text);
+                    color: var(--elements-background);
+                }
+            }
+        }
+    }
+    .article {
+        cursor: default;
+        &:hover {
+            img {
+                opacity: 1;
+            }
+            h6 {
+                text-decoration: none;
+            }
         }
     }
 }
 
 
-#edit-page > div {
+#edit-page > div:last-child {
     display: grid;
-    grid-template-columns: 50% 50%;
-    .section-container {
-        position: relative;
-        .select-btn {
-            position: absolute;
-            left: 12px;
-            bottom: 12px;
-            display: none;
-            button {
-                background-color: white;
-                color: black;
-                width: 70px;
-                height: 30px;
-                border-radius: 5px;
-                border: 1px solid gray;
-                transition: .3s ease-in-out;
-                &:hover {
-                    background-color: black;
-                    color: white;
+    grid-template-columns: repeat(2, 50%);
+    box-sizing: border-box;
+    font-size: .75rem;
+        .section-container {
+            position: relative;
+            .select-btn {
+                position: absolute;
+                left: 12px;
+                bottom: 12px;
+                display: none;
+                a {
+                    background-color: var(--elements-background);
+                    color: var(--page-text);
+                    width: 70px;
+                    height: 30px;
+                    border-radius: 5px;
+                    border: 1px solid var(--page-secondary);
+                    transition: .3s ease-in-out;
+                    padding: .5rem 1rem;
+                    &:hover {
+                        background-color: var(--page-text);
+                        color: var(--elements-background);
+                    }
                 }
             }
-        }
-        &:hover {
-            .select-btn {
-                display: block;
+            &:hover {
+                .select-btn {
+                    display: block;
+                }
+            }
+            #carousel-section-design {
+            position: relative;
+            grid-template-columns: 1fr;
+            .side-div .side-new .side-new-image-div  {
+                flex-basis: 35%;
+            }
+            .buttons {
+                position: absolute;
+                left: 24px;
+                bottom: 24px;
             }
         }
-        #carousel-section {
-        position: relative;
-        grid-template-columns: 1fr;
-        .side-div .side-new .side-new-image-div  {
-            flex-basis: 35%;
+        .carousel-div {
+            margin-bottom: 1rem;
         }
-        .buttons {
-            position: absolute;
-            left: 24px;
-            bottom: 24px;
+        .side-div {
+            margin: 0;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+        #scroll-section {
+            overflow: hidden;
         }
     }
-    .carousel-div {
-        margin-bottom: 1rem;
-    }
-    .side-div {
-        margin: 0;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-    }
-    #scroll-section {
-        overflow: hidden;
-    }
-}}
+}
 
 #placements-page {
     & > div {
@@ -170,12 +220,13 @@ $opacity: 0.8;
         margin: 1rem;
     }
     .news-search {
-        border-right: 1px solid gray;
+        border-right: 1px solid var(--page-secondary);
     }
     #distribution-form {
-        .btn {
-            margin-left: 1rem;
-            margin-bottom: 1rem;
+        .distribution-form-submit-btn {
+            display: flex;
+            justify-content: end;
+            margin: 1rem;
         }
     }
 }
@@ -186,7 +237,7 @@ $opacity: 0.8;
     background: none;
     border: none;
     border-radius: 1.2rem;
-    color: black;
+    color: var(--page-text);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -204,6 +255,7 @@ $opacity: 0.8;
     background-color: transparent;
     border: none;
     border-bottom: 1px solid rgba(0, 0, 0, .15);
+    margin-bottom: .5rem;
 
     &::placeholder {
         font-size: 1.5rem;
@@ -211,5 +263,21 @@ $opacity: 0.8;
 
     &:focus-visible {
         outline: none;
+    }
+}
+
+#scroll-section-design {
+    overflow-x: hidden;
+}
+
+.carousel-item {
+    img {
+        aspect-ratio: 16 / 9;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    #edit-page > div:last-child {
+        grid-template-columns: 1fr;
     }
 }

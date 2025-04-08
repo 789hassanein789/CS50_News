@@ -13,7 +13,7 @@
                 +
             </a>
             {% for new in news %}
-                <a href="{% url 'new' cat=new.get_category_display slug=new.slug %}" class="created link" draggable="false">
+                <a href="{% url 'new' cat=new.get_category_display sub=new.get_sub_category_display slug=new.slug %}" class="created link" draggable="false">
                     <div class="img">
                         <img src="{{new.image}}" alt="" draggable="false">
                     </div>
@@ -29,28 +29,17 @@
                 </a>
             {% endfor %}
         </div>
-        <table>
-            <tr>
-                <th>User</th>
-                <th>Email</th>
-                <th>Admin</th>
-                <th>Active</th>
-                <th>Since</th>
-            </tr>
-            {% for user in users %}
-                <tr>
-                    <td>{{user.username}}</td>
-                    <td>{{user.email}}</td>
-                    <td>{{user.is_staff}}</td>
-                    <td>{{user.is_active}}</td>
-                    <td>{{user.date_joined}}</td>
-                </tr>
-            {% endfor %}
-        </table>
         <div id="distribution-container">
-            {% for section in sections %}
-                {% include section.include_name %}
-            {% endfor %}
+            <a href="{% url 'page' %}" class="link">
+                <div id="distribution-wrapper">
+                    <div id="title">
+
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
     <script src="{% static 'CS50_News/admin.js' %}"></script>

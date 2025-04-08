@@ -205,23 +205,6 @@ aside {
     }
 }
 
-
-.x-secondary-div {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    color: $secondary;
-    font-size: 12px;
-    font-weight: 300;
-    margin-bottom: 4px;
-    div {
-        background-color: $secondary;
-        height: 1rem;
-        width: 1px;
-        margin: auto 2px;
-    }
-}
-
 @media screen and (max-width: 1024px) {
 
 }

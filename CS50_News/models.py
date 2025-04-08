@@ -8,8 +8,6 @@ from taggit.managers import TaggableManager, TaggedItem
 # Create your models here.
 class User(AbstractUser):
     saved_articles = models.ManyToManyField("New")
-    validation_date = models.DateTimeField(null=True, blank=True)
-    otp_date = models.DateTimeField(null=True, blank=True)
     def __str__(self):
         return f"{self.username}"
     
@@ -111,7 +109,7 @@ class Section(models.Model):
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name="sections")
     name = models.CharField(max_length=100, choices=SECTIONS, null=True, blank=True)
     title = models.CharField(max_length=100, null=True, blank=True)
-    position = models.PositiveIntegerField(default=0)  # Order within the page
+    position = models.PositiveIntegerField(unique=True)  # Order within the page
 
     class Meta:
         ordering = ["position"]

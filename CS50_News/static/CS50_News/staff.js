@@ -1,58 +1,35 @@
 const distributionForm = document.querySelector('#distribution-form');
 const newsSearch = document.querySelector('.news-search');
-const links = document.querySelectorAll('.news-search .h-card');
-const createLink = document.querySelector('#main-page .create')
+const createLinks = document.querySelectorAll('.create')
 const editPage = document.querySelector('#edit-page')
+const mainPage = document.querySelector('#main-page')
 const pagesContainer = document.querySelector('#main-page')
 const selectBtns = document.querySelectorAll('.select-btn')
 const pages = document.querySelectorAll('.page')
 const placementsPage = document.querySelector('#placements-page')
 const backBtns = document.querySelectorAll('.back-btn')
 const placementsBtn = placementsPage.querySelector('.btn-success')
+const sectionEditBtns = document.querySelectorAll('.section-edit')
+const mainPageLinks = document.querySelectorAll('#main-page a')
+const selectLinks = document.querySelectorAll('.select-link')
 let placeholders;
+let darkMode = localStorage.getItem('darkmode');
 
-const full = new URLSearchParams(window.location.search)
-const page = full.get('page')
-
-if (page) {
-    show(page)
+if (darkMode === 'enabled') {
+    document.body.classList.add('dark-mode');
+    document.body.setAttribute('data-bs-theme', 'dark')
 }
 
-selectBtns.forEach(btn => {
-    btn.addEventListener('click', selectDesign)
+toggleBtn.addEventListener('click', () => {
+    if (darkMode === 'enabled') {
+        disableDarkMode()
+    }
+    else {
+        enableDarkMode()
+    }
+    darkMode = localStorage.getItem('darkmode')
 })
 
-createLink.addEventListener('click', () => {
-    show('edit-page')
-})
-
-links.forEach(link => {
-    link.addEventListener('click', () => {
-        const selected = document.querySelector(`#placements-page [data-num='${sessionStorage.getItem('selected-placement')}']`)
-        const img = selected.querySelector(`img`)
-        const h6 = selected.querySelector('h6')
-        const p = selected.querySelector('p')
-        const secondaryDiv = selected.querySelector('.secondary-div')
-        if (img) {
-            img.src = link.querySelector('img').src
-        }
-        if (h6) {
-            h6.textContent = link.querySelector('h4').textContent
-        }
-        if (p) {
-            p.textContent = link.querySelector('h6').textContent
-        }
-        if (secondaryDiv) {
-            const linkSecondaryDiv = link.querySelector('.x-secondary-div')
-            secondaryDiv.firstChild.textContent = linkSecondaryDiv.firstChild.textContent
-            secondaryDiv.lastChild.textContent = linkSecondaryDiv.lastChild.textContent        
-        }
-        selected.dataset.chosen = link.dataset.id
-        show('placements-page')
-    })
-})
-
-placementsBtn.addEventListener('click', addSection)
 
 backBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -67,6 +44,41 @@ backBtns.forEach(btn => {
         })
     })
 })
+
+mainPageLinks.forEach(article => {
+    article.removeAttribute('href')
+})
+
+createLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        if (link.dataset.num)
+        selectLinks.forEach(selectlink => {
+            selectlink.setAttribute('href', `${selectlink.getAttribute('href')}?position=${link.dataset.num}`)
+        })
+        show('edit-page')
+    })
+})
+
+function show(pageName) {
+    pages.forEach(page => {
+        page.classList.add('d-none')
+    })
+    const pageToSee = document.getElementById(pageName)
+    pageToSee.scroll(top)
+    pageToSee.classList.remove('d-none')
+}
+
+function enableDarkMode() {
+    document.body.classList.add('dark-mode');
+    document.body.setAttribute('data-bs-theme', 'dark');
+    localStorage.setItem('darkmode', 'enabled');
+}
+
+function disableDarkMode() {
+    document.body.classList.remove('dark-mode');
+    document.body.removeAttribute('data-bs-theme')
+    localStorage.setItem('darkmode', null);
+}
 
 function getCookie(name) {
     let cookieValue = null;
@@ -107,7 +119,7 @@ function addSection() {
         }) 
    })
    .then(res => {
-        if (res.status == 200) {
+        if (!res.errors) {
             console.log(res)
         }
         else {
@@ -119,42 +131,80 @@ function addSection() {
     })
 }
 
-function show(pageName) {
-    pages.forEach(page => {
-        page.classList.add('d-none')
+function editSection() {
+    let ids = []
+    placeholders.forEach(link => {
+        if (link.dataset.chosen !== '') {
+            ids.push(link.dataset.chosen)
+        }
+        else {
+            link.classList.add('is-invalid')
+        }
     })
-    const pageToSee = document.getElementById(pageName)
-    pageToSee.scroll(top)
-    pageToSee.classList.remove('d-none')
+    fetch('', {
+        method: 'PUT',
+        headers: {
+           'X-CSRFToken': getCookie('csrftoken'),
+        },
+        credentials: "same-origin",
+        body: JSON.stringify({
+            'ids': ids,
+            'section-id': sessionStorage.getItem('chosed-design'),
+            'section-title': new FormData(distributionForm).get('section-title')
+        }) 
+   })
+   .then(res => {
+        if (res.ok) {
+            window.location.reload()
+        }
+        else {
+            throw res
+        }
+   })
+   .catch((error) => {
+        console.log(error)
+    })
 }
 
-function selectDesign() {
-    show('placements-page')
-    const sectionName = this.previousElementSibling.id.replace('-section', '')
-    sessionStorage.setItem('chosed-design', sectionName)
-    distributionForm.innerHTML = this.parentElement.outerHTML
-    distributionForm.querySelector('.select-btn').remove()
-    console.log(sectionName)
-    const sectionTitle = distributionForm.querySelector(`section .${sectionName}-section-heading`)
-    console.log(sectionTitle)
-    if (sectionTitle) {
-        const newInput = document.createElement('input')
-        newInput.classList.add('t-input')
-        newInput.name = 'section-title'
-        newInput.placeholder = 'Section Title'
-        sectionTitle.replaceWith(newInput)
-    }
-    placeholders = document.querySelectorAll('#distribution-form .article')
-    placeholders.forEach(placeholder => {
-        placeholder.addEventListener('click', () => {
-            sessionStorage.setItem('selected-placement', placeholder.dataset.num)
+function editDesign(e) {
+    const section = e.target.parentElement.nextElementSibling
+    const sectionName = section.id.replace('-section', '')
+    sessionStorage.setItem('chosed-design', section.dataset.id)
+    distributionForm.innerHTML = editPage.querySelector(`#${sectionName}-section-design`).outerHTML
+    placeholders = document.querySelectorAll('#distribution-form .article');
+    preSelectedPlaceholders = section.querySelectorAll('.article');
+    for (let i = 0; i < placeholders.length; i++) {
+        if (preSelectedPlaceholders[i]) {
+            const img = placeholders[i].querySelector('img')
+            const h6 = placeholders[i].querySelector('h6')
+            const p = placeholders[i].querySelector('p')
+            const secondaryDiv = placeholders[i].querySelector('.secondary-div')
+            const linkSecondaryDiv = preSelectedPlaceholders[i].querySelector('.secondary-div')
+            if (img) {
+                img.src = preSelectedPlaceholders[i].querySelector('img').src
+            }
+            if (h6) {
+                h6.textContent = preSelectedPlaceholders[i].querySelector('h6').textContent
+            }
+            if (p) {
+                p.textContent = preSelectedPlaceholders[i].querySelector('p').textContent
+            }
+            if (secondaryDiv && linkSecondaryDiv) {
+                secondaryDiv.firstChild.textContent = linkSecondaryDiv.firstChild.textContent
+                secondaryDiv.lastChild.textContent = linkSecondaryDiv.lastChild.textContent        
+            }
+            placeholders[i].dataset.chosen = preSelectedPlaceholders[i].dataset.id
+        }
+        placeholders[i].addEventListener('click', () => {
+            sessionStorage.setItem('selected-placement', placeholders[i].dataset.num)
             show('search-page')
         })
-    })
-
+    }
+    placementsBtn.addEventListener('click', editSection)
+    show('placements-page')
 }
 
-const scrollBtns = editPage.querySelector('#scroll-heading .buttons')
+const scrollBtns = editPage.querySelector('#scroll-heading #scroll-buttons')
 const scrollDiv = editPage.querySelector('.scroll-div')
 const scrollRightBtn = editPage.querySelector('.scroll-right')
 const scrollLeftBtn = editPage.querySelector('.scroll-left')
@@ -213,3 +263,89 @@ scrollLinks && scrollLinks.forEach(link => {
         }
     })
 })
+
+const mainPageScrollBtns = mainPage.querySelector('#scroll-heading #scroll-buttons')
+const mainPageScrollDiv = mainPage.querySelector('.scroll-div')
+const mainPageScrollRightBtn = mainPage.querySelector('.scroll-right')
+const mainPageScrollLeftBtn = mainPage.querySelector('.scroll-left')
+const mainPageScrollLinks = mainPage.querySelectorAll('.scroll-div > a')
+
+let mainHolding = false
+
+mainPageScrollDiv && mainPageScrollDiv.addEventListener('mousedown', (e) => {
+    mainPageScrollDiv.dataset.mousePosition = e.clientX;
+    mainHolding = false
+})
+
+window.addEventListener('mouseup', (e) => {
+    mainPageScrollDiv.dataset.mousePosition = "0";
+    mainPageScrollDiv.dataset.percentage = mainPageScrollDiv.dataset.new
+})
+
+mainPageScrollDiv && mainPageScrollDiv.addEventListener('mousemove', (e) => {
+    if (mainPageScrollDiv.dataset.mousePosition === "0") return
+
+    mainHolding = true
+
+    const delta = parseFloat(mainPageScrollDiv.dataset.mousePosition) - e.clientX;
+    const maxDelta = window.innerWidth / 2
+
+    let percentage = (delta / maxDelta) * -100,
+          newPercentage = parseFloat(mainPageScrollDiv.dataset.percentage) + percentage
+    newPercentage = Math.min(newPercentage, 0)
+    newPercentage = Math.max(newPercentage, -100)
+
+    mainPageScrollDiv.dataset.new = newPercentage
+
+    mainPageScrollDiv.animate({
+        transform: `translate(${newPercentage}%, 0%)`
+    }, {duration: 1200, fill: 'forwards'})
+})
+
+mainPageScrollRightBtn && mainPageScrollRightBtn.addEventListener('click', () => {
+    mainPageScrollDiv.dataset.percentage = "-100"
+    mainPageScrollDiv.animate({
+        transform: `translate(${mainPageScrollDiv.dataset.percentage}%, 0%)`
+    }, {duration: 500, fill: 'forwards'})
+})
+
+mainPageScrollLeftBtn && mainPageScrollLeftBtn.addEventListener('click', () => {
+    mainPageScrollDiv.dataset.percentage = "0"
+    mainPageScrollDiv.animate({
+        transform: `translate(${mainPageScrollDiv.dataset.percentage}%, 0%)`
+    }, {duration: 500, fill: 'forwards'})
+})
+
+mainPageScrollLinks && mainPageScrollLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        if (mainHolding) {
+            e.preventDefault()
+        }
+    })
+})
+
+function deleteSection() {
+    fetch(`delete/`, {
+        method: 'POST',
+        headers: {
+           'X-CSRFToken': getCookie('csrftoken'),
+        },
+        credentials: "same-origin",
+        body: JSON.stringify({
+            'ids': ids,
+            'section-name': sessionStorage.getItem('chosed-design'),
+            'section-title': new FormData(distributionForm).get('section-title')
+        }) 
+   })
+   .then(res => {
+        if (res.status == 200) {
+            console.log(res)
+        }
+        else {
+            throw res
+        }
+   })
+   .catch((error) => {
+        console.log(error)
+    })
+}

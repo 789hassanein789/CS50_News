@@ -1,30 +1,61 @@
 {% load change %}
 {% load static %}
 
-<section id="scroll-section">
-    <div id="scroll-heading">
-        <h3 class="scroll-section-heading">Section Title</h3>
-        <div class="buttons">
-            <button type="button" class="btn scroll-left"><i class="fa-solid fa-chevron-left"></i></button>
-            <button type="button" class="btn scroll-right"><i class="fa-solid fa-chevron-right"></i></button>
+<section id="scroll-section-design">
+    {% if section.id %}
+        <div id="scroll-heading">
+            {% if section.title %}
+                <input type="text" class="t-input" name="title" value="{{section.title}}" placeholder="Section Title">
+            {% endif %}
+            <div id="scroll-buttons">
+                <button class="btn scroll-left"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="btn scroll-right"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
         </div>
-    </div>
-    <div class="scroll-div" data-mouse-position="0" data-percentage="0">
-        {% for placement in '01234567'|make_list %}
-            <a class="new-container link article" draggable="false" data-chosen="" data-num="{{forloop.counter}}">
-                <div class="new-image">
-                    <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="" draggable="false">
-                </div>
-                <div class="content">
-                    <h6 class="content-heading">headline</h6>
-                    <p>sub headline</p>
-                    <div class="secondary-div">
-                        <span>1d ago</span>
-                        <div></div> 
-                        <span>category</span>
+        <div class="scroll-div" data-mouse-position="0" data-percentage="0">
+            {% for placement in section.articles.all %}
+                <a class="new-container link article" data-id="{{placement.article.id}}" draggable="false">
+                    <div class="new-image">
+                        <img src="{{placement.article.image.url}}" alt="" draggable="false">
                     </div>
-                </div>
-            </a>
-        {% endfor %}
-    </div>
+                    <div class="content">
+                        <h6 class="content-heading">{{placement.article.headline}}</h6>
+                        <p>{{placement.article.sub_headline}}</p>
+                        <div class="secondary-div">
+                            <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                            <div></div>
+                            <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div id="scroll-heading">
+            <h3 class="section-heading scroll-section-heading">Section Title</h3>
+            <div id="scroll-buttons">
+                <button type="button" class="btn scroll-left"><i class="fa-solid fa-chevron-left"></i></button>
+                <button type="button" class="btn scroll-right"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </div>
+        <div class="scroll-div" data-mouse-position="0" data-percentage="0">
+            {% for i in '01234567'|make_list %}
+                <a class="new-container link article" draggable="false" data-chosen="" data-num="{{i}}">
+                    <input type="hidden" value="" name="{{i}}">
+                    <div class="new-image">
+                        <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="" draggable="false">
+                    </div>
+                    <div class="content">
+                        <h6 class="content-heading">headline</h6>
+                        <p>sub headline</p>
+                        <div class="secondary-div">
+                            <span>1d ago</span>
+                            <div></div> 
+                            <span>category</span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
 </section>

@@ -1,24 +1,50 @@
 {% load change %}
 {% load static %}
 
-<section id="only-section">
-    <h3 class="only-section-heading">Section Title</h3>
-    <div class="only-div">
-    {% for placement in '01'|make_list %}
-        <a class="tn link article" data-chosen="" data-num="{{forloop.counter}}">
-            <div class="img">
-                <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
-            </div>
-            <div class="content">
-                <h6 class="content-heading">headline</h6>
-                <p>sub headline</p>
-                <div class="secondary-div">
-                    <span>1d ago</span>
-                    <div></div> 
-                    <span>category</span>
+<section id="only-section-design">
+    {% if section.id %}
+        {% if section.title %}
+            <input type="text" class="t-input" name="title" value="{{section.title}}" placeholder="Section Title">
+        {% endif %}
+        <div class="only-div">
+            {% for placement in section.articles.all %}
+            <a class="article tn link" data-num="{{forloop.counter0}}">
+                <input type="hidden" value="{{placement.article.id}}" name="{{forloop.counter0}}">
+                <div class="img">
+                    <img src="{{placement.article.image.url}}" alt="">
                 </div>
-            </div>
-        </a>
-    {% endfor %}
-    </div>
+                <div class="content">
+                    <h6 class="content-heading">{{placement.article.headline}}</h6>
+                    <p>{{placement.article.sub_headline}}</p>
+                    <div class="secondary-div">
+                        <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                        <div></div>
+                        <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+        </div>
+    {% else %}
+        <h3 class="section-heading only-section-heading">Section Title</h3>
+        <div class="only-div">
+        {% for i in '01'|make_list %}
+            <a class="tn link article" data-chosen="" data-num="{{i}}">
+                <input type="hidden" value="" name="{{i}}">
+                <div class="img">
+                    <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                </div>
+                <div class="content">
+                    <h6 class="content-heading">headline</h6>
+                    <p>sub headline</p>
+                    <div class="secondary-div">
+                        <span>1d ago</span>
+                        <div></div> 
+                        <span>category</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+        </div>
+    {% endif %}
 </section>
