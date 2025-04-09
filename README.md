@@ -1,6 +1,10 @@
 # CS50 News  
 
-cs50 News is a bbc like news website were users can read the recent articles and news on any topic.
+## overview of the project
+cs50 News is a bbc like news website were users can read news and articles on various topics, including but not limited to the recent news, sport, business, culture, Innovation and more, admins of the site can add, edit and delete articles and they control the distribution of articels in different pages by controling the sections of the page and the articels placement in each section.
+
+# Distinctiveness and Complexity
+I have implemeted a fairly good authentication & authrization system in this project using django-allauth library making the user able to sign up, sign in and sign out, as will as signing in using a third party provider (google & github), after signing in the user can edit his account info like his email & password after varifing his identity by either entering his password or entering a one time password (OTP) that he receives on his email, and the user can reset his password even if he was signed out of his account by entering his email then receiving url to reset his password, 
 
 * **Authentication & Authorization**: a user can register & log in into any account and
 
