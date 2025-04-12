@@ -4,7 +4,13 @@
 cs50 News is a bbc like news website were users can read news and articles on various topics, including but not limited to the recent news, sport, business, culture, Innovation and more, admins of the site can add, edit and delete articles and they control the distribution of articels in different pages by controling the sections of the page and the articels placement in each section.
 
 # Distinctiveness and Complexity
-I have implemeted a fairly good authentication & authrization system in this project using django-allauth library making the user able to sign up, sign in and sign out, as will as signing in using a third party provider (google & github), after signing in the user can edit his account info like his email & password after varifing his identity by either entering his password or entering a one time password (OTP) that he receives on his email, and the user can reset his password even if he was signed out of his account by entering his email then receiving url to reset his password, 
+I have implemeted a fairly good authentication & authrization system in this project using django-allauth library making the user able to sign up, sign in and sign out, as will as signing in using a third party provider (google & github), edit his account info like his email & password, reset his password even if he was signed out of his account, and finally delete the account, the news is devided to main categories then sub categories and every page is devided to sections and placements within sections which is all customizable by the admins, the site supports dark mood as will as having a text editor integrated in the admin page for writing news articles.
+
+# Files content
+- CS50_News: the main app directory
+    - static/CS50_News: static files directory
+        - bundles: containes images to style the site (logo & google png image)
+    - templates/CS50_News: templates directory
 
 * **Authentication & Authorization**: a user can register & log in into any account and
 
