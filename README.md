@@ -7,6 +7,122 @@ cs50 News is a bbc like news website were users can read news and articles on va
 I have implemeted a fairly good authentication & authrization system in this project using django-allauth library making the user able to sign up, sign in and sign out, as will as signing in using a third party provider (google & github), edit his account info like his email & password, reset his password even if he was signed out of his account, and finally delete the account, the news is devided to main categories then sub categories and every page is devided to sections and placements within sections which is all customizable by the admins, the site supports dark mood as will as having a text editor integrated in the admin page for writing news articles.
 
 # Files content
+- .gitignore
+- db.sqlite3
+- manage.py
+- output.txt
+- README.md
+- requirements.txt
+- CS50_News
+    - adapters.py
+    - admin.py
+    - apps.py
+    - forms.py
+    - models.py
+    - tests.py
+    - urls.py
+    - utils.py
+    - views.py
+    - management
+        - commands
+        - print.py
+        - score.py
+             
+    - static
+        - CS50_News
+            - admin.js
+            - CKEditor.css
+            - CKEditor.js
+            - create.css
+            - create.css.map
+            - create.scss
+            - crop.js
+            - footer.css
+            - footer.css.map
+            - footer.scss
+            - index.css
+            - index.css.map
+            - index.js
+            - index.scss
+            - new.css
+            - new.css.map
+            - new.scss
+            - news.js
+            - placements.js
+            - reset.css
+            - reset.js
+            - staff.css
+            - staff.css.map
+            - staff.js
+            - staff.scss
+            - style.css
+            - bundles
+                - G.png
+                - favicon_io
+                    - about.txt
+                    - android- chrome- 192x192.png
+                    - android- chrome- 512x512.png
+                    - apple- touch- icon.png
+                    - favicon- 16x16.png
+                    - favicon- 32x32.png
+                    - favicon.ico
+                    - site.webmanifest
+                - cover  
+    - templates
+        - CS50_News
+        - admin.html
+        - crop.html
+        - editor.html
+        - index.html
+        - layout.html
+        - new.html
+        - pages.html
+        - placements.html
+        - search.html
+        - designs
+            - _carousel.html
+            - _featured.html
+            - _hero.html
+            - _left.html
+            - _more.html
+            - _news.html
+            - _only.html
+            - _right.html
+            - _scroll.html
+            - _trending.html
+         - pages
+            - business.html
+            - culture.html
+            - earth.html
+            - innovation.html
+            - news.html
+            - sport.html
+            - travel.html  
+         - sections
+            - _carousel.html
+            - _featured.html
+            - _hero.html
+            - _left.html
+            - _more.html
+            - _news.html
+            - _only.html
+            - _right.html
+            - _scroll.html
+            - _trending.html
+         - sub_templates
+            - _footer.html
+            - _main- header.html
+            - _navbar.html
+            - _offcanvas.html
+            - _overlay.html
+            - _subnav.html        
+    - templatetags
+        - change.py 
+- final_project
+   - .env
+   - settings.py
+   - urls.py
+            
 - CS50_News: the main app directory
     - static/CS50_News: static files directory
         - bundles: containes images to style the site (logo & google png image)
