@@ -13,32 +13,13 @@ I have implemeted a fairly good authentication & authrization system in this pro
     - utils.py: containing help functions.
     - views.py: containing all app views.
     - static/CS50_News: all static files in the application, which are css & javascrip files for the templates.
-        - admin.js
-        - CKEditor.css
-        - CKEditor.js
-        - create.css
-        - create.css.map
-        - create.scss
-        - crop.js
-        - footer.css
-        - footer.css.map
-        - footer.scss
-        - index.css
-        - index.css.map
-        - index.js
-        - index.scss
-        - new.css
-        - new.css.map
-        - new.scss
-        - news.js
-        - placements.js
-        - reset.css
-        - reset.js
-        - staff.css
-        - staff.css.map
-        - staff.js
-        - staff.scss
-        - style.css
+        - css: a directory containing all styling files which are SCSS & CSS files.
+        - CKEditor.js: the js file for the text editor configurations and settings.
+        - index.js: the js file for runing the main index.html template.
+        - news.js: js file for the news.html template. 
+        - placements.js: js file for placements.html template.
+        - reset.js: js file for 
+        - staff.js: js file for admin.html template
         - bundles: a directory containing the app logo and google logo.
         - cover: a directory for storing all the images uploaded for the articles.
     - templates/CS50_News: a directory containing all app templates.
@@ -50,54 +31,19 @@ I have implemeted a fairly good authentication & authrization system in this pro
         - pages.html: an admin template for preforming CRUD operations on sections from any page. 
         - placements.html: an admin template for selecting article palacements.
         - search.html: a template for displaying search results and tags related news.
-        - designs: a directory
-            - _carousel.html
-            - _featured.html
-            - _hero.html
-            - _left.html
-            - _more.html
-            - _news.html
-            - _only.html
-            - _right.html
-            - _scroll.html
-            - _trending.html
-         - pages
-            - business.html
-            - culture.html
-            - earth.html
-            - innovation.html
-            - news.html
-            - sport.html
-            - travel.html  
-         - sections
-            - _carousel.html
-            - _featured.html
-            - _hero.html
-            - _left.html
-            - _more.html
-            - _news.html
-            - _only.html
-            - _right.html
-            - _scroll.html
-            - _trending.html
-         - sub_templates
-            - _footer.html
-            - _main- header.html
-            - _navbar.html
-            - _offcanvas.html
-            - _overlay.html
-            - _subnav.html        
-    - templatetags
-        - change.py 
-- final_project
-   - .env
-   - settings.py
-   - urls.py
-            
-- CS50_News: the main app directory
-    - static/CS50_News: static files directory
-        - bundles: containes images to style the site (logo & google png image)
-    - templates/CS50_News: templates directory
+        - designs: a directory containing all the sections design as subtemplates to select from. 
+         - sections: a directory containing all sections as subtemplates to display at pages dynamically
+         - sub_templates: sub templates used on different places in the project including the layout.html base template.
+            - _footer.html: the site footer.
+            - _main- header.html: the site header.
+            - _navbar.html: a navigation bar for navigating categories.
+            - _offcanvas.html: an offcanvas for navigating and other uses.
+            - _overlay.html: an overlay for authentication and account sittings. 
+            - _subnav.html: a sub navigation bar for navigating sub categories.
+    - templatetags: a directory containing django templates custom tags to use in the app.
+        - change.py: containes tag functions.
+- final_project: the project directory.
+   - .env: enviroment variables for securety.
 
 * **Authentication & Authorization**: a user can register & log in into any account and
 
