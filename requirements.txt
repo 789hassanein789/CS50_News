@@ -1,2 +1,7 @@
-Django
-Pillow
+Django==5.2
+django_allauth==65.7.0
+django_taggit==6.1.0
+markdown2==2.5.3
+Pillow==11.2.1
+python-dotenv==1.1.0
+pytz==2025.2

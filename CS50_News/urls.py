@@ -20,7 +20,6 @@ urlpatterns = [
     path("check", views.check, name="check"),
     path("delete", views.delete_account, name="delete"),
     path("edit", views.accountEdit, name="edit"),
-    path("OTP", views.otp_view, name="otp"),
     path("reauthenticate", views.reauthenticate_decision, name="reauthenticate"),
     path("auth", views.index, name="auth"),
     path("auth/<str:key>", views.index, name="new-password"),

@@ -20,12 +20,11 @@ from sys import getsizeof
 from math import isclose
 from allauth.account.views import ConfirmEmailVerificationCodeView
 from taggit.models import Tag
-import pyotp
 import json
 from markdown2 import Markdown
 
 from .models import User, New, Page, Section, Placement
-from .utils import send_otp, Rescore, short_category
+from .utils import Rescore, short_category
 
 section_names = Section.SECTIONS
 
@@ -247,25 +246,6 @@ def passwordCheck(request):
         user.save()
         return JsonResponse({"email":user.email, "first":user.first_name, "last":user.last_name }, status = 200)
     return HttpResponse(status = 404)
-
-def otp_view(request):
-    if request.method == "POST":
-        otp = request.POST.get("otp")
-        otp_secret_key = request.session["otp_secret_key"]
-        otp_valid_util = request.session["otp_valid_until"]
-        if not (otp_secret_key and otp_secret_key):
-            return HttpResponse(status=500)
-        valid_until = datetime.fromisoformat(otp_valid_util)
-        if not valid_until > datetime.now():
-                    return HttpResponse(status=408)
-        totp = pyotp.TOTP(otp_secret_key, interval=360)
-        if not totp.now() == otp:
-            return HttpResponse(status=401)
-        user = User.objects.get(id=request.user.id)
-        user.otp_date = datetime.now(timezone.utc)
-        return HttpResponse(status=200)
-    send_otp(request)
-    return HttpResponse(status=200)
 
 def delete_account(request):
     if (
