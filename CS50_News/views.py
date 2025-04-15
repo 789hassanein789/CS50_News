@@ -4,7 +4,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django import forms
 from django.shortcuts import render
-from datetime import datetime
 from django.core.paginator import Paginator
 from allauth.account.decorators import login_required, secure_admin_login, reauthentication
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -17,9 +16,9 @@ from math import isclose
 from taggit.models import Tag
 import json
 from markdown2 import Markdown
-
 from .models import User, New, Page, Section, Placement
 from .utils import short_category, section_recursion
+
 
 section_names = Section.SECTIONS
 
