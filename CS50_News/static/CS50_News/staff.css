@@ -55,11 +55,6 @@
   color: var(--page-secondary);
 }
 
-#main-page .create {
-  width: calc(100% - 2rem);
-  margin: 0 1rem;
-}
-
 .created {
   width: 100%;
   cursor: pointer;
@@ -121,6 +116,30 @@
   overflow-x: hidden;
 }
 
+#main-page .page-layout .create-btn {
+  width: calc(100% - 2rem);
+  margin: 0 1rem;
+  height: 3rem;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#main-page .page-layout .create-btn:hover {
+  background-color: var(--bg-hover);
+}
+#main-page .page-layout .create {
+  width: calc(100% - 2rem);
+  margin: 0 1rem;
+  aspect-ratio: 8/1;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+#main-page .page-layout .last-create {
+  aspect-ratio: 16/9;
+  margin-bottom: 1rem;
+}
 #main-page .page-layout .buttons {
   display: flex;
 }

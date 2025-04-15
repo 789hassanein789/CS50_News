@@ -203,7 +203,7 @@
                 <div class="account-drop-down flex-column">
                     <button class="a-dp-btn" id="a-dp-btn">
                         <i class="fa-solid fa-user fa-lg"></i>
-                        Your Account
+                        {{request.user.username}}
                     </button>
                     <div class="a-dp-content d-none">
                         {% if request.user.has_usable_password %}

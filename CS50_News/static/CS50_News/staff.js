@@ -10,26 +10,17 @@ const placementsPage = document.querySelector('#placements-page')
 const backBtns = document.querySelectorAll('.back-btn')
 const placementsBtn = placementsPage.querySelector('.btn-success')
 const sectionEditBtns = document.querySelectorAll('.section-edit')
-const mainPageLinks = document.querySelectorAll('#main-page a')
+const mainPageArticles = document.querySelectorAll('#main-page .article')
 const selectLinks = document.querySelectorAll('.select-link')
+const createBtns = document.querySelectorAll(".create-btn")
 let placeholders;
 let darkMode = localStorage.getItem('darkmode');
+
 
 if (darkMode === 'enabled') {
     document.body.classList.add('dark-mode');
     document.body.setAttribute('data-bs-theme', 'dark')
 }
-
-toggleBtn.addEventListener('click', () => {
-    if (darkMode === 'enabled') {
-        disableDarkMode()
-    }
-    else {
-        enableDarkMode()
-    }
-    darkMode = localStorage.getItem('darkmode')
-})
-
 
 backBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -45,7 +36,7 @@ backBtns.forEach(btn => {
     })
 })
 
-mainPageLinks.forEach(article => {
+mainPageArticles.forEach(article => {
     article.removeAttribute('href')
 })
 
@@ -59,6 +50,19 @@ createLinks.forEach(link => {
     })
 })
 
+createBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        let child = btn.firstElementChild
+        if (child.classList.contains('fa-chevron-down')) {
+            child.classList.replace('fa-chevron-down', 'fa-chevron-up')
+        }
+        else {
+            child.classList.replace('fa-chevron-up', 'fa-chevron-down')
+        }
+        btn.nextElementSibling.classList.toggle('d-none')
+    })
+})
+
 function show(pageName) {
     pages.forEach(page => {
         page.classList.add('d-none')
@@ -66,18 +70,6 @@ function show(pageName) {
     const pageToSee = document.getElementById(pageName)
     pageToSee.scroll(top)
     pageToSee.classList.remove('d-none')
-}
-
-function enableDarkMode() {
-    document.body.classList.add('dark-mode');
-    document.body.setAttribute('data-bs-theme', 'dark');
-    localStorage.setItem('darkmode', 'enabled');
-}
-
-function disableDarkMode() {
-    document.body.classList.remove('dark-mode');
-    document.body.removeAttribute('data-bs-theme')
-    localStorage.setItem('darkmode', null);
 }
 
 function getCookie(name) {
@@ -270,59 +262,61 @@ const mainPageScrollRightBtn = mainPage.querySelector('.scroll-right')
 const mainPageScrollLeftBtn = mainPage.querySelector('.scroll-left')
 const mainPageScrollLinks = mainPage.querySelectorAll('.scroll-div > a')
 
-let mainHolding = false
+if (mainPageScrollDiv) {
+    let mainHolding = false
 
-mainPageScrollDiv && mainPageScrollDiv.addEventListener('mousedown', (e) => {
-    mainPageScrollDiv.dataset.mousePosition = e.clientX;
-    mainHolding = false
-})
-
-window.addEventListener('mouseup', (e) => {
-    mainPageScrollDiv.dataset.mousePosition = "0";
-    mainPageScrollDiv.dataset.percentage = mainPageScrollDiv.dataset.new
-})
-
-mainPageScrollDiv && mainPageScrollDiv.addEventListener('mousemove', (e) => {
-    if (mainPageScrollDiv.dataset.mousePosition === "0") return
-
-    mainHolding = true
-
-    const delta = parseFloat(mainPageScrollDiv.dataset.mousePosition) - e.clientX;
-    const maxDelta = window.innerWidth / 2
-
-    let percentage = (delta / maxDelta) * -100,
-          newPercentage = parseFloat(mainPageScrollDiv.dataset.percentage) + percentage
-    newPercentage = Math.min(newPercentage, 0)
-    newPercentage = Math.max(newPercentage, -100)
-
-    mainPageScrollDiv.dataset.new = newPercentage
-
-    mainPageScrollDiv.animate({
-        transform: `translate(${newPercentage}%, 0%)`
-    }, {duration: 1200, fill: 'forwards'})
-})
-
-mainPageScrollRightBtn && mainPageScrollRightBtn.addEventListener('click', () => {
-    mainPageScrollDiv.dataset.percentage = "-100"
-    mainPageScrollDiv.animate({
-        transform: `translate(${mainPageScrollDiv.dataset.percentage}%, 0%)`
-    }, {duration: 500, fill: 'forwards'})
-})
-
-mainPageScrollLeftBtn && mainPageScrollLeftBtn.addEventListener('click', () => {
-    mainPageScrollDiv.dataset.percentage = "0"
-    mainPageScrollDiv.animate({
-        transform: `translate(${mainPageScrollDiv.dataset.percentage}%, 0%)`
-    }, {duration: 500, fill: 'forwards'})
-})
-
-mainPageScrollLinks && mainPageScrollLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        if (mainHolding) {
-            e.preventDefault()
-        }
+    mainPageScrollDiv && mainPageScrollDiv.addEventListener('mousedown', (e) => {
+        mainPageScrollDiv.dataset.mousePosition = e.clientX;
+        mainHolding = false
     })
-})
+
+    window.addEventListener('mouseup', (e) => {
+        mainPageScrollDiv.dataset.mousePosition = "0";
+        mainPageScrollDiv.dataset.percentage = mainPageScrollDiv.dataset.new
+    })
+
+    mainPageScrollDiv && mainPageScrollDiv.addEventListener('mousemove', (e) => {
+        if (mainPageScrollDiv.dataset.mousePosition === "0") return
+
+        mainHolding = true
+
+        const delta = parseFloat(mainPageScrollDiv.dataset.mousePosition) - e.clientX;
+        const maxDelta = window.innerWidth / 2
+
+        let percentage = (delta / maxDelta) * -100,
+            newPercentage = parseFloat(mainPageScrollDiv.dataset.percentage) + percentage
+        newPercentage = Math.min(newPercentage, 0)
+        newPercentage = Math.max(newPercentage, -100)
+
+        mainPageScrollDiv.dataset.new = newPercentage
+
+        mainPageScrollDiv.animate({
+            transform: `translate(${newPercentage}%, 0%)`
+        }, {duration: 1200, fill: 'forwards'})
+    })
+
+    mainPageScrollRightBtn && mainPageScrollRightBtn.addEventListener('click', () => {
+        mainPageScrollDiv.dataset.percentage = "-100"
+        mainPageScrollDiv.animate({
+            transform: `translate(${mainPageScrollDiv.dataset.percentage}%, 0%)`
+        }, {duration: 500, fill: 'forwards'})
+    })
+
+    mainPageScrollLeftBtn && mainPageScrollLeftBtn.addEventListener('click', () => {
+        mainPageScrollDiv.dataset.percentage = "0"
+        mainPageScrollDiv.animate({
+            transform: `translate(${mainPageScrollDiv.dataset.percentage}%, 0%)`
+        }, {duration: 500, fill: 'forwards'})
+    })
+
+    mainPageScrollLinks && mainPageScrollLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            if (mainHolding) {
+                e.preventDefault()
+            }
+        })
+    })
+}
 
 function deleteSection() {
     fetch(`delete/`, {

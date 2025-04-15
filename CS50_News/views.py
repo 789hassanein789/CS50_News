@@ -1,56 +1,41 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django import forms
-from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
 from datetime import datetime
 from django.core.paginator import Paginator
-from django.template.defaulttags import register
-from django.core import serializers
-from datetime import datetime, timezone
-from allauth.account.decorators import login_required, verified_email_required, secure_admin_login, reauthentication_required, reauthentication
-from django.contrib.admin.views.decorators import staff_member_required
+from allauth.account.decorators import login_required, secure_admin_login, reauthentication
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db.models import Count
+from django.shortcuts import get_object_or_404
 from PIL import Image
 from io import BytesIO
 from sys import getsizeof
 from math import isclose
-from allauth.account.views import ConfirmEmailVerificationCodeView
 from taggit.models import Tag
-import pyotp
 import json
 from markdown2 import Markdown
 
 from .models import User, New, Page, Section, Placement
-from .utils import send_otp, Rescore, short_category
+from .utils import short_category, section_recursion
 
 section_names = Section.SECTIONS
 
-def index(request, cat=None, sub=None, key=None):
-    Rescore(New.objects.all())
+def index(request, cat="Home", sub=None, key=None):
     sub_categories = None
-    if cat == None:
-        page = Page.objects.get(slug="Home")
+    if not sub:
+        page = get_object_or_404(Page, slug=cat)
         sections = page.sections.prefetch_related("articles__article")
-    # make sure the cat is valid.
-    elif cat and not sub:
-        page = Page.objects.get(slug=cat)
-        sections = page.sections.prefetch_related("articles__article")
-        if cat != "Business":
+        if not cat in ["Business", "Home"]:
             sub_categories = New.SUB_CATEGORIES[cat[0]]
     else:
-        page = Page.objects.get(slug=sub)
-        print(page)
+        page = get_object_or_404(Page, slug=sub)
         sections = page.sections.prefetch_related("articles__article")
-        sub_categories = New.SUB_CATEGORIES[cat[0]]
-    # TODO: filter on section not just category.
-    
+        sub_categories = New.SUB_CATEGORIES[cat[0]]    
     for section in sections:
         section.include_name = f"CS50_News/sections/_{section_names[section.name]}.html"
-
     return render(request, "CS50_News/index.html", {
         "sections" : sections,
         "subs": sub_categories,
@@ -78,24 +63,25 @@ def logout_view(request):
 
 @secure_admin_login
 def admin_view(request):
-    sections = Page.objects.get(name="Home").sections.prefetch_related("articles__article")
-    for section in sections:
-        section.include = f"CS50_News/designs/_{section_names[section.name]}.html"
     return render(request, "CS50_News/admin.html", {
         "news": New.objects.filter(auther=request.user).order_by("-timestamp"),
-        "users": User.objects.all(),
-        "sections": sections
     })
 
 @secure_admin_login
-def add_new(request):
+def add_new(request, slug=None):
     if request.method == "POST":
-        headline = request.POST.get("headline")
-        sub_headline = request.POST.get("sub_headline")
-        category = request.POST.get("category")
-        sub_category = request.POST.get("sub_category")
-        tags = request.POST.get("tags").lower()
-        content = request.POST.get("content")
+        if slug:
+            new = New.objects.get(slug=slug)
+            user = User.objects.get(id=request.user.id)
+            if new.auther != request.user and not user.is_superuser:
+                return HttpResponse(status=403)
+        post_data = request.POST
+        headline = post_data.get("headline")
+        sub_headline = post_data.get("sub_headline")
+        category = post_data.get("category")
+        sub_category = post_data.get("sub_category")
+        tags = post_data.get("tags").lower()
+        content = post_data.get("content")
         image = request.FILES.get("blob")
         
         short_name = short_category(sub_category)
@@ -130,12 +116,24 @@ def add_new(request):
                 size=getsizeof(img_io),
                 charset=None
                 )
-                new = New(headline=headline, sub_headline=sub_headline, image=cropped_image_file, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-"))
-                new.save()
+                if slug:
+                    new.image = cropped_image_file
+                else:
+                    new = New(headline=headline, sub_headline=sub_headline, image=cropped_image_file, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-"))
             else:
-                new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-"))
-                new.save()
-        
+                if slug:
+                    new.image = image
+                else:
+                    new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-"))
+        if slug:
+            new.headline=headline
+            new.sub_headline=sub_headline
+            new.content=content
+            new.auther=request.user
+            new.category=category[0]
+            new.sub_category=short_name
+            new.slug=headline.replace(" ", "-")
+        new.save()
         try:
             tags = tags.split(",")
             for tag in tags:
@@ -240,33 +238,6 @@ def delete_new(request):
         return HttpResponseRedirect(reverse("index"))
     return HttpResponse(status=405)
 
-def passwordCheck(request):
-    user = User.objects.get(id=request.user.id)
-    if user.check_password(request.POST.get("password")):
-        user.validation_date = datetime.now(timezone.utc)
-        user.save()
-        return JsonResponse({"email":user.email, "first":user.first_name, "last":user.last_name }, status = 200)
-    return HttpResponse(status = 404)
-
-def otp_view(request):
-    if request.method == "POST":
-        otp = request.POST.get("otp")
-        otp_secret_key = request.session["otp_secret_key"]
-        otp_valid_util = request.session["otp_valid_until"]
-        if not (otp_secret_key and otp_secret_key):
-            return HttpResponse(status=500)
-        valid_until = datetime.fromisoformat(otp_valid_util)
-        if not valid_until > datetime.now():
-                    return HttpResponse(status=408)
-        totp = pyotp.TOTP(otp_secret_key, interval=360)
-        if not totp.now() == otp:
-            return HttpResponse(status=401)
-        user = User.objects.get(id=request.user.id)
-        user.otp_date = datetime.now(timezone.utc)
-        return HttpResponse(status=200)
-    send_otp(request)
-    return HttpResponse(status=200)
-
 def delete_account(request):
     if (
             request.user.is_anonymous
@@ -299,12 +270,6 @@ def accountEdit(request):
         return HttpResponse(status=200)
     return HttpResponse(status=405)
 
-def crop(request):
-    if request.method == 'POST':
-        blob = request.FILES.get('blob')
-        return HttpResponse(200)
-    return render(request, "CS50_News/crop.html")
-
 def new(request, cat, sub, slug):
     try:
         news = New.objects.prefetch_related("auther").get(slug=slug, category=cat[0])
@@ -329,21 +294,6 @@ def reset(request, key):
         "key": key
     })
 
-def reauthenticate_decision(request):
-    if (
-            request.user.is_anonymous
-            or not reauthentication.did_recently_authenticate(request)
-            ):
-        return HttpResponse(status=401)
-    else:
-        return HttpResponse(status=200)
-    
-def check(request):
-    return render(request, "CS50_News/index.html")
-
-def settings(request):
-    return render(request, "CS50_News/setting.html")
-
 def tag(request, tag):
     news = New.objects.filter(tags__name__in=[tag]).order_by("timestamp")
     pagenator = Paginator(news, 10)
@@ -353,14 +303,6 @@ def tag(request, tag):
         "news": news,
         "tag": tag
     })
-
-class CustomConfirmCode(ConfirmEmailVerificationCodeView):
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        return JsonResponse({
-            "message": "Email confirmed successfully!",
-            "redirect_url": reverse('home') + "?auth=confirm-email"
-        })
     
 def save_new(request, headline=None):
     if request.method == "POST":
@@ -382,78 +324,28 @@ def save_new(request, headline=None):
         "tag": "saved"
     })
 
-def admin_pop(request):
-    cat_list = New.SUB_CATEGORIES
-    for name, category in cat_list.items():
-        if name == "B":
-            continue
-        for cat in category:
-            p = Page(name=category[cat], slug=category[cat].replace(" ", "-"))
-            p.save()
-    return HttpResponse(status=200)
+def reauthenticate_decision(request):
+    if (
+            request.user.is_anonymous
+            or not reauthentication.did_recently_authenticate(request)
+            ):
+        return HttpResponse(status=401)
+    else:
+        return HttpResponse(status=200)
 
 @secure_admin_login
-def page(request, cat=None, sub=None):
-    if request.method == "PUT":
-        data = json.loads(request.body)
-        section_title = None
-        if data['section-title']:
-            section_title = data['section-title']
-            data = json.loads(request.body)
-        section_title = None
-        if data['section-title']:
-            section_title = data['section-title']
-        if not cat:
-            section = Section.objects.get(page=Page.objects.get(slug="Home"), id=data['section-id'])
-        elif cat and not sub:
-            section = Section.objects.get(page=Page.objects.get(slug=cat), id=data['section-id'])
-        else:
-            section = Section.objects.get(page=Page.objects.get(slug=sub), id=data['section-id'])
-        i = 0
-        for id in data["ids"]:
-            try:
-                placement = Placement.objects.get(section=section, position=i)
-                placement.article=New.objects.get(id=int(id))
-                placement.save()
-            except:
-                Placement.objects.create(article=New.objects.get(id=int(id)), section=section, position=i)
-            i += 1
-        return HttpResponse(status=200)
-    if request.method == "POST":
-        data = json.loads(request.body)
-        section_title = None
-        if data['section-title']:
-            section_title = data['section-title']
-        
-        for key, value in section_names.items():
-            if value == data['section-name']:
-                name = key
-        if not cat:
-            new_section = Section(page=Page.objects.get(slug="Home"), name=name, title=section_title)
-        elif cat and not sub:
-            new_section = Section(page=Page.objects.get(slug=cat), name=name, title=section_title)
-        else:
-            new_section = Section(page=Page.objects.get(slug=sub), name=name, title=section_title)
-        new_section.save()
-        i = 0
-        for id in data["ids"]:
-            Placement.objects.create(article=New.objects.get(id=int(id)), section=new_section, position=i)
-            i += 1
-        return HttpResponseRedirect(reverse("page"))
+def page(request, cat="Home", sub=None):
     sub_categories = None
     parent = None
-    if not cat:
-        page = Page.objects.get(slug="Home")
-        sections = page.sections.prefetch_related("articles__article")
-    elif cat and not sub:
+    if not sub:
         page = Page.objects.get(slug=cat)
-        sections = page.sections.prefetch_related("articles__article")
+        sections = page.sections.prefetch_related("articles__article").order_by("position")
         parent = cat
-        if cat != "Business":
+        if not cat in ["Business", "Home"]:
             sub_categories = New.SUB_CATEGORIES[cat[0]]
     else:
         page = Page.objects.get(slug=sub)
-        sections = page.sections.prefetch_related("articles__article")
+        sections = page.sections.prefetch_related("articles__article").order_by("position")
         sub_categories = New.SUB_CATEGORIES[cat[0]]
         parent = cat
     
@@ -476,6 +368,7 @@ def page(request, cat=None, sub=None):
         "all": [{"name": name, "include": f"CS50_News/designs/_{name}.html"}  for name in section_names.values()],
         "news": all_news,
     })
+
 @secure_admin_login
 def delete_section(request, id):
     if request.method == "POST":
@@ -487,18 +380,16 @@ def delete_section(request, id):
         return HttpResponseRedirect(reverse('page'))
     return HttpResponse(status=405)
 
-def select_section(request):
-    if request.method == "GET":
-        return render(request, "CS50_News/pages.html")
-    return HttpResponse(status=405)
-
+@secure_admin_login
 def placements(request, name, cat="Home", sub=None):
     dict_name = list(section_names.keys())[list(section_names.values()).index(name)]
-    if sub:
-        cat = sub
     if request.method == "POST":
+        selected_page = Page.objects.get(slug=cat)
+        if sub:
+            cat = sub
+        position = request.POST.get("position")
         if request.POST.get("method") == "put":
-            edit_section = Section.objects.get(page=Page.objects.get(name=cat), name=dict_name, position=request.POST.get("position"))
+            edit_section = Section.objects.get(page=selected_page, name=dict_name, position=position)
             if request.POST.get('title'):
                 edit_section.title = request.POST.get('title')
             i = 0
@@ -510,7 +401,10 @@ def placements(request, name, cat="Home", sub=None):
                 i += 1
             return HttpResponseRedirect(reverse("page"))
         else:
-            new_section = Section(page=Page.objects.get(slug=cat), name=dict_name, title=request.POST.get("title"), position=request.POST.get("position"))
+            sections = Section.objects.filter(page=selected_page)
+            if sections.filter(position=position).exists():
+                section_recursion(int(position), sections)
+            new_section = Section(page=selected_page, name=dict_name, title=request.POST.get("title"), position=position)
             new_section.save()
             i = 0
             while request.POST.get(str(i)):
@@ -520,9 +414,16 @@ def placements(request, name, cat="Home", sub=None):
     q = request.GET.get("q")
     if (q):
         q = q.capitalize().strip()
-        news = New.objects.filter(headline__contains=q)
+        news = New.objects.filter(category=cat[0], headline__contains=q)
     else:
         news = New.objects.all()
+        if cat != "Home":
+            news = news.filter(category=cat[0])
+            if sub:
+                sub_cateogry_dict = New.SUB_CATEGORIES[cat[0]]
+                print(sub_cateogry_dict.values())
+                sub_short_name = list(sub_cateogry_dict.keys())[list(sub_cateogry_dict.values()).index(sub)]
+                news = news.filter(sub_category=sub_short_name)
         Paginators = Paginator(news, 10)
         pagenumber = request.GET.get("p")
         all_news = Paginators.get_page(pagenumber)

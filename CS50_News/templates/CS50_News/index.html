@@ -2,7 +2,7 @@
 {% load change %}
 
 {% block body %}
-    {% if parent %}
+    {% if parent != "Home" %}
         <h3 id="category-title">{{parent}}</h3>
     {% endif %}
     {% for section in sections %}

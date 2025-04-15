@@ -33,6 +33,8 @@ class New(models.Model):
             "AF": "Africa",
             "AU": "Australia",
             "LA": "Latine_America",
+            "WO": "World",
+            "PO": "Politics",
         },
         "S": {
             "MA": "Martial_Arts",
@@ -74,7 +76,6 @@ class New(models.Model):
     image = models.ImageField(upload_to="CS50_News/static/CS50_News/cover")
     content = models.TextField()
     views = models.IntegerField(default=0)
-    score = models.IntegerField(default=10)
     timestamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=50, choices=CATEGORYS, null=True, blank=True)
     sub_category = models.CharField(max_length=50, choices=SUB_CATEGORIES, null=True, blank=True)
@@ -109,7 +110,7 @@ class Section(models.Model):
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name="sections")
     name = models.CharField(max_length=100, choices=SECTIONS, null=True, blank=True)
     title = models.CharField(max_length=100, null=True, blank=True)
-    position = models.PositiveIntegerField(unique=True)  # Order within the page
+    position = models.PositiveIntegerField()  # Order within the page
 
     class Meta:
         ordering = ["position"]

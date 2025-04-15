@@ -1,7 +1,7 @@
 import pyotp
 from datetime import datetime, timedelta
 from django.core.mail import send_mail
-from .models import New
+from .models import New, Section
 
 def send_otp(request):
     totp = pyotp.TOTP(pyotp.random_base32(), interval=360)
@@ -16,13 +16,7 @@ def send_otp(request):
     #    "hassanein582@gmail.com",
     #    [request.user.email], 
     #    fail_silently=False
-    #)
-
-def Rescore(news):
-    for new in news:
-        new.score = new.views / new.timesince()
-        new.save()
-    return 
+    #
 
 def short_category(cat):
     cat_dict = New.SUB_CATEGORIES
@@ -33,4 +27,9 @@ def short_category(cat):
                 return key
     return
 
-    
+def section_recursion(position, sections):
+    if sections.filter(position=position + 1).exists():
+        section_recursion(position + 1, sections)
+    s = sections.get(position=position)
+    s.position += 1
+    s.save()

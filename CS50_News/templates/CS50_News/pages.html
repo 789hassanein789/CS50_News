@@ -47,6 +47,11 @@
 			{% endif %}
 			<div class="page-layout">
 				{% for section in sections %}
+					{% if forloop.first %}
+						<a class="create link" draggable="false" data-num="0">
+							+
+						</a>
+					{% endif %}
 					<div class="layout-wrapper">
 						<div class="buttons">
 							<form action="{% url 'delete_section' id=section.id %}" method="post" class="popup-form" id="delete-form">
@@ -57,10 +62,23 @@
 						</div>
 						{% include section.include_name %}
 						{% if forloop.last %}
-							<a class="create link" draggable="false" data-num="{{forloop.counter}}">
+							<a class="last-create create link" draggable="false" data-num="{{forloop.counter}}">
+								+
+							</a>
+						{% else %}
+							<div class="create-btn">
+								<i class="fa-solid fa-chevron-down"></i>
+							</div>
+							<a class="create link d-none" draggable="false" data-num="{{forloop.counter}}">
 								+
 							</a>
 						{% endif %}
+					</div>
+				{% empty %}
+					<div class="layout-wrapper">
+						<a class="last-create create link" draggable="false" data-num="{{forloop.counter}}">
+							+
+						</a>
 					</div>
 				{% endfor %}
 			</div>

@@ -57,10 +57,9 @@ const scrollRightBtn = document.querySelector('.scroll-right')
 const scrollLeftBtn = document.querySelector('.scroll-left')
 const scrollLinks = document.querySelectorAll('.scroll-div > a')
 
-
 const popupContent = popup.innerHTML;
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
+ 
 // dark/light mood
 if (darkMode === 'enabled') {
     document.body.classList.add('dark-mode');
@@ -282,8 +281,6 @@ popupInputs.forEach(input => {
     })
 })
 
-resendLink.addEventListener('click', resendOtp)
-
 passwordResetLink && passwordResetLink.addEventListener('click', () => {
     requestPasswordReset(successForm)
 })
@@ -352,6 +349,12 @@ if (scrollDiv) {
             }
         })
     })
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 function enableDarkMode() {
@@ -438,7 +441,6 @@ function reauthenticate() {
         errorPar.textContent = error.errors[0].message
         passwordInput.classList.add('is-invalid');
         passwordInput.value = ''
-        continueBtn.textContent = 'Continue'
     })
 }
 
@@ -461,7 +463,6 @@ function userKeyDown(event) {
 function userPaste(e) {
     e.preventDefault()
     let paste = (e.clipboardData || window.clipboardData).getData("text");
-    console.log(paste)
     for (let i = 0; i < 6; i++) {
         document.querySelector(`#otp-${i}`).value = paste[i]
     }
@@ -547,33 +548,6 @@ function backward(input)   {
     }
 }
 
-function otp() {
-    fetch('/_allauth/browser/v1/auth/2fa/reauthenticate', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        credentials: "same-origin",
-    })
-    .then(res => res.json())
-    .then(result => {
-        console.log(result)
-    })
-}
-
-function verifyOtp() {
-    let form = new FormData();
-    form.append('otp', otpCode);
-    fetch('/OTP', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        credentials: 'same-origin',
-        body: form
-    });
-}
-
 function inputError(name) {
     document.querySelector(`#${name}-input`).classList.add('is-invalid');
     const errorPar = document.querySelector(`#${name}-input-error-p`);
@@ -620,9 +594,6 @@ function signup() {
             const errorPar = document.querySelector(`#${error.errors[0].param}-input-error-p`);
             errorPar.textContent = error.errors[0].message;
             errorPar.classList.remove('d-none')
-        }
-        else {
-            console.log(error)
         }
     })
 }
@@ -683,20 +654,6 @@ function login() {
     })
 }
 
-function provider() {
-    fetch("/_allauth/browser/v1/auth/provider/redirect", {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({
-            'provider': 'google',
-            'callback_url': 'http://127.0.0.1:8000/accounts/google/login/callback/',
-            'process': 'login'
-        })
-    })
-}
-
 function passwordRequest() {
     fetch('_allauth/browser/v1/auth/password/request', {
         method: 'POST',
@@ -737,7 +694,6 @@ function verifyEmail() {
     .then(res => res.json())
     .then(result => {
         if (!result.errors) {
-            console.log(result);
             location.reload();
         }
         else {
@@ -745,9 +701,6 @@ function verifyEmail() {
         }
     })
     .catch(error => {
-        console.log('error')
-        console.log(error);
-        console.log(error.errors[0].message);
         errorPar.textContent = error.errors[0].message
         errorPar.classList.remove('d-none');
         inputs.forEach(input => {
@@ -806,25 +759,8 @@ function requestPasswordReset(form) {
         }
     })
     .catch(error => {
-        console.log(error)
         resentContinueBtn.textContent = 'continue'
     })
-}
-
-function provider() {
-    fetch('/_allauth/browser/v1/auth/provider/redirect', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken'),
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            'provider': 'google',
-            'callback_url': 'http/127.0.0.1:8000/',
-            'process': 'login'
-        })
-    })
-    .then(res => console.log(res))
 }
 
 function logout() {
@@ -853,7 +789,7 @@ function changePassword(form) {
     })
     .then(res => res.json())
     .then(result => {
-        if (result.ok) {
+        if (result.status == 200) {
             window.location.reload()
         }
         else {
@@ -932,31 +868,6 @@ function changeEmail() {
         emailBlockError.classList.remove('d-none')
         emailDoneBtn.textContent = 'Done'
         emailBlockInput.classList.add('is-invalid')
-    })
-}
-
-function resendOtp() {
-    fetch('/_allauth/browser/v1/account/email', {
-        method: 'PUT',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken'),
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            'email': 'hassanein582@gmail.com',
-        })
-    }) 
-    .then(res => res.json())
-    .then(result => {
-        if (!result.ok) {
-            throw result
-        }
-        else {
-            console.log(result)
-        }
-    })
-    .catch((error) => {
-        console.log(error)
     })
 }
 

@@ -55,7 +55,7 @@
             </h5>
             <div class="content">
                 {% for related in relatedNews %}
-                    <a class="new-page-link" href="{% url 'new' cat=new.get_category_display slug=new.slug %}">
+                    <a class="new-page-link" href="{% url 'new' cat=new.get_category_display sub=new.get_sub_category_display slug=new.slug %}">
                         <h6>{{related.headline}}</h6>
                         <div class="secondary-div">
                             <span>{{related.timestamp|timesince|timeformat|safe}}</span>
@@ -67,9 +67,9 @@
             </div>
         </aside>
     </article>
-</div>
-<div class="overlay d-none">
-    <div class="popup">
+
+    <div class="overlay d-none">
+        <div class="popup">
         <div class="popup-block">
             <form action="{% url 'delete-new' %}" method="post" class="popup-form">
                 <input type="hidden" value="{{new.id}}" name="id">

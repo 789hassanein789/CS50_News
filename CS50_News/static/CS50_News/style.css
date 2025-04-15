@@ -22,7 +22,7 @@
     --elements-background:#424242;
     --pg-border: hsla(0, 0%, 100%, 0.1);
     --page-text: hsl(0, 0%, 100%);
-    --page-secondary: #aeb0b5;
+    --page-secondary: #e7e7e7;
     --icon-color: #727272;
     --bg-hover: #393939;
     --opacity: 0.5;
@@ -127,7 +127,6 @@ header {
 
 .fa-circle-half-stroke {
   align-self: center;
-  color: var(--icon-color);
 }
 
 #navbar-form {
@@ -249,7 +248,7 @@ header {
   font-weight: 600;
 }
 
-#account-btn {
+.account-btn {
   width: 100%;
   height: 100%;
 }
@@ -276,6 +275,7 @@ header {
   justify-content: left;
   align-content: center;
   margin: 1rem 0;
+  width: 50%;
 }
 
 .a-dp-btn {
@@ -703,8 +703,15 @@ li.nav-dd-item:hover::after {
   color: var(--page-background);
 }
 
-.error-p {
+#body .error-p {
   color: #cf3939;
+  font-size: .85rem;
+  height: min-content;
+  margin: -1rem 0;
+}
+
+#body .ok-p {
+  color: #04b622;
   font-size: .85rem;
   height: min-content;
   margin: -1rem 0;
@@ -1004,7 +1011,6 @@ input[type="number"] {
   display: flex;
   gap: 4px;
   align-items: center;
-  color: var(--page-secondary);
   font-size: 12px;
   font-weight: 300;
   margin-bottom: 4px;

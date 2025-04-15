@@ -38,9 +38,9 @@
 					<div>
 						<label for="headline">headline</label>
 						{% if new %}
-							<input class="t-input" type="text" placeholder="Add a headline..." value="{{new.headline}}" id="headline" name="headline">
+							<input autocomplete="off" class="t-input" type="text" placeholder="Add a headline..." value="{{new.headline}}" id="headline" name="headline">
 						{% else %}
-							<input class="t-input" type="text" placeholder="Add a headline..." id="headline" name="headline">
+							<input autocomplete="off" class="t-input" type="text" placeholder="Add a headline..." id="headline" name="headline">
 						{% endif %}
 						<p class="headline-error error d-none">please provide a headline for the article</p>
 					</div>
@@ -49,9 +49,9 @@
 					<div>
 						<label for="Sub_headline">Sub headline</label>
 						{% if new %}
-							<input class="t-input" type="text" value="{{new.sub_headline}}" placeholder="Add a Sub headline..." id="Sub_headline" name="sub_headline">
+							<input autocomplete="off" class="t-input" type="text" value="{{new.sub_headline}}" placeholder="Add a Sub headline..." id="Sub_headline" name="sub_headline">
 						{% else %}
-							<input class="t-input" type="text" placeholder="Add a Sub headline..." id="Sub_headline" name="sub_headline">
+							<input autocomplete="off" class="t-input" type="text" placeholder="Add a Sub headline..." id="Sub_headline" name="sub_headline">
 						{% endif %}
 						<p class="Sub_headline-error error d-none">please provide a sub headline for the article</p>
 					</div>
@@ -98,10 +98,7 @@
 									<i class="fa-solid fa-x" data-tag={{tag}}></i>
 								</li>
 							{% endfor %}
-							<input type="text" id="tags-input" placeholder="Add a topic.." list="subs">
-							<datalist id="subs">
-								
-							</datalist>
+							<input type="text" id="tags-input" placeholder="Add a topic..">
 						</ul>
 						<ul class="suggestions list-group">
 							{% for tag in suggestions %}

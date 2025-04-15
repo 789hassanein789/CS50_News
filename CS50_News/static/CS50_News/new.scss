@@ -1,5 +1,17 @@
 $secondary: hsl(210, 2%, 34%);
 
+:root {
+    --page-background: #fff;
+    --page-text: #121212;
+    --page-secondary: #b6b6b6;
+}
+
+.dark-mode {
+    --page-background: #272727;
+    --page-text: #dee2e6;
+    --page-secondary: #414141;
+}
+
 @mixin new-hover {
     cursor: pointer;
     &:hover {
@@ -46,7 +58,7 @@ $secondary: hsl(210, 2%, 34%);
             align-items: center;
             font-size: 14px;
             gap: 1rem;
-            color: $secondary;
+            color: inherit;
 
             a {
                 user-select: none;
@@ -93,22 +105,18 @@ $secondary: hsl(210, 2%, 34%);
         font-size: .85rem;
         letter-spacing: 0px;
         padding: .6rem .7rem;
-        background-color: rgb(240, 240, 240);
+        background-color: var(--page-secondary);
         font-family: Arial, Helvetica, sans-serif;
 
         &:hover {
-            background-color: $secondary;
-            color: white;;
-        }
-        &:focus {
-            background-color: black;
-            color: white;
+            background-color: var(--page-text);
+            color: var(--page-background);
         }
     }
 }
 
 .border {
-    background-color: black;
+    background-color: var(--page-text);
     height: 3px;
 }
 
@@ -147,7 +155,6 @@ aside {
 }
 
 .more {
-
 
     .new-container {
         margin: 0 4rem;
