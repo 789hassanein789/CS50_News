@@ -44,6 +44,21 @@ I have implemeted a fairly good authentication & authrization system in this pro
         - change.py: containes tag functions.
 - final_project: the project directory.
    - .env: enviroment variables for securety.
+## requirements
+1. python3
+2. pip
+## How to run
+1. run `pip install -r requirements.txt` to install all the project dependencies.
+2. create a file to store your envirenment variables by running `python setup_env.py`, which will create a `.env` file in the project directory (final_project) to store all the envirenment variables.
+3. in the `.env` file you can find seven variables, and they are:
+   -EMAIL: for your support email address, it will be used to send emails for authentication.
+   -EMAIL_PASSWORD: for your support email password & both of them are required for the authentication sysrem to work.
+   -SECRET_KEY: the project `SECRET_KEY` and it will be pre-filled with a random secret_key when you generate the file using setup_env.py 
+   -GOOGLE_OAUTH_CLIENT_ID: for google project client_id, its used for social authentication with google account and you can get it by creating a project on [google cloud APIs](https://console.cloud.google.com/apis/dashboard) then create OAuth 2.0 Client IDs in credentials.
+   -GOOGLE_SECRET: for the google OAuth 2.0 client secret & both of the id and secret are required for the social authentication.
+   -GITHUB_OAUTH_CLIENT_ID: for github project client_id, just like google its used for social authetication and you can get it by creating a project on [github Developer settings](https://github.com/settings/developers).
+   -GITHUB_SECRET: for the github project client secret.
+4. make the migrations & migrate by running `python manage.py makemigrations` & `python manage.py migrate`
 
 * **Authentication & Authorization**: a user can register & log in into any account and
 
