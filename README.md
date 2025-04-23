@@ -4,7 +4,7 @@
 cs50 News is a bbc like news website were users can read news and articles on various topics, including but not limited to the recent news, sport, business, culture, Innovation and more, admins of the site can add, edit and delete articles and they control the distribution of articels in different pages by controling the sections of the page and the articels placement in each section.
 
 # Distinctiveness and Complexity
-I have implemeted a fairly good authentication & authrization system in this project using django-allauth library making the user able to sign up, sign in and sign out, as will as signing in using a third party provider (google & github), edit his account info like his email & password, reset his password even if he was signed out of his account, and finally delete the account, the news is devided to main categories then sub categories and every page is devided to sections and placements within sections which is all customizable by the admins, the site supports dark mood as will as having a text editor integrated in the admin page for writing news articles.
+for the distinctiveness this project is a news website it's not a wiki, only the admins of the site is able to create and edit news aritlce, as well as control the other aspects of the site and the news is divided into categories and the focus is on the latest events. overall the site functions like a bbc or cnn sites and not like wikipidia I have implemeted a fairly good authentication & authrization system in this project using django-allauth library making the user able to sign up, sign in and sign out, as will as signing in using a third party provider (google & github), edit his account info like his email & password, reset his password even if he was signed out of his account, and finally delete the account, the news is devided to main categories then sub categories and every page is devided to sections and placements within sections which is all customizable by the admins, the site supports dark mood as will as having a text editor integrated in the admin page for writing news articles.
 
 # Files content
 - CS50_News: the app directory.
@@ -51,32 +51,13 @@ I have implemeted a fairly good authentication & authrization system in this pro
 1. run `pip install -r requirements.txt` to install all the project dependencies.
 2. create a file to store your envirenment variables by running `python setup_env.py`, which will create a `.env` file in the project directory (final_project) to store all the envirenment variables.
 3. in the `.env` file you can find seven variables, and they are:
-   -EMAIL: for your support email address, it will be used to send emails for authentication.
-   -EMAIL_PASSWORD: for your support email password & both of them are required for the authentication sysrem to work.
-   -SECRET_KEY: the project `SECRET_KEY` and it will be pre-filled with a random secret_key when you generate the file using setup_env.py 
-   -GOOGLE_OAUTH_CLIENT_ID: for google project client_id, its used for social authentication with google account and you can get it by creating a project on [google cloud APIs](https://console.cloud.google.com/apis/dashboard) then create OAuth 2.0 Client IDs in credentials.
-   -GOOGLE_SECRET: for the google OAuth 2.0 client secret & both of the id and secret are required for the social authentication.
-   -GITHUB_OAUTH_CLIENT_ID: for github project client_id, just like google its used for social authetication and you can get it by creating a project on [github Developer settings](https://github.com/settings/developers).
-   -GITHUB_SECRET: for the github project client secret.
-4. make the migrations & migrate by running `python manage.py makemigrations` & `python manage.py migrate`
-
-* **Authentication & Authorization**: a user can register & log in into any account and
-
-* **Home Page**: the main route of the site should take the user to the Home page which display's all the important news 
-
-* **Admin Page**: The admin page is a page that is only accessible for admin via which the admin can:
-
-    - publish new articles
-    - distribute new articles in the site
-    - manage users accounts
-
-* **Categories**: each article should have a category and a list of tags, each article can have up to 10 tags and must have one category
-
-* **New Page**: when a user click's at a New he should be redircted to that New page where the user can:
-
-    - the content of the new article including the Headline, subheadline, auther, main image, content, time since the article was published and all tags/categories at the bottom of the article.
-    - the should display an edit and delete buttons if the admin is the auther of the article, clicking at the edit button should redirect the admin to the create article page with the article info prepopulating the fields, and clicking at the delete button should evoke a popup where the admin can conrifm or cancel.
-    - clicking at any category should take the user to a page displaying all the news articles that have the category with the most recent article first.
-    - the page should display all related articles, clicking at any article should take the user to that article page.
-
-* **Ranking algorithm**: implement a ranking algorithm that frequently reorder's all the new articles in the database based on the new article popularity.
+   - EMAIL: for your support email address, it will be used to send emails for authentication.
+   - EMAIL_PASSWORD: for your support email password & both of them are required for the authentication sysrem to work.
+   - SECRET_KEY: the project `SECRET_KEY` and it will be pre-filled with a random secret_key when you generate the file using setup_env.py 
+   - GOOGLE_OAUTH_CLIENT_ID: for google project client_id, its used for social authentication with google account and you can get it by creating a project on [google cloud APIs](https://console.cloud.google.com/apis/dashboard) then create OAuth 2.0 Client IDs in credentials.
+   - GOOGLE_SECRET: for the google OAuth 2.0 client secret & both of the id and secret are required for the social authentication.
+   - GITHUB_OAUTH_CLIENT_ID: for github project client_id, just like google its used for social authetication and you can get it by creating a project on [github Developer settings](https://github.com/settings/developers).
+   - GITHUB_SECRET: for the github project client secret.
+4. make the migrations & migrate by running `python manage.py makemigrations` & `python manage.py migrate`.
+6. create a super user to access the admin page and privileges by running `python manage.py createsuperuser`.
+7. run `python manage.py runserver` to lunch the project and then log into the super user account.
