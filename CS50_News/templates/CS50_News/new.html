@@ -14,7 +14,7 @@
                 {{new.headline}}
             </h1>
             <p class="time">
-                {{new.timestamp|timesince|timeformat|safe}}
+                {{new.timestamp|timesince|safe}}
             </p>
             <div class="min-info">
                 <p class="auther">
@@ -39,6 +39,7 @@
         </div>
         <div class="main-img">
             <img src="{{new.image.url}}" alt="main-img">
+            <div class="border"></div>
         </div>
         <article>
             <div class="new-content">
@@ -58,7 +59,7 @@
                     <a class="new-page-link" href="{% url 'new' cat=new.get_category_display sub=new.get_sub_category_display slug=new.slug %}">
                         <h6>{{related.headline}}</h6>
                         <div class="secondary-div">
-                            <span>{{related.timestamp|timesince|timeformat|safe}}</span>
+                            <span>{{related.timestamp|timesince|safe}}</span>
                             <div></div>
                             <span>{{related.get_category_display}}</span>
                         </div>

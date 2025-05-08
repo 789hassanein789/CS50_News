@@ -70,10 +70,10 @@
                     {% csrf_token %}
                     <p class="fs-4 fw-bold m-0">Are you sure?</p>
                     <p>By deleting your account, you will no longer be able to log in to websites, mobile apps, or other online services, and you will not be able to use your account to access any associated purchases, credits, points, rewards, plans, content or other benefits you may have associated with it.</p>
-                    <button class="popup-btn" id="delete-btn">
+                    <button class="popup-btn delete-btn">
                         Yes, delete this account
                     </button>
-                    <button class="popup-btn" id="back-btn" type="button">
+                    <button class="popup-btn cancel-btn" id="back-btn" type="button">
                         No, I'll keep it
                     </button>
                     {% if error %}
@@ -183,7 +183,7 @@
                     </div>
                 </div>
                 <a class="focus-link min-font" id="reset-link">forget your password?</a>
-                <p class="min-font">don't have an account?  <a class="focus-link min-font" onclick="show('signup')">sign up here.</a></p>
+                <p class="min-font">don't have an account?  <a class="focus-link min-font signup-link">sign up here.</a></p>
             </div>
             <div class="popup-block d-none" id="signup-block">
                 <form class="popup-form" id="signup-form">
@@ -238,7 +238,7 @@
                             </button>
                         </form>
                     </div>
-                    <p class="min-font">have an account allready?  <a class="focus-link min-font" onclick="show('login')">login here.</a></p>
+                    <p class="min-font">have an account allready?  <a class="focus-link min-font login-link">login here.</a></p>
                 </div>
             </div>
             <div class="popup-block d-none" id="reset-block">
@@ -300,6 +300,24 @@
                 </form>
             </div>
         {% endif %}
+        {% if users %}
+            <div class="popup-block d-none" id="management-popup-block">
+                <form method="post" class="popup-form" id="management-popup-form">
+                    {% csrf_token %}
+                    <p class="fs-4 fw-bold m-0">Are you sure?</p>
+                    <p class="management-message"></p>
+                    <button class="popup-btn delete-btn">
+                        Continue
+                    </button>
+                    <button class="popup-btn cancel-btn" type="button">
+                        cancel
+                    </button>
+                    {% if error %}
+                        <p class="error-p">{{error}}</p>
+                    {% endif %}
+                </form>
+            </div>
+        {% endif %}
         <div class="popup-block" id="otp-block">
             <form class="popup-form">
                 <p class="fs-3 fw-bold m-0">Check your email inbox</p>
@@ -315,10 +333,10 @@
                     </div>
                 </div>
                 <p class="error-p d-none" id="otp-input-error-p"></p>
-                <button class="popup-btn continue-btn" onclick="verifyEmail()" type="button">
+                <button class="popup-btn continue-btn" type="button">
                     Continue
                 </button>
-                <button class="popup-btn" onclick="settings()" type="button" id="cancel-btn">
+                <button class="popup-btn" type="button" id="cancel-btn">
                     Cancel
                 </button>
             </form>

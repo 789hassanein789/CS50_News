@@ -17,9 +17,6 @@ const settingsForm = document.querySelector('#settings-form');
 const loginForm = document.querySelector('#login-form');
 const signupFrom = document.querySelector('#signup-form');
 const closeBtns = document.querySelectorAll('.btn-close.setting-btn');
-const settingUsername = document.querySelector('#username');
-const settingFirst = document.querySelector('#first-name');
-const settingLast = document.querySelector('#last-name');
 const loginError = document.querySelector('#conflict-login');
 const loginInputs = document.querySelectorAll('.login-input');
 const navLinks = document.querySelectorAll('.nav-link');
@@ -27,14 +24,12 @@ const headingIcons = document.querySelectorAll('#main-header_content i');
 const AgreeBtn = document.querySelector('.signup-form-btn')
 const passwordForm = document.querySelector('#password-block form');
 const emailForm = document.querySelector('#email-block form');
-const hiddenPassword = document.querySelector('#hidden-password')
 const emailDiv = document.querySelector('#email')
 const passwordDiv = document.querySelector('#password')
 const continueBtn = document.querySelector('#validation-block .popup-btn');
 const resetForm = document.querySelector('#reset-form')
 const logoutForm = document.querySelector('#logout-form');
 const changePasswordError = document.querySelector('#password-block .error-p')
-const doneBtn = document.querySelector('#password-block .popup-btn')
 const resetLink = document.querySelector('#reset-link');
 const settingBtn = document.querySelector('#setting-btn');
 const backBtns = document.querySelectorAll('.back-btn')
@@ -45,21 +40,34 @@ const passwordBlockInputs = document.querySelectorAll('#password-block .popup-in
 const popupInputs = document.querySelectorAll('.popup-input')
 const emailBlockError = document.querySelector('#email-block .error-p')
 const emailBlockInput = document.querySelector('#new-email')
-const resendLink = document.querySelector('#resend-link')
 const resentContinueBtn = document.querySelector('#reset-block .continue-btn')
 const passwordResetLink = document.querySelector('#password-reset-link')
 const newPasswordForm = document.querySelector('#new-password-form')
 const successForm = document.querySelector('#success-form')
 const newPasswordContinueBtn = document.querySelector('#new-password-block .continue-btn')
-const scrollBtns = document.querySelector('#scroll-heading .buttons')
 const scrollDiv = document.querySelector('.scroll-div')
 const scrollRightBtn = document.querySelector('.scroll-right')
 const scrollLeftBtn = document.querySelector('.scroll-left')
 const scrollLinks = document.querySelectorAll('.scroll-div > a')
+const loginBtn = document.querySelector('.signin-btn')
+const loginLink = document.querySelector('.login-link')
+const signupBtn = document.querySelector('.signup-btn')
+const signupLink = document.querySelector('.signup-link')
+const otpContinueBtn = document.querySelector('#otp-block .continue-btn')
+const otpCancelBtn = document.querySelector('#otp-block #cancel-btn')
 
-const popupContent = popup.innerHTML;
-const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
- 
+
+otpContinueBtn.addEventListener("click", verifyEmail)
+
+otpCancelBtn.addEventListener("click", settings)
+
+signupLink && signupLink.addEventListener('click', () => {
+    show("signup")
+})
+
+loginLink && loginLink.addEventListener("click", () => {
+    show("login")
+})
 // dark/light mood
 if (darkMode === 'enabled') {
     document.body.classList.add('dark-mode');
@@ -117,7 +125,7 @@ document.querySelector(`#${Main}-category`).classList.add('selected')
 document.querySelector(`#nav-${Main}`).classList.add('clicked')
 
 // defining an object for category maping
-sub_categorys = [['Home'],
+const sub_categorys = [['Home'],
                 ['News', 'Israil-Gaza_war', 'Ukraine-Russia_war', 'Iraq', 'US_&_Canada', 'Middle_East', 'Europe', 'Asia', 'Africa', 'Australia', 'Latine_America'],
                 ['Sport', 'Martial_Arts', 'Football', 'Cricket', 'Formula_1', 'Tennis', 'Golf', 'Athletics', 'Cycling'],
                 ['Business'],
@@ -197,7 +205,7 @@ iconSize(media);
 
 // Attach listener function on state changes
 media.addEventListener("change", function() {
-iconSize(media);
+    iconSize(media);
 });
 
 passwordForm && passwordForm.addEventListener('submit', (e) => {
@@ -294,6 +302,21 @@ if (auth) {
     show(auth)
     settings()
 }
+let MAX_SCROLL;
+let x = window.matchMedia("(max-width: 992px)")
+let minx = window.matchMedia("(max-width: 480px")
+
+twoArticle(x)
+
+oneArticle(minx)
+
+x.addEventListener("change", () => {
+    twoArticle(x)
+})
+
+minx.addEventListener("change", () => {
+    oneArticle(minx)
+})
 
 if (scrollDiv) {
     let holding = false
@@ -312,14 +335,14 @@ if (scrollDiv) {
         if (scrollDiv.dataset.mousePosition === "0") return
 
         holding = true
-
+    
         const delta = parseFloat(scrollDiv.dataset.mousePosition) - e.clientX;
         const maxDelta = window.innerWidth / 2
 
         let percentage = (delta / maxDelta) * -100,
             newPercentage = parseFloat(scrollDiv.dataset.percentage) + percentage
         newPercentage = Math.min(newPercentage, 0)
-        newPercentage = Math.max(newPercentage, -100)
+        newPercentage = Math.max(newPercentage, MAX_SCROLL)
 
         scrollDiv.dataset.new = newPercentage
 
@@ -329,16 +352,36 @@ if (scrollDiv) {
     })
 
     scrollRightBtn && scrollRightBtn.addEventListener('click', () => {
-        scrollDiv.dataset.percentage = "-100"
+        let newPosition
+        if (scrollDiv.dataset.percentage % 100 == 0) {
+            newPosition = parseFloat(scrollDiv.dataset.percentage) - 100
+        }
+        else {
+            newPosition = Math.ceil(scrollDiv.dataset.percentage / 100) * -100
+        }
+        newPosition = Math.min(newPosition, 0)
+        newPosition = Math.max(newPosition, MAX_SCROLL)
+        scrollDiv.dataset.percentage = `${newPosition}`
+        scrollDiv.dataset.new = `${newPosition}`
         scrollDiv.animate({
-            transform: `translate(${scrollDiv.dataset.percentage}%, 0%)`
+            transform: `translate(${newPosition}%, 0%)`
         }, {duration: 500, fill: 'forwards'})
     })
 
     scrollLeftBtn && scrollLeftBtn.addEventListener('click', () => {
-        scrollDiv.dataset.percentage = "0"
+        let newPosition;
+        if (scrollDiv.dataset.percentage % 100 == 0) {
+            newPosition = parseFloat(scrollDiv.dataset.percentage) + 100
+        }
+        else {
+            newPosition = Math.floor(scrollDiv.dataset.percentage / 100) * -100
+        }
+        newPosition = Math.min(newPosition, 0)
+        newPosition = Math.max(newPosition, MAX_SCROLL)
+        scrollDiv.dataset.percentage = `${newPosition}`
+        scrollDiv.dataset.new = `${newPosition}`
         scrollDiv.animate({
-            transform: `translate(${scrollDiv.dataset.percentage}%, 0%)`
+            transform: `translate(${newPosition}%, 0%)`
         }, {duration: 500, fill: 'forwards'})
     })
 
@@ -351,10 +394,38 @@ if (scrollDiv) {
     })
 }
 
+loginBtn && loginBtn.addEventListener("click", () => {
+    show('login'); 
+    settings()
+})
+
+signupBtn && signupBtn.addEventListener("click", () => {
+    show('signup'); 
+    settings()
+})
+
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function twoArticle(x) {
+    if (x.matches) {
+        MAX_SCROLL = -300
+    }
+    else {
+        MAX_SCROLL = -100
+    }
+}
+
+function oneArticle(x) {
+    if (x.matches) {
+        MAX_SCROLL = -700
+    }
+    else {
+        MAX_SCROLL = -300
+    }
 }
 
 function enableDarkMode() {
@@ -384,22 +455,6 @@ function settings() {
     if (accountDPContent && !accountDPContent.classList.contains('d-none')) {
         accountDPContent.classList.add('d-none')
     }
-}
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Check if this cookie string begins with the name we want
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
 }
 
 function reauthenticate() {
@@ -899,3 +954,5 @@ function reset(e) {
         newPasswordContinueBtn.textContent = 'continue'
     })
 }
+
+export {settings, show, getCookie}

@@ -253,13 +253,13 @@ header {
   height: 100%;
 }
 
-.signin-btn, #back-btn {
+.signin-btn, .cancel-btn {
   background: transparent;
   border: 3px var(--page-text) solid;
   transition: 0.3s ease-in-out;
 }
 
-.signin-btn:hover, #back-btn:hover {
+.signin-btn:hover, .cancel-btn:hover {
   background-color: var(--page-text);
   color: var(--page-background);
 }
@@ -682,7 +682,7 @@ li.nav-dd-item:hover::after {
   color: white;
 }
 
-.done-btn, #delete-btn {
+.done-btn, .delete-btn {
   background-color: #30f;
   color: white;
 }

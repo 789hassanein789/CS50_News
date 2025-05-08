@@ -4,12 +4,14 @@ $secondary: hsl(210, 2%, 34%);
     --page-background: #fff;
     --page-text: #121212;
     --page-secondary: #b6b6b6;
+    --bg-hover: #f4f4f4;
 }
 
 .dark-mode {
     --page-background: #272727;
     --page-text: #dee2e6;
     --page-secondary: #414141;
+    --bg-hover: #d9d9d9;
 }
 
 @mixin new-hover {
@@ -71,12 +73,19 @@ $secondary: hsl(210, 2%, 34%);
 }
 
 .main-img {
-    margin: 0 auto;
+    margin: 1rem auto;
     width: 932px;
-
+    position: relative;
     img {
         width: 100%;
         object-fit: cover;
+        padding-bottom: 1rem;
+    }
+    .border {
+        background-color: var(--page-secondary);
+        height: 2px;
+        width: 728px;
+        margin: 0 auto;
     }
 }
 
@@ -98,6 +107,9 @@ $secondary: hsl(210, 2%, 34%);
     
     img {
         width: 100%;
+        margin: 2rem 0;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--page-secondary);
     }
     a {
         border: none;
@@ -105,7 +117,7 @@ $secondary: hsl(210, 2%, 34%);
         font-size: .85rem;
         letter-spacing: 0px;
         padding: .6rem .7rem;
-        background-color: var(--page-secondary);
+        background-color: var(--bg-hover);
         font-family: Arial, Helvetica, sans-serif;
 
         &:hover {
@@ -232,10 +244,11 @@ aside {
 
 @media screen and (max-width: 768px) {
     aside {
+        margin: 1rem .5rem;
         .content {
             grid-template-columns: 1fr;
             grid-template-rows: repeat(3, 1fr);
-            gap: 0;
+            gap: .5rem;
         }
     }
 }
@@ -251,6 +264,7 @@ aside {
             gap: .5rem;
         }
     }
+    
 }
 
 @media screen and (max-width: 300px) {

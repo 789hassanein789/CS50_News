@@ -6,7 +6,7 @@
     {% endif %}
     <div>
         <div class="side column-section">
-            {% for placement in section.articles.all|slice:":4" %}
+            {% for placement in section.articles.all|slice:":3" %}
                 {% if forloop.first %}
                     <a class="article main link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
                         <div class="img">
@@ -16,7 +16,7 @@
                             <h6 class="content-heading">{{placement.article.headline}}</h6>
                             <p>{{placement.article.sub_headline}}</p>
                             <div class="secondary-div">
-                                <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                                <span>{{placement.article.timestamp|timesince|safe}}</span>
                                 <div></div>
                                 <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
                             </div>
@@ -30,7 +30,7 @@
                         <div>
                             <h6>{{placement.article.headline}}</h6>
                             <div class="secondary-div">
-                                <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                                <span>{{placement.article.timestamp|timesince|safe}}</span>
                                 <div></div>
                                 <span>{{placement.article.get_sub_category_display}}</span>
                             </div>
@@ -40,7 +40,7 @@
             {% endfor %}
         </div>
         <div class="middle">
-            {% for placement in section.articles.all|slice:"4:6" %}
+            {% for placement in section.articles.all|slice:"3:5" %}
                 {% if forloop.first %}
                     <a class="article main link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
                         <div class="img">
@@ -50,7 +50,7 @@
                             <h6>{{placement.article.headline}}</h6>
                             <p>{{placement.article.sub_headline}}</p>
                             <div class="secondary-div">
-                                <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                                <span>{{placement.article.timestamp|timesince|safe}}</span>
                                 <div></div>
                                 <span>{{placement.article.get_sub_category_display}}</span>
                             </div>
@@ -64,7 +64,7 @@
                         <div class="content">
                             <h6>{{placement.article.headline}}</h6>
                             <div class="side-secondary secondary-div">
-                                <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                                <span>{{placement.article.timestamp|timesince|safe}}</span>
                                 <div></div>
                                 <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
                             </div>
@@ -74,7 +74,7 @@
             {% endfor %}
         </div>
         <div class="side column-section">
-            {% for placement in section.articles.all|slice:"6:" %}
+            {% for placement in section.articles.all|slice:"5:" %}
                 {% if forloop.first %}
                     <a class="article main link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
                         <div class="img">
@@ -84,7 +84,7 @@
                             <h6 class="content-heading">{{placement.article.headline}}</h6>
                             <p>{{placement.article.sub_headline}}</p>
                             <div class="secondary-div">
-                                <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                                <span>{{placement.article.timestamp|timesince|safe}}</span>
                                 <div></div>
                                 <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
                             </div>
@@ -95,7 +95,7 @@
                         <div>
                             <h6>{{placement.article.headline}}</h6>
                             <div class="secondary-div">
-                                <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                                <span>{{placement.article.timestamp|timesince|safe}}</span>
                                 <div></div>
                                 <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
                             </div>

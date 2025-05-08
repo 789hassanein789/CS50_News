@@ -84,6 +84,12 @@ footer {
   gap: 1.25rem;
   text-align: center;
   justify-content: center;
+  background-color: white;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+.media .icons a {
+  height: 32px;
 }
 .media .icons div {
   display: flex;

@@ -1,8 +1,7 @@
 from django.contrib.auth import logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from django import forms
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from allauth.account.decorators import login_required, secure_admin_login, reauthentication
@@ -19,34 +18,33 @@ from markdown2 import Markdown
 from .models import User, New, Page, Section, Placement
 from .utils import short_category, section_recursion
 
-
 section_names = Section.SECTIONS
 
 def index(request, cat="Home", sub=None, key=None):
-    sub_categories = None
-    if not sub:
-        page = get_object_or_404(Page, slug=cat)
-        sections = page.sections.prefetch_related("articles__article")
-        if not cat in ["Business", "Home"]:
+    if not cat in ["Business", "Home"]:
             sub_categories = New.SUB_CATEGORIES[cat[0]]
     else:
-        page = get_object_or_404(Page, slug=sub)
-        sections = page.sections.prefetch_related("articles__article")
-        sub_categories = New.SUB_CATEGORIES[cat[0]]    
+        sub_categories = None
+    parent = cat
+    if sub:
+        cat = sub
+    page = get_object_or_404(Page, slug=cat)
+    sections = page.sections.prefetch_related("articles__article")
     for section in sections:
         section.include_name = f"CS50_News/sections/_{section_names[section.name]}.html"
     return render(request, "CS50_News/index.html", {
         "sections" : sections,
         "subs": sub_categories,
-        "parent": cat,
+        "parent": parent,
         "sub_category": sub,
         "key": key
     })
 
 def search(request):
     q = request.GET.get("q")
-    q = q.capitalize().strip()
-    news = New.objects.filter(headline__contains=q)
+    news = New.objects.all()
+    if q:
+        news = news.filter(headline__contains=q.strip()).order_by("-timestamp")
     Paginators = Paginator(news, 10)
     pagenumber = request.GET.get("p")
     all_news = Paginators.get_page(pagenumber)
@@ -61,9 +59,20 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("index"))
 
 @secure_admin_login
-def admin_view(request):
-    return render(request, "CS50_News/admin.html", {
+def staff_view(request):
+    users = User.objects.all()
+    q = request.GET.get("q")
+    p = request.GET.get("p")
+    if not p:
+        p = 0
+    if (q):
+        users = users.filter(username=q.strip())
+    users = users.order_by("id")
+    paginator = Paginator(users, 10)
+    page_users = paginator.get_page(p)
+    return render(request, "CS50_News/staff.html", {
         "news": New.objects.filter(auther=request.user).order_by("-timestamp"),
+        "users": page_users
     })
 
 @secure_admin_login
@@ -89,7 +98,7 @@ def add_new(request, slug=None):
         with Image.open(image) as img:
             w, h = img.size
             aspect_ratio = 16 / 9
-            if isclose(w / h, aspect_ratio):
+            if not isclose(w / h, aspect_ratio):
                 newh = h
                 neww = int(h * aspect_ratio)
 
@@ -118,12 +127,12 @@ def add_new(request, slug=None):
                 if slug:
                     new.image = cropped_image_file
                 else:
-                    new = New(headline=headline, sub_headline=sub_headline, image=cropped_image_file, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-"))
+                    new = New(headline=headline, sub_headline=sub_headline, image=cropped_image_file, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-").replace("'", ""))
             else:
                 if slug:
                     new.image = image
                 else:
-                    new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-"))
+                    new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-").replace("'", ""))
         if slug:
             new.headline=headline
             new.sub_headline=sub_headline
@@ -140,7 +149,7 @@ def add_new(request, slug=None):
             new.save()
         except:
            return HttpResponse({"could not create the article"}, status=400)
-        return HttpResponseRedirect(reverse("admin"))
+        return HttpResponseRedirect(reverse("staff"))
     suggestions = Tag.objects.all().annotate(num_tags=Count("new")).order_by("-num_tags")
     return render(request, "CS50_News/editor.html", {
         "categories": New.CATEGORYS.values(),
@@ -214,7 +223,7 @@ def edit_new(request, slug=None):
             new.save()
         except:
            return HttpResponse({"could not Edit the article"}, status=400)
-        return HttpResponseRedirect(reverse("admin"))
+        return HttpResponseRedirect(reverse("staff"))
     new = New.objects.get(slug=slug)
     suggestions = Tag.objects.all().annotate(num_tags=Count("new")).order_by("-num_tags")
     return render(request, "CS50_News/editor.html", {
@@ -251,6 +260,37 @@ def delete_account(request):
         except User.DoesNotExist:
             return HttpResponse({"error":"There is no such account, please reload the page and try again"}, status=500)
     return HttpResponse({"error":"bad request method"}, status=405)
+
+@secure_admin_login
+def delete_user_account(request):
+    if request.method == "POST":
+        selected_users_ids = request.POST.getlist("selected-users")
+        users = User.objects.filter(id__in=selected_users_ids)
+        for user in users:
+            try:
+                user.delete()
+            except IntegrityError:
+                return HttpResponse(status=404)
+        return HttpResponseRedirect(reverse("staff"))
+    return HttpResponseRedirect(reverse("staff"))
+
+@secure_admin_login
+def user_management(request):
+    if request.method == "POST":
+        operation = request.POST.get("action")
+        selected_users_ids = request.POST.getlist("selected-users")
+        selected_users = User.objects.filter(id__in=selected_users_ids)
+        adminBool = operation == "admin"
+        staffBool = operation == "staff" or adminBool
+        for user in selected_users:
+            try:
+                user.is_superuser = adminBool
+                user.is_staff = staffBool
+                user.save()
+            except IntegrityError:
+                return HttpResponseRedirect(reverse("staff"))
+        return HttpResponseRedirect(reverse("staff"))
+    return HttpResponseRedirect(reverse("staff"))
 
 def accountEdit(request):
     if (
@@ -294,7 +334,7 @@ def reset(request, key):
     })
 
 def tag(request, tag):
-    news = New.objects.filter(tags__name__in=[tag]).order_by("timestamp")
+    news = New.objects.filter(tags__name__in=[tag]).order_by("-timestamp")
     pagenator = Paginator(news, 10)
     pagenum = request.GET.get("p")
     news = pagenator.get_page(pagenum)
@@ -314,7 +354,7 @@ def save_new(request, headline=None):
         else:
             user.saved_articles.add(article)
         return HttpResponse(status=200)
-    news = User.objects.get(id=request.user.id).saved_articles.all()
+    news = User.objects.get(id=request.user.id).saved_articles.all().order_by("-timestamp")
     paginator = Paginator(news, 10)
     num = request.GET.get("p")
     news = paginator.get_page(num)
@@ -357,6 +397,7 @@ def page(request, cat="Home", sub=None):
         news = New.objects.filter(headline__contains=q)
     else:
         news = New.objects.all()
+    news = news.order_by("-timestamp")
     Paginators = Paginator(news, 10)
     pagenumber = request.GET.get("p")
     all_news = Paginators.get_page(pagenumber)
@@ -381,6 +422,8 @@ def delete_section(request, id):
 
 @secure_admin_login
 def placements(request, name, cat="Home", sub=None):
+    if not [k for k, v in section_names.items() if v == name]:
+        return JsonResponse({"error": "there is not such section design"}, status=400)
     dict_name = list(section_names.keys())[list(section_names.values()).index(name)]
     if request.method == "POST":
         selected_page = Page.objects.get(slug=cat)
@@ -410,29 +453,45 @@ def placements(request, name, cat="Home", sub=None):
                 Placement.objects.create(article=New.objects.get(id=request.POST.get(str(i))), section=new_section, position=i)
                 i += 1
             return HttpResponseRedirect(reverse("page"))
-    q = request.GET.get("q")
-    if (q):
-        q = q.capitalize().strip()
-        news = New.objects.filter(category=cat[0], headline__contains=q)
-    else:
-        news = New.objects.all()
-        if cat != "Home":
-            news = news.filter(category=cat[0])
-            if sub:
-                sub_cateogry_dict = New.SUB_CATEGORIES[cat[0]]
-                print(sub_cateogry_dict.values())
-                sub_short_name = list(sub_cateogry_dict.keys())[list(sub_cateogry_dict.values()).index(sub)]
-                news = news.filter(sub_category=sub_short_name)
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        q = request.GET.get("q")
+        if q:
+            q = q.capitalize().strip()
+            news = New.objects.filter(category=cat[0], headline__contains=q)
+        else:
+            news = New.objects.all().order_by("id")
+        news = news.order_by("-timestamp")
+        p = request.GET.get("p")
         Paginators = Paginator(news, 10)
         pagenumber = request.GET.get("p")
-        all_news = Paginators.get_page(pagenumber)
-        if request.GET.get("edit"):
-            section = Section.objects.get(page=Page.objects.get(name=cat), name=dict_name, position=request.GET.get("position"))
-            section.include = f"CS50_News/designs/_{name}.html"
-        else:
-            section = {"include": f"CS50_News/designs/_{name}.html"}
-        return render(request, "CS50_News/placements.html", {
-            "section": section,
-            "news": all_news,
+        requested_news = Paginators.get_page(pagenumber)
+        news_data = []
+        news_data = [
+            {
+            "headline": n.headline,
+            "sub_headline": n.sub_headline,
+            "image": n.image.url if n.image else None,
+            "timestamp": n.timesince(),
+            "category": n.get_category_display(),
+            }
+            for n in requested_news 
+            ]
+        return JsonResponse({"news": news_data, "next": requested_news.has_next(), "previous": requested_news.has_previous(), "current_page": p}, safe=False)
+    news = New.objects.all().order_by("-timestamp")
+    paginators = Paginator(news, 10)
+    all_news = paginators.get_page(1)
+    if cat != "Home":
+        news = news.filter(category=cat[0])
+        if sub:
+            sub_cateogry_dict = New.SUB_CATEGORIES[cat[0]]
+            sub_short_name = list(sub_cateogry_dict.keys())[list(sub_cateogry_dict.values()).index(sub)]
+            news = news.filter(sub_category=sub_short_name)
+    if request.GET.get("edit"):
+        section = Section.objects.get(page=Page.objects.get(name=cat), name=dict_name, position=request.GET.get("position"))
+        section.include = f"CS50_News/designs/_{name}.html"
+    else:
+        section = {"include": f"CS50_News/designs/_{name}.html"}
+    return render(request, "CS50_News/placements.html", {
+        "section": section,
+        "news": all_news,
     })
-    

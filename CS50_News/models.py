@@ -2,12 +2,12 @@ import datetime
 import pytz
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils import timesince
 from taggit.managers import TaggableManager, TaggedItem
 
 # Create your models here.
 class User(AbstractUser):
     saved_articles = models.ManyToManyField("New")
+    
     def __str__(self):
         return f"{self.username}"
     
@@ -25,7 +25,6 @@ class New(models.Model):
         "N" : {   
             "IG": "Israil-Gaza_war",
             "UR": "Ukraine-Russia_war",
-            "IQ": "Iraq",
             "US&C": "US_&_Canada",
             "MD": "Middle_East",
             "EU": "Europe",
@@ -52,8 +51,11 @@ class New(models.Model):
         "I": {
             "TECH": "Technology",
             "S&HE": "Science_&_Health",
+            "FU": "Future",
+            "CL": "Climate",
         },
         "C": {
+            "CU": "Culture",
             "BOOK": "Books",
             "ST": "Style",
             "TV": "Film_&_TV",
@@ -73,7 +75,7 @@ class New(models.Model):
     }
     headline = models.CharField(max_length=100)
     sub_headline = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="CS50_News/static/CS50_News/cover")
+    image = models.ImageField(upload_to="images", default="images/test-img.jpg")
     content = models.TextField()
     views = models.IntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -84,7 +86,20 @@ class New(models.Model):
     slug = models.SlugField(default="" , null=False, unique=True, max_length=100)
 
     def timesince(self):
-        return (self.timestamp - datetime.datetime.now(tz=pytz.UTC)).total_seconds()
+        value = str(datetime.datetime.now(tz=pytz.UTC) - self.timestamp)
+        for i, s in enumerate(value):
+            if s == ',':
+                return f"{value[:i]}&nbspago"
+        if len(value) > 0:
+            if value[:3] == "0:0":
+                return "now"
+            if value[0] == "0":
+                return f"{value[2:4]}&nbspminutes&nbspago"
+            return f"{value[0]}&nbsphrs&nbspago"
+            
+        
+
+
     
 class Page(models.Model):
     name = models.CharField(max_length=100, unique=True)

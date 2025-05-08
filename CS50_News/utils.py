@@ -1,4 +1,5 @@
 from .models import New
+from re import sub
 
 def Rescore(news):
     for new in news:
@@ -21,3 +22,10 @@ def section_recursion(position, sections):
     s = sections.get(position=position)
     s.position += 1
     s.save()
+
+def slugify(string):
+    s = string.lower().strip()
+    s = sub(r'[^\w\s-]', '', s)
+    s = sub(r'[\s_-]+', '-', s)
+    s = sub(r'^-+|-+$', '', s)
+    return s

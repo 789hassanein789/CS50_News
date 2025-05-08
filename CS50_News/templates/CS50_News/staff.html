@@ -1,0 +1,178 @@
+{% extends 'CS50_News/layout.html' %}
+{% load change %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'CS50_News/staff.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div id="admin-container">
+        <div class="news-container" data-mouse-down-at="0">
+            <div class="news-scroll-div" data-percentage="0">
+                <a class="create link" href="{% url 'add' %}" draggable="false">
+                    +
+                </a>
+                {% for new in news %}
+                    <a href="{% url 'new' cat=new.get_category_display sub=new.get_sub_category_display slug=new.slug %}" class="created link" draggable="false">
+                        <div class="img">
+                            <img src="{{new.image.url}}" alt="" draggable="false">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">{{new.headline}}</h6>
+                            <p>{{new.sub_headline}}</p>
+                            <div class="secondary-div">
+                                <span>{{new.timestamp|timesince|safe}}</span>
+                                <div></div>
+                                <span>{{new.get_sub_category_display}}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="user-control">
+            <div id="user-search">
+                <form action="{% url 'staff' %}" method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" placeholder="search" autocomplete="off">
+                        <button class="btn btn-outline-secondary search-button" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <input type="hidden" name="p" value="1">
+                </form>
+            </div>
+            <form action="{% url 'user-management' %}" method="post" id="user-management-form">
+                {% csrf_token %}
+                <div id="select-div">
+                    <select name="action" id="action-select" class="form-select">
+                        <option disabled selected>select action</option>
+                        <option value="delete" id="delete-select-option">Delete user</option>
+                        <option value="user" id="user-select-option">user permissions</option>
+                        <option value="staff" id="staff-select-option">staff permissions</option>
+                        <option value="admin" id="admin-select-option">admin premissions</option>
+                    </select>
+                    <button id="go-btn">go</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td scope="col"><input type="checkbox" id="main-checkbox"></td>
+                            <th scope="col" class="username-table">username</th> 
+                            <th scope="col" class="access-table">access</th> 
+                            <th scope="col" class="active-table">last active</th> 
+                            <th scope="col" class="date-table">date added</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td><input type="checkbox" class="table-checkbox" name="selected-users" id="checkbox-{{user.id}}" value="{{user.id}}" data-username="{{user.username}}"></td>
+                                <td>
+                                    <h6>{{user.username}}</h6>
+                                    <small>{{user.email}}</small>
+                                </td>
+                                {% if user.is_superuser %}
+                                    <td><p class="badge rounded-pill text-bg-primary">admin</p></td>
+                                {% elif user.is_staff %}
+                                    <td><p class="badge rounded-pill text-bg-success">staff</p></td>
+                                {% else %}
+                                    <td><p class="badge rounded-pill text-bg-secondary">user</p></td>
+                                {% endif %}
+                                <td><p>{{user.last_login.date}}</p></td>
+                                <td class="date-table"><p>{{user.date_joined.date}}</p></td>
+                                <td>
+                                    <button class="icon-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {% if request.user.is_superuser %}
+                                            <li><button class="dropdown-item secondary-dropdown" type="button"><i class="fa-solid fa-key"></i> permission</button></li>
+                                            <ul class="sub-dropdown d-none">
+                                                <li><a class="dropdown-item" data-user-id="{{user.id}}" data-username="{{user.username}}">admin</a></li>
+                                                <li><a class="dropdown-item" data-user-id="{{user.id}}" data-username="{{user.username}}">staff</a></li>
+                                                <li><a class="dropdown-item" data-user-id="{{user.id}}" data-username="{{user.username}}">user</a></li>
+                                            </ul>
+                                        {% endif %}
+                                        <li><a class="dropdown-item delete-link" data-user-id="{{user.id}}" data-username="{{user.username}}"><i class="fa-solid fa-trash-can"></i> Delete user</a></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if users.has_previous or users.has_next %}
+                            {% if users.has_previous %}
+                                <li class="page-item"><a class="page-link" href="?p={{users.previous_page_number}}">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="?p={{users.previous_page_number}}">{{users.previous_page_number}}</a></li>
+                            {% endif %}
+                                <li class="page-item"><a class="page-link" href="">{{request.GET.p}}</a></li>
+                            {% if users.has_next %}
+                                <li class="page-item"><a class="page-link" href="?p={{users.next_page_number}}">{{users.next_page_number}}</a></li>
+                                <li class="page-item"><a class="page-link" href="?p={{users.next_page_number}}">Next</a></li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </nav>
+            </form>
+        </div>
+        <div id="distribution-container">
+            <a href="{% url 'page' %}" class="link" draggable="false">
+                <div id="distribution-wrapper">
+                    <div id="title">
+                        <h6>new distribution</h6>
+                    </div>
+                    <div id="distribution-body">
+                        <section id="only-section-design">
+                            <h3 class="section-heading only-section-heading">Section Title</h3>
+                            <div class="only-div">
+                            {% for i in '01'|make_list %}
+                                <div class="tn link article">
+                                    <div class="img">
+                                        <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <h6 class="content-heading">headline</h6>
+                                        <p>sub headline</p>
+                                        <div class="secondary-div">
+                                            <span>1d ago</span>
+                                            <div></div> 
+                                            <span>category</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            </div>
+                        </section>
+                        <section class="one-article-section" id="left-section-design">
+                            <h3>
+                                <div class="link">Category</div>
+                            </h3>
+                            <div class="side-img-article link article" data-chosen="" data-num="0">
+                                <input type="hidden" value="" name="0">
+                                <div class="img">
+                                    <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                                </div>
+                                <div class="content">
+                                    <h6 class="content-heading">headline</h6>
+                                    <p>sub headline</p>
+                                    <div class="secondary-div">
+                                        <span>1d ago</span>
+                                        <div></div> 
+                                        <span>category</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <script src="{% static 'CS50_News/staff.js' %}" type="module"></script>
+{% endblock %}

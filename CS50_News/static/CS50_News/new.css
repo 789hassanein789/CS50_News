@@ -2,12 +2,14 @@
   --page-background: #fff;
   --page-text: #121212;
   --page-secondary: #b6b6b6;
+  --bg-hover: #f4f4f4;
 }
 
 .dark-mode {
   --page-background: #272727;
   --page-text: #dee2e6;
   --page-secondary: #414141;
+  --bg-hover: #d9d9d9;
 }
 
 .heading {
@@ -52,13 +54,21 @@
 }
 
 .main-img {
-  margin: 0 auto;
+  margin: 1rem auto;
   width: 932px;
+  position: relative;
 }
 .main-img img {
   width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+  padding-bottom: 1rem;
+}
+.main-img .border {
+  background-color: var(--page-secondary);
+  height: 2px;
+  width: 728px;
+  margin: 0 auto;
 }
 
 .new-content {
@@ -79,6 +89,9 @@
 }
 .new-content img {
   width: 100%;
+  margin: 2rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--page-secondary);
 }
 .new-content a {
   border: none;
@@ -86,7 +99,7 @@
   font-size: 0.85rem;
   letter-spacing: 0px;
   padding: 0.6rem 0.7rem;
-  background-color: var(--page-secondary);
+  background-color: var(--bg-hover);
   font-family: Arial, Helvetica, sans-serif;
 }
 .new-content a:hover {
@@ -207,10 +220,13 @@ aside .content h6 {
   }
 }
 @media screen and (max-width: 768px) {
+  aside {
+    margin: 1rem 0.5rem;
+  }
   aside .content {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, 1fr);
-    gap: 0;
+    gap: 0.5rem;
   }
 }
 @media screen and (max-width: 480px) {

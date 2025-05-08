@@ -237,9 +237,9 @@
                 </div>
                 {% if user.is_staff %}
                     <div class="mt-3">
-                        <a class="a-dp-btn link" href="{% url 'admin' %}">
+                        <a class="a-dp-btn link" href="{% url 'staff' %}">
                             <i class="fa-solid fa-user-tie fa-lg"></i>
-                            admin page                    
+                            staff page                    
                         </a>
                     </div>
                 {% endif %}
@@ -247,10 +247,10 @@
         {% else %}
             <div class="account-div">
                 <form class="account-form">
-                    <button type="button" class="account-btn signin-btn" onclick="show('login'); settings()">log in</button>
+                    <button type="button" class="account-btn signin-btn">log in</button>
                 </form>
                 <form class="account-form">
-                    <button type="button" class="account-btn signup-btn" onclick="show('signup'); settings()">sign up</button>
+                    <button type="button" class="account-btn signup-btn">sign up</button>
                 </form>
             </div>    
         {% endif %}

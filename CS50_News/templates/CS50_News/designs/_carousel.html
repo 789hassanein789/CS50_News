@@ -14,7 +14,7 @@
                 <div class="carousel-inner">
                     {% for placement in section.articles.all|slice:":4" %}
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <a class="article link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                            <a class="article link" data-num="{{forloop.counter0}}">
                                 <img src="{{placement.article.image.url}}" class="d-block w-100 slide-img" alt="...">
                                 <div class="carousel-caption">
                                     <h5>{{placement.article.headline}}</h5>
@@ -35,15 +35,15 @@
             </div>
         </div>
         <div class="side-div">
-            {% for placement in section.articles.all %}
-                <a class="article side-new link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+            {% for placement in section.articles.all|slice:"4:8" %}
+                <a class="article side-new link" data-num="{{forloop.counter0|add:'4'}}">
                     <div class="side-new-image-div">
                         <img src="{{placement.article.image.url}}" alt="">
                     </div>
                     <div class="side-new-text">
                         <h6 class="main-text">{{placement.article.headline}}</h6>
                         <div class="secondary-div side-secondary">
-                            <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                            <span>{{placement.article.timestamp|timesince|safe}}</span>
                             <div></div>
                             <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
                         </div>

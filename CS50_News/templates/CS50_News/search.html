@@ -35,7 +35,7 @@
                         <h6 class="sub-headline">{{new.sub_headline}}</h6>
                     </div>
                     <div class="x-secondary-div side-secondary">
-                        <span>{{new.timestamp|timesince|timeformat|safe}}</span>
+                        <span>{{new.timestamp|timesince|safe}}</span>
                         <div></div>
                         <span>{{new.get_sub_category_display|change:"_ "}}</span>
                     </div>
@@ -47,35 +47,15 @@
     <nav>
         <ul class="pagination">
             {% if news.has_previous %}
-                {% if input %}
-                    <li class="page-item">
-                        <a class="page-link" href="?q={{input}}&p={{news.previous_page_number}}" aria-label="Previous">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{news.previous_page_number}}" aria-label="Previous">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </a>
-                    </li>
-                {% endif %}
+                <li class="page-item">
+                    <a class="page-link" href="?p={{news.previous_page_number}}{% if input %}&q={{input}}{% endif %}" aria-label="Previous">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                </li>
             {% endif %}
 
             {% for i in news.paginator.page_range %}
-                {% if input %}
-                    {% if request.GET.p|add:"0" == i %}
-                        <i class="page-item active" aria-current="page"><a class="page-link" href="?q={{input}}&p={{i}}">{{i}}</a></i>
-                    {% else %}    
-                        <i class="page-item"><a class="page-link" href="?q={{input}}&p={{i}}">{{i}}</a></i>
-                    {% endif %}
-                {% else %}
-                    {% if request.GET.p|add:"0" == i %}
-                    <i class="page-item active" aria-current="page"><a class="page-link" href="?p={{i}}">{{i}}</a></i>
-                    {% else %}    
-                        <i class="page-item"><a class="page-link" href="?p={{i}}">{{i}}</a></i>
-                    {% endif %}
-                {% endif %}
+                <i class="page-item {% if request.GET.p|add:'0' == i %} active {% endif %} {% if i == request.GET.p|add:'-5' or i == request.GET.p|add:'-4' or i == request.GET.p|add:'-3' or i == request.GET.p|add:'-2' or i == request.GET.p|add:'-1' or i == request.GET.p|add:'0' or i == request.GET.p|add:'1' or i == request.GET.p|add:'2' or i == request.GET.p|add:'3' or i == request.GET.p|add:'4' or i == request.GET.p|add:'5' %} {% else %} d-none {% endif %}" aria-current="page"><a class="page-link" href="?p={{i}}{% if input %}&q={{input}}{% endif %}">{{i}}</a></i>
             {% endfor %}
 
             {% if news.has_next %}

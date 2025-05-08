@@ -1,4 +1,15 @@
-# CS50 News  
+# CS50 News
+
+## Table of content
+1. [overview](#overview-of-the-project)
+2. [Distinctiveness and Complexity](#Distinctiveness-and-Complexity)
+3. [Files content](#Files-content)
+    - [CS50_News/](#CS50_News)
+5. [overview](#overview-of-the-project)
+6. [requirements](#requirements)
+7. [How to run](#How-to-run)
+8. [Note](#Note)
+9. [overview](#overview-of-the-project)
 
 ## overview of the project
 cs50 News is a bbc like news website were users can read news and articles on various topics, including but not limited to the recent news, sport, business, culture, Innovation and more, admins of the site can add, edit and delete articles and they control the distribution of articels in different pages by controling the sections of the page and the articels placement in each section.
@@ -45,23 +56,4 @@ I have implemeted a fairly good authentication & authrization system in this pro
 - final_project: the project directory.
    - .env: enviroment variables for securety.
 
-* **Authentication & Authorization**: a user can register & log in into any account and
-
-* **Home Page**: the main route of the site should take the user to the Home page which display's all the important news 
-
-* **Admin Page**: The admin page is a page that is only accessible for admin via which the admin can:
-
-    - publish new articles
-    - distribute new articles in the site
-    - manage users accounts
-
-* **Categories**: each article should have a category and a list of tags, each article can have up to 10 tags and must have one category
-
-* **New Page**: when a user click's at a New he should be redircted to that New page where the user can:
-
-    - the content of the new article including the Headline, subheadline, auther, main image, content, time since the article was published and all tags/categories at the bottom of the article.
-    - the should display an edit and delete buttons if the admin is the auther of the article, clicking at the edit button should redirect the admin to the create article page with the article info prepopulating the fields, and clicking at the delete button should evoke a popup where the admin can conrifm or cancel.
-    - clicking at any category should take the user to a page displaying all the news articles that have the category with the most recent article first.
-    - the page should display all related articles, clicking at any article should take the user to that article page.
-
-* **Ranking algorithm**: implement a ranking algorithm that frequently reorder's all the new articles in the database based on the new article popularity.
+# Note

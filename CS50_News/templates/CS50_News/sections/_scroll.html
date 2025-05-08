@@ -10,7 +10,7 @@
             <button class="btn scroll-right"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
     </div>
-    <div class="scroll-div" data-mouse-position="0" data-percentage="0">
+    <div class="scroll-div" data-mouse-position="0" data-percentage="0" data-new="0">
         {% for placement in section.articles.all %}
             <a class="new-container link article" data-id="{{placement.article.id}}" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" draggable="false">
                 <div class="new-image">
@@ -20,7 +20,7 @@
                     <h6 class="content-heading">{{placement.article.headline}}</h6>
                     <p>{{placement.article.sub_headline}}</p>
                     <div class="secondary-div">
-                        <span>{{placement.article.timestamp|timesince|timeformat|safe}}</span>
+                        <span>{{placement.article.timestamp|timesince|safe}}</span>
                         <div></div>
                         <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
                     </div>

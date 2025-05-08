@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
-from os import environ
+import os
 
 load_dotenv()
 
@@ -23,15 +23,15 @@ SITE_ID = 2
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-MEDIA_ROOT = ''
-MEDIA_URL = ''
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
 #TEMPLATE_DIR = os.path.join(BASE_DIR, 'webappexample', 'templates')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -67,8 +67,8 @@ SOCIALACCOUNT_PROVIDERS= {
         ],
         'AUTH_PARAMS': {'access_type': 'online'},
         'APP': {
-            'client_id': environ.get("GOOGLE_OAUTH_CLIENT_ID"),
-            'secret': environ.get("GOOGLE_SECRET"),
+            'client_id': os.environ.get("GOOGLE_OAUTH_CLIENT_ID"),
+            'secret': os.environ.get("GOOGLE_SECRET"),
             'key': ''
         }
     },
@@ -77,8 +77,8 @@ SOCIALACCOUNT_PROVIDERS= {
             'user'
         ],
         'APP': {
-            'client_id': environ.get("GITHUB_OAUTH_CLIENT_ID"),
-            'secret': environ.get("GITHUB_SECRET"),
+            'client_id': os.environ.get("GITHUB_OAUTH_CLIENT_ID"),
+            'secret': os.environ.get("GITHUB_SECRET"),
             'key': ''
         }
     }
@@ -174,8 +174,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
-EMAIL_HOST_USER = environ.get("EMAIL")
-EMAIL_HOST_PASSWORD = environ.get("EMAIL_PASSWORD")
+EMAIL_HOST_USER = os.environ.get("EMAIL")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 

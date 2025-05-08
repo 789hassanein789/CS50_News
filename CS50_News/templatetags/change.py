@@ -7,18 +7,8 @@ register = template.Library()
 def change(value, args):
     return value.replace(args[0], args[1])
 
-def timeformat(value):
-    if len(value) > 0:
-        if value[0] == "0":
-            return "now"
-    for i, s in enumerate(value):
-        if s == ',':
-            return f"{value[:i]}&nbspago"
-    return f"{value}&nbspago"
-
 def create_list(string):
     return string.split()
 
 register.filter("change", change)
-register.filter("timeformat", timeformat)
 register.filter("create_list", create_list)
