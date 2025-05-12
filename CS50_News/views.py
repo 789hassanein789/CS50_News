@@ -19,12 +19,14 @@ from .models import User, New, Page, Section, Placement
 from .utils import short_category, section_recursion
 
 section_names = Section.SECTIONS
+sub_categories = New.SUB_CATEGORIES
+new_categories = New.CATEGORYS
 
 def index(request, cat="Home", sub=None, key=None):
     if not cat in ["Business", "Home"]:
-            sub_categories = New.SUB_CATEGORIES[cat[0]]
+        subs = New.SUB_CATEGORIES[cat[0]]
     else:
-        sub_categories = None
+        subs = None
     parent = cat
     if sub:
         cat = sub
@@ -34,7 +36,7 @@ def index(request, cat="Home", sub=None, key=None):
         section.include_name = f"CS50_News/sections/_{section_names[section.name]}.html"
     return render(request, "CS50_News/index.html", {
         "sections" : sections,
-        "subs": sub_categories,
+        "subs": subs,
         "parent": parent,
         "sub_category": sub,
         "key": key
@@ -43,6 +45,9 @@ def index(request, cat="Home", sub=None, key=None):
 def search(request):
     q = request.GET.get("q")
     news = New.objects.all()
+    category = request.GET.get("cat")
+    if category:
+        news = news.filter(category=category[0])
     if q:
         news = news.filter(headline__contains=q.strip()).order_by("-timestamp")
     Paginators = Paginator(news, 10)
@@ -50,7 +55,8 @@ def search(request):
     all_news = Paginators.get_page(pagenumber)
     return render(request, "CS50_News/search.html", {
         "news": all_news,
-        "input": q,
+        "categories": new_categories.values(),
+        "count": news.count()
     })
 
 @login_required
@@ -70,10 +76,24 @@ def staff_view(request):
     users = users.order_by("id")
     paginator = Paginator(users, 10)
     page_users = paginator.get_page(p)
+    news = New.objects.filter(auther=request.user).order_by("-timestamp")
+    for n in news:
+        n.list = [sub for sub in sub_categories[n.category[0]].values()]
     return render(request, "CS50_News/staff.html", {
-        "news": New.objects.filter(auther=request.user).order_by("-timestamp"),
-        "users": page_users
+        "news": news,
+        "users": page_users,
     })
+
+def categories(request, slug, cat, sub):
+    if request.method == "POST":
+        new = New.objects.get(slug=slug)
+        print(cat[0])
+        print(sub_categories[cat[0]])
+        short_name = list(sub_categories[cat[0]].keys())[list(sub_categories[cat[0]].values()).index(sub)]
+        print(short_name)
+        new.sub_category = short_name
+        new.save()
+        return HttpResponseRedirect(reverse("staff"))
 
 @secure_admin_login
 def add_new(request, slug=None):
@@ -374,18 +394,18 @@ def reauthenticate_decision(request):
 
 @secure_admin_login
 def page(request, cat="Home", sub=None):
-    sub_categories = None
+    subs = None
     parent = None
     if not sub:
         page = Page.objects.get(slug=cat)
         sections = page.sections.prefetch_related("articles__article").order_by("position")
         parent = cat
         if not cat in ["Business", "Home"]:
-            sub_categories = New.SUB_CATEGORIES[cat[0]]
+            subs = New.SUB_CATEGORIES[cat[0]]
     else:
         page = Page.objects.get(slug=sub)
         sections = page.sections.prefetch_related("articles__article").order_by("position")
-        sub_categories = New.SUB_CATEGORIES[cat[0]]
+        subs = New.SUB_CATEGORIES[cat[0]]
         parent = cat
     
     for section in sections:
@@ -403,7 +423,7 @@ def page(request, cat="Home", sub=None):
     all_news = Paginators.get_page(pagenumber)
     return render(request, "CS50_News/pages.html", {
         "sections": sections,
-        "subs": sub_categories,
+        "subs": subs,
         "parent": parent,
         "all": [{"name": name, "include": f"CS50_News/designs/_{name}.html"}  for name in section_names.values()],
         "news": all_news,
@@ -426,9 +446,10 @@ def placements(request, name, cat="Home", sub=None):
         return JsonResponse({"error": "there is not such section design"}, status=400)
     dict_name = list(section_names.keys())[list(section_names.values()).index(name)]
     if request.method == "POST":
-        selected_page = Page.objects.get(slug=cat)
         if sub:
-            cat = sub
+            selected_page = Page.objects.get(slug=sub)
+        else:
+            selected_page = Page.objects.get(slug=cat)
         position = request.POST.get("position")
         if request.POST.get("method") == "put":
             edit_section = Section.objects.get(page=selected_page, name=dict_name, position=position)
@@ -436,12 +457,17 @@ def placements(request, name, cat="Home", sub=None):
                 edit_section.title = request.POST.get('title')
             i = 0
             edit_section.save()
-            while request.POST.get(str(i)):
-                placement = Placement.objects.get(section=edit_section, position=i)
-                placement.article=New.objects.get(id=request.POST.get(str(i)))
-                placement.save()
+            while str(i) in request.POST:
+                new_id = request.POST.get(str(i))
+                if new_id:
+                    placement = Placement.objects.get(section=edit_section, position=i)
+                    placement.article = New.objects.get(id=new_id)
+                    placement.save()
                 i += 1
-            return HttpResponseRedirect(reverse("page"))
+            kwargs = {"cat": cat}
+            if sub:
+                kwargs["sub"] = sub
+            return HttpResponseRedirect(reverse("page", kwargs=kwargs))
         else:
             sections = Section.objects.filter(page=selected_page)
             if sections.filter(position=position).exists():
@@ -468,20 +494,22 @@ def placements(request, name, cat="Home", sub=None):
         news_data = []
         news_data = [
             {
-            "headline": n.headline,
-            "sub_headline": n.sub_headline,
-            "image": n.image.url if n.image else None,
-            "timestamp": n.timesince(),
-            "category": n.get_category_display(),
+                "id": n.id,
+                "headline": n.headline,
+                "sub_headline": n.sub_headline,
+                "image": n.image.url if n.image else None,
+                "timestamp": n.timesince(),
+                "category": n.get_category_display(),
             }
             for n in requested_news 
             ]
         return JsonResponse({"news": news_data, "next": requested_news.has_next(), "previous": requested_news.has_previous(), "current_page": p}, safe=False)
-    news = New.objects.all().order_by("-timestamp")
-    paginators = Paginator(news, 10)
-    all_news = paginators.get_page(1)
-    if cat != "Home":
-        news = news.filter(category=cat[0])
+    order = request.GET.get("order") or "-timestamp"
+    news = New.objects.all().order_by(order)
+    p = request.GET.get("p") or 1
+    category = request.GET.get("category")
+    if category:
+        news = news.filter(category=category[0])
         if sub:
             sub_cateogry_dict = New.SUB_CATEGORIES[cat[0]]
             sub_short_name = list(sub_cateogry_dict.keys())[list(sub_cateogry_dict.values()).index(sub)]
@@ -491,7 +519,12 @@ def placements(request, name, cat="Home", sub=None):
         section.include = f"CS50_News/designs/_{name}.html"
     else:
         section = {"include": f"CS50_News/designs/_{name}.html"}
+    paginators = Paginator(news, 10)
+    all_news = paginators.get_page(p)
+    
     return render(request, "CS50_News/placements.html", {
         "section": section,
         "news": all_news,
+        "count": news.count(),
+        "categories": new_categories.values(),
     })

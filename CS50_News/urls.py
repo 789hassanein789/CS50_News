@@ -20,6 +20,7 @@ urlpatterns = [
         path("add/", include([
             path("", views.add_new, name="add"),
             path("<slug:slug>", views.edit_new, name="update"),
+            path("<slug:slug>/<str:cat>/<str:sub>", views.categories, name="categories"),
         ])),
     ])),
     path("deletenew/", views.delete_new, name="delete-new"),

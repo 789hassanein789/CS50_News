@@ -6,5 +6,4 @@ class Command(BaseCommand):
         user = User.objects.get(username="super")
         news = New.objects.all()
         for new in news:
-            new.auther = user
-            new.save()
+            print(new.id)

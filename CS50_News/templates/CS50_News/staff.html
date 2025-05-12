@@ -14,7 +14,7 @@
                     +
                 </a>
                 {% for new in news %}
-                    <a href="{% url 'new' cat=new.get_category_display sub=new.get_sub_category_display slug=new.slug %}" class="created link" draggable="false">
+                    <a class="created link" draggable="false">
                         <div class="img">
                             <img src="{{new.image.url}}" alt="" draggable="false">
                         </div>
@@ -28,10 +28,15 @@
                             </div>
                         </div>
                     </a>
+                    <div class="list-group categories-list">
+                        {% for li in new.list %} 
+                            <a data-slug="{{new.slug}}" data-cat="{{new.get_category_display}}" data-sub="{{li}}" class="list-group-item list-group-item-action">{{li}}</button>
+                        {% endfor %}
+                    </div>
                 {% endfor %}
             </div>
         </div>
-        <div id="user-control">
+        <div id="user-control" class="d-none">
             <div id="user-search">
                 <form action="{% url 'staff' %}" method="get">
                     <div class="input-group">
@@ -121,7 +126,7 @@
                 </nav>
             </form>
         </div>
-        <div id="distribution-container">
+        <div id="distribution-container" class="d-none">
             <a href="{% url 'page' %}" class="link" draggable="false">
                 <div id="distribution-wrapper">
                     <div id="title">

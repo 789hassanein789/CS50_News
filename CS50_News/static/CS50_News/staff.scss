@@ -156,6 +156,11 @@
     }
 }
 
+.categories-list {
+    max-height: 250px;
+    overflow-y: scroll;
+}
+
 .buttons {
     gap: 1rem;
     justify-content: left;

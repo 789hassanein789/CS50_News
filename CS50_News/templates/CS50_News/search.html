@@ -13,15 +13,35 @@
                 <h2 id="main-tag">{{tag}}</h2>
             {% else %}
                 <form action="{% url 'search' %}" class="top-search-form">
-                    <input autocomplete="off" type="text" class="top-search-input" name="q" value={{request.GET.q}}>
-                    <button class="top-search-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                        </svg>
-                    </button>
+                    <div class="top-search-div">
+                        <input autocomplete="off" type="text" class="top-search-input" name="q" value={{request.GET.q}}>
+                        <button class="top-search-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                            </svg> 
+                        </button>
+                    </div>
+                    <div class="category-radio-container">
+                        <input type="radio" name="cat" class="d-none" value="" id="everything-radio" {% if not request.GET.cat %} checked {% endif %}>
+                        <label for="everything-radio" class="category-radio">Everything</label>
+                        {% for v in categories %}
+                            <input type="radio" name="cat" class="d-none" value="{{v}}" id="{{v}}-radio" {% if v == request.GET.cat %} checked {% endif %}>
+                            <label for="{{v}}-radio" class="category-radio">{{v}}</label>
+                        {% endfor %}
+                    </div>
                     <input type="hidden" name="p" value="1">
                 </form>
+                <div class="light-seperator"></div>
             {% endif %}
+                <div class="search-info-container">
+                    <div>
+                        displaying {{news.start_index}}-{{news.end_index}} results out of {{count}}
+                    </div>
+                    <select name="order" id="order-select" form="top-search-form" class="form-select">
+                        <option value="-timestamp" selected>latest</option>
+                        <option value="timestamp">oldest</option>
+                    </select>
+                </div>
         {% for new in news %}
             <a class="h-card" href="{% url 'new' cat=new.get_category_display sub=new.get_sub_category_display slug=new.slug %}">
                 <div class="h-card-main-image-div">
@@ -48,7 +68,7 @@
         <ul class="pagination">
             {% if news.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?p={{news.previous_page_number}}{% if input %}&q={{input}}{% endif %}" aria-label="Previous">
+                    <a class="page-link" href="?p={{news.previous_page_number}}&q={{request.GET.q}}" aria-label="Previous">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                 </li>
@@ -59,19 +79,11 @@
             {% endfor %}
 
             {% if news.has_next %}
-                {% if input %}
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{news.next_page_number}}" aria-label="Next">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item">
-                        <a class="page-link" href="?q={{input}}&p={{news.next_page_number}}" aria-label="Next">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </a>
-                    </li>
-                {% endif %}
+                <li class="page-item">
+                    <a class="page-link" href="?q={{request.GET.q}}&p={{news.next_page_number}}" aria-label="Next">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </li>
             {% endif %}
         </ul>
     </nav>

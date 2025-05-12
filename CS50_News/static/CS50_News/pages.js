@@ -15,7 +15,6 @@ const createBtns = document.querySelectorAll(".create-btn")
 const cancelBtn = document.querySelector('#cancel-btn')
 const overlay = document.querySelector('.overlay')
 let placeholders;
-let currentPage = mainPage
 
 // dark mode
 let darkMode = localStorage.getItem('darkmode');
@@ -61,7 +60,6 @@ function show(pageName) {
         page.classList.add('d-none')
     })
     const pageToSee = document.getElementById(pageName)
-    currentPage = document.getElementById(pageName)
     pageToSee.scroll(top)
     pageToSee.classList.remove('d-none')
 }
@@ -125,10 +123,10 @@ function editDesign(e) {
     show('placements-page')
 }
 
-const scrollDiv = currentPage.querySelector('.scroll-div')
-const scrollRightBtn = currentPage.querySelector('.scroll-right')
-const scrollLeftBtn = currentPage.querySelector('.scroll-left')
-const scrollLinks = currentPage.querySelectorAll('.scroll-div > a')
+const scrollDiv = document.querySelector('.scroll-div')
+const scrollRightBtn = document.querySelector('.scroll-right')
+const scrollLeftBtn = document.querySelector('.scroll-left')
+const scrollLinks = document.querySelectorAll('.scroll-div > a')
 
 let holding = false
 

@@ -10,7 +10,8 @@
             <div class="side column-section">
                 {% for placement in section.articles.all|slice:":3" %}
                     {% if forloop.first %}
-                        <a class="article main link">
+                        <a class="article main link" data-num="{{forloop.counter0}}">
+                            <input type="hidden" value="" name="{{forloop.counter0}}">
                             <div class="img">
                                 <img src="{{placement.article.image.url}}" alt="">
                             </div>
@@ -25,7 +26,8 @@
                             </div>
                         </a>
                     {% else %}
-                        <a class="article link column-side-new">
+                        <a class="article link column-side-new" data-num="{{forloop.counter0}}">
+                            <input type="hidden" value="" name="{{forloop.counter0}}">
                             <div class="img">
                                 <img src="{{placement.article.image.url}}" alt="">
                             </div>
@@ -44,7 +46,8 @@
             <div class="middle">
                 {% for placement in section.articles.all|slice:"3:5" %}
                     {% if forloop.first %}
-                        <a class="article main link">
+                        <a class="article main link" data-num="{{forloop.counter0|add:'3'}}">
+                            <input type="hidden" value="" name="{{forloop.counter0|add:'3'}}">
                             <div class="img">
                                 <img src="{{placement.article.image.url}}" alt="">
                             </div>
@@ -59,7 +62,8 @@
                             </div>
                         </a>
                     {% else %}
-                        <a class="article link column-side-new">
+                        <a class="article link column-side-new" data-num="{{forloop.counter0|add:'3'}}">
+                            <input type="hidden" value="" name="{{forloop.counter0|add:'3'}}">
                             <div class="img">
                                 <img src="{{placement.article.image.url}}" alt="">
                             </div>
@@ -78,7 +82,8 @@
             <div class="side column-section">
                 {% for placement in section.articles.all|slice:"5:" %}
                     {% if forloop.first %}
-                        <a class="article main link">
+                        <a class="article main link" data-num="{{forloop.counter0|add:'5'}}">
+                            <input type="hidden" value="" name="{{forloop.counter0|add:'5'}}">
                             <div class="img">
                                 <img src="{{placement.article.image.url}}" alt="">
                             </div>
@@ -93,7 +98,8 @@
                             </div>
                         </a>
                     {% else %}
-                        <a class="article link column-side-new">
+                        <a class="article link column-side-new" data-num="{{forloop.counter0|add:'5'}}">
+                            <input type="hidden" value="" name="{{forloop.counter0|add:'5'}}">
                             <div>
                                 <h6>{{placement.article.headline}}</h6>
                                 <div class="secondary-div">
@@ -113,7 +119,7 @@
             <div class="side column-section">
                 {% for i in '0123'|make_list %}
                     {% if forloop.first %}
-                        <a class="main link article" data-chosen="" data-num="{{i}}">
+                        <a class="main link article" data-num="{{i}}">
                             <input type="hidden" value="" name="{{i}}">
                             <div class="img">
                                 <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
@@ -129,7 +135,7 @@
                             </div>
                         </a>
                     {% else %}
-                        <a class="link column-side-new article" data-chosen="" data-num="{{i}}">
+                        <a class="link column-side-new article" data-num="{{i}}">
                             <input type="hidden" value="" name="{{i}}">
                             <div class="img">
                                 <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
@@ -149,7 +155,7 @@
             <div class="middle">
                 {% for i in '45'|make_list %}
                     {% if forloop.first %}
-                        <a class="main link article" data-chosen="" data-num="2{{i}}">
+                        <a class="main link article" data-num="2{{i}}">
                             <input type="hidden" value="" name="{{i}}">
                             <div class="img">
                                 <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
@@ -165,7 +171,7 @@
                             </div>
                         </a>
                     {% else %}
-                        <a class="link column-side-new article" data-chosen="" data-num="2{{i}}">
+                        <a class="link column-side-new article" data-num="2{{i}}">
                             <input type="hidden" value="" name="{{i}}">
                             <div class="img">
                                 <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
@@ -185,7 +191,7 @@
             <div class="side column-section">
                 {% for i in '6789'|make_list %}
                     {% if forloop.first %}
-                        <a class="main link article" data-chosen="" data-num="3{{i}}">
+                        <a class="main link article" data-num="3{{i}}">
                             <input type="hidden" value="" name="{{i}}">
                             <div class="img">
                                 <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
@@ -201,7 +207,7 @@
                             </div>
                         </a>
                     {% else %}
-                        <a class="link column-side-i article" data-chosen="" data-num="3{{i}}">
+                        <a class="link column-side-i article" data-num="3{{i}}">
                             <input type="hidden" value="" name="{{i}}">
                             <div>
                                 <h6>headline</h6>

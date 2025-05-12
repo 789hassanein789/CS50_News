@@ -85,24 +85,25 @@ function pagination(e) {
             link.classList.add("h-card")
             link.dataset.id = `${article.id}`
             link.draggable = false
+            link.dataset.id = article.id
             const category = article.category.replace('_', ' ')
             link.innerHTML = `
-                <div class="h-card-main-image-div">
-                    <div class="h-card-sub-image-div">
-                        <img src="${article.image}" class="h-card-image" draggable="false">
+                    <div class="h-card-main-image-div">
+                        <div class="h-card-sub-image-div">
+                            <img src="${article.image}" class="h-card-image" draggable="false">
+                        </div>
                     </div>
-                </div>
-                <div class="h-card-content">
-                    <h4 class="headline">${article.headline}</h4>
-                    <div class="sub-headline-div">
-                        <h6 class="sub-headline">${article.sub_headline}</h6>
+                    <div class="h-card-content">
+                        <h4 class="headline">${article.headline}</h4>
+                        <div class="sub-headline-div">
+                            <h6 class="sub-headline">${article.sub_headline}</h6>
+                        </div>
+                        <div class="x-secondary-div side-secondary">
+                            <span>${article.timestamp}</span>
+                            <div></div>
+                            <span>${category}</span>
+                        </div>
                     </div>
-                    <div class="x-secondary-div side-secondary">
-                        <span>${article.timestamp}</span>
-                        <div></div>
-                        <span>${category}</span>
-                    </div>
-                </div>
                 `
             newsDiplay.appendChild(link)
         })

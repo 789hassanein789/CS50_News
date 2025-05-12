@@ -545,12 +545,20 @@ li.nav-dd-item:hover::after {
 
 .top-search-form {
   display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.top-search-div {
+  display: flex;
   justify-content: center;
+  width: 100%;
+  height: 40px;
 }
 
 .top-search-input {
   width: 80%;
-  height: 40px;
+  height: 100%;
   border: 1px solid var(--page-secondary);
   border-right: none;
   padding-left: .5rem;
@@ -563,13 +571,43 @@ li.nav-dd-item:hover::after {
 
 .top-search-btn {
   border: 1px solid var(--page-secondary);
-  height: 40px;
+  height: 100%;
   width: 40px;
   background-color: transparent;
 }
 
 .top-search-btn:hover {
   background-color: var(--bg-hover);
+}
+
+.category-radio-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.category-radio-container label {
+  font-size: 1.25em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.category-radio-container input[type="radio"]:checked+label {
+  border-bottom: 2px solid red;
+  font-weight: 600;
+}
+
+.search-info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.search-info-container div {
+  margin: 0;
+}
+
+#order-select {
+  width: 100px;
 }
 
 .overlay {

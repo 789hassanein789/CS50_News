@@ -10,6 +10,7 @@ const managementPopupMessage = document.querySelector('.management-message')
 const managementCancelBtn = document.querySelector('#management-popup-form .cancel-btn')
 const deleteLinks = document.querySelectorAll('.delete-link')
 const permissionLinks = document.querySelectorAll('.sub-dropdown .dropdown-item')
+const links = document.querySelectorAll('.list-group-item-action')
 
 mainCheckbox.addEventListener("click", toggleAll)
 allCheckboxs.forEach(checkbox => {
@@ -92,6 +93,21 @@ managementPopupForm.addEventListener('submit', (e) => {
         }
     }
     managementForm.submit()
+})
+
+links.forEach(link => {
+    link.addEventListener("click", () => {
+        fetch(`/staff/add/${link.dataset.slug}/${link.dataset.cat}/${link.dataset.sub}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                credentials: "same-origin",
+            })
+            .then(res => {
+                console.log(res)
+            })
+    })
 })
 
 function toggleAll() {

@@ -42,16 +42,36 @@
         </div>
         <div class="main-search-div">
             <div class="sub-main-search-div">
-                <form class="top-search-form">
-                    <input autocomplete="off" type="text" class="top-search-input" name="q" value={{request.GET.q}}>
-                    <button class="top-search-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                        </svg> 
-                    </button>
+                <form class="top-search-form" id="top-search-form">
+                    <div class="top-search-div">
+                        <input autocomplete="off" type="text" class="top-search-input" name="q" value={{request.GET.q}}>
+                        <button class="top-search-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                            </svg> 
+                        </button>
+                    </div>
+                    <div class="category-radio-container">
+                        <input type="radio" name="cat" class="d-none" value="" id="everything-radio" {% if not request.GET.cat %} checked {% endif %}>
+                        <label for="everything-radio" class="category-radio">Everything</label>
+                        {% for v in categories %}
+                            <input type="radio" name="cat" class="d-none" value="{{v}}" id="{{v}}-radio" {% if v == request.GET.cat %} checked {% endif %}>
+                            <label for="{{v}}-radio" class="category-radio">{{v}}</label>
+                        {% endfor %}
+                    </div>
                     <input type="hidden" name="page" value="search-page">
                     <input type="hidden" name="p" value="1">
-                </form> 
+                </form>
+                <div class="light-seperator"></div>
+                <div class="search-info-container">
+                    <div>
+                        displaying {{news.start_index}}-{{news.end_index}} results out of {{count}}
+                    </div>
+                    <select name="order" id="order-select" form="top-search-form" class="form-select">
+                        <option value="-timestamp" selected>latest</option>
+                        <option value="timestamp">oldest</option>
+                    </select>
+                </div>
                 <div id="news-display" data-name="{{request}}">
                     {% for new in news %}
                         <a class="h-card" data-id="{{new.id}}" draggable="false">

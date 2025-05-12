@@ -5,13 +5,14 @@ import requests
 from bs4 import BeautifulSoup
 from CS50_News.utils import slugify
 import os
+import re
 from django.core.files.base import ContentFile
 from urllib.parse import urlparse
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         url = "https://www.bbc.com"
-        page = requests.get(f"{url}/culture")
+        page = requests.get(f"{url}/business")
         soup = BeautifulSoup(page.text, "html.parser")
         articles = soup.find_all("a", "hMvGwj")
         i = 0
@@ -42,8 +43,8 @@ class Command(BaseCommand):
                 else:
                     content += f"##{tag.text}\n\n"
             sub_category = article.find("span", "ivCQgh")
-            category = "C"
-            short_name = "CU"
+            category = "B"
+            short_name = "B"
             for key, dict in New.SUB_CATEGORIES.items():
                 values = [value.replace("_", " ") for value in dict.values()]
                 if sub_category and sub_category.text in values:
@@ -59,8 +60,11 @@ class Command(BaseCommand):
                 article_img = article_content_soup.find("img", "edrdn950")
             if article_img:
                 src = article_img.get("src")
-                if not src.startswith("http"):
-                    src = requests.compat.urljoin(url + src)
+                src = re.sub(r"/news/\d+/", "/news/2048/", src)
+                src = re.sub(r"/standard/\d+/", "/standard/2048/", src)
+                src = re.sub(r"/ic/\d+x\d+/", "/ic/1920x1080/", src)
+                src = re.sub(r"/ic/\d+x\d+/", "/ic/1920x1080/", src)
+                print(src)
                 request = requests.get(src, stream=True)
             if request and request.status_code == 200:
                 name = os.path.basename(urlparse(src).path)
@@ -81,8 +85,6 @@ class Command(BaseCommand):
                 new.image.save(name, ContentFile(request.content), save=True)
             new.save()
             print("saved")
-            print(category)
-            print(short_name)
             for tag in article_content_soup.find_all("a", "emeJAW"):
                 new.tags.add(tag.text)
             new.save()

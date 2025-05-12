@@ -58,7 +58,7 @@
 								{% csrf_token %}
 								<button><i class="fa-solid fa-trash"></i> Delete</button>
 							</form>
-							<a href="placements/{{section.get_name_display}}?position={{section.position}}&edit=t" class="section-edit" value="{{section.name}}"><i class="fa-solid fa-pen"></i> Edit</a>
+							<a href="placements/{{section.get_name_display}}?position={{section.position}}&p=1&edit=t" class="section-edit" value="{{section.name}}"><i class="fa-solid fa-pen"></i> Edit</a>
 						</div>
 						{% include section.include_name %}
 						{% if forloop.last %}
@@ -95,7 +95,7 @@
 					<div class="section-container">
 						{% include section.include %}
 						<div class="select-btn">
-							<a href="placements/{{section.name}}" class="select-link">select</a>
+							<a href="placements/{{section.name}}?p=1" class="select-link">select</a>
 						</div>
 					</div>
 				{% endfor %}
