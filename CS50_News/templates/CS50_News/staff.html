@@ -30,7 +30,12 @@
                     </a>
                     <div class="list-group categories-list">
                         {% for li in new.list %} 
-                            <a data-slug="{{new.slug}}" data-cat="{{new.get_category_display}}" data-sub="{{li}}" class="list-group-item list-group-item-action">{{li}}</button>
+                            <a data-slug="{{new.slug}}" data-cat="{{new.get_category_display}}" data-sub="{{li}}" class="list-group-item list-group-item-action">{{li}}</a>
+                        {% endfor %}
+                    </div>
+                    <div class="list-group categories-list">
+                        {% for li in new.cats %} 
+                            <a data-slug="{{new.slug}}" data-cat="{{li}}" class="list-group-item list-group-item-action">{{li}}</a>
                         {% endfor %}
                     </div>
                 {% endfor %}

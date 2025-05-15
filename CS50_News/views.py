@@ -16,7 +16,7 @@ from taggit.models import Tag
 import json
 from markdown2 import Markdown
 from .models import User, New, Page, Section, Placement
-from .utils import short_category, section_recursion
+from .utils import short_category, section_recursion, slugify
 
 section_names = Section.SECTIONS
 sub_categories = New.SUB_CATEGORIES
@@ -78,20 +78,21 @@ def staff_view(request):
     page_users = paginator.get_page(p)
     news = New.objects.filter(auther=request.user).order_by("-timestamp")
     for n in news:
+        n.cats = [cat for cat in new_categories]
         n.list = [sub for sub in sub_categories[n.category[0]].values()]
     return render(request, "CS50_News/staff.html", {
         "news": news,
         "users": page_users,
     })
 
-def categories(request, slug, cat, sub):
+@secure_admin_login
+def categories(request, slug, cat, sub=None):
     if request.method == "POST":
         new = New.objects.get(slug=slug)
-        print(cat[0])
-        print(sub_categories[cat[0]])
-        short_name = list(sub_categories[cat[0]].keys())[list(sub_categories[cat[0]].values()).index(sub)]
-        print(short_name)
-        new.sub_category = short_name
+        if sub:
+            short_name = list(sub_categories[cat[0]].keys())[list(sub_categories[cat[0]].values()).index(sub)]
+            new.sub_category = short_name
+        new.category = cat[0]
         new.save()
         return HttpResponseRedirect(reverse("staff"))
 
@@ -147,12 +148,12 @@ def add_new(request, slug=None):
                 if slug:
                     new.image = cropped_image_file
                 else:
-                    new = New(headline=headline, sub_headline=sub_headline, image=cropped_image_file, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-").replace("'", ""))
+                    new = New(headline=headline, sub_headline=sub_headline, image=cropped_image_file, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=slugify(headline))
             else:
                 if slug:
                     new.image = image
                 else:
-                    new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=headline.replace(" ", "-").replace("'", ""))
+                    new = New(headline=headline, sub_headline=sub_headline, image=image, content=content, auther=request.user, category=category[0], sub_category=short_name, slug=slugify(headline))
         if slug:
             new.headline=headline
             new.sub_headline=sub_headline
@@ -160,7 +161,7 @@ def add_new(request, slug=None):
             new.auther=request.user
             new.category=category[0]
             new.sub_category=short_name
-            new.slug=headline.replace(" ", "-")
+            new.slug=slugify(headline)
         new.save()
         try:
             tags = tags.split(",")
@@ -234,7 +235,7 @@ def edit_new(request, slug=None):
         new.auther=request.user
         new.category=category[0]
         new.sub_category=short_name
-        new.slug=headline.replace(" ", "-")
+        new.slug=slugify(headline)
         new.save()
         try:
             tags = tags.split(",")
@@ -346,11 +347,6 @@ def new(request, cat, sub, slug):
         "relatedNews": related,
         "tags": news.tags.names(),
         "saved": user,
-    })
-
-def reset(request, key):
-    return render(request, "CS50_News/reset.html", {
-        "key": key
     })
 
 def tag(request, tag):
@@ -481,17 +477,18 @@ def placements(request, name, cat="Home", sub=None):
             return HttpResponseRedirect(reverse("page"))
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
         q = request.GET.get("q")
+        print("hi")
         if q:
+            print("hi")
             q = q.capitalize().strip()
-            news = New.objects.filter(category=cat[0], headline__contains=q)
+            news = New.objects.filter(headline__contains=q)
         else:
-            news = New.objects.all().order_by("id")
+            news = New.objects.all()
         news = news.order_by("-timestamp")
         p = request.GET.get("p")
-        Paginators = Paginator(news, 10)
+        paginator = Paginator(news, 10)
         pagenumber = request.GET.get("p")
-        requested_news = Paginators.get_page(pagenumber)
-        news_data = []
+        requested_news = paginator.get_page(pagenumber)
         news_data = [
             {
                 "id": n.id,
@@ -501,9 +498,9 @@ def placements(request, name, cat="Home", sub=None):
                 "timestamp": n.timesince(),
                 "category": n.get_category_display(),
             }
-            for n in requested_news 
+            for n in requested_news
             ]
-        return JsonResponse({"news": news_data, "next": requested_news.has_next(), "previous": requested_news.has_previous(), "current_page": p}, safe=False)
+        return JsonResponse({"news": news_data, "next": requested_news.has_next(), "previous": requested_news.has_previous(), "current_page": p, "num_pages": paginator.num_pages, "start": requested_news.start_index(), "end": requested_news.end_index(), "count": paginator.count}, safe=False)
     order = request.GET.get("order") or "-timestamp"
     news = New.objects.all().order_by(order)
     p = request.GET.get("p") or 1
@@ -519,8 +516,8 @@ def placements(request, name, cat="Home", sub=None):
         section.include = f"CS50_News/designs/_{name}.html"
     else:
         section = {"include": f"CS50_News/designs/_{name}.html"}
-    paginators = Paginator(news, 10)
-    all_news = paginators.get_page(p)
+    paginator = Paginator(news, 10)
+    all_news = paginator.get_page(p)
     
     return render(request, "CS50_News/placements.html", {
         "section": section,

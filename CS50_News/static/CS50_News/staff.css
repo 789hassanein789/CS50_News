@@ -323,13 +323,21 @@ table .sub-dropdown {
 }
 
 #edit-page > div:last-child {
-  display: grid;
-  grid-template-columns: repeat(2, 50%);
+  -moz-columns: 450px;
+       columns: 450px;
   box-sizing: border-box;
   font-size: 0.75rem;
 }
 #edit-page > div:last-child .section-container {
   position: relative;
+  -moz-column-break-inside: avoid;
+       break-inside: avoid;
+  border: 1px solid var(--page-secondary);
+  margin: 0.75rem 0;
+  padding: 0.25rem 0;
+}
+#edit-page > div:last-child .section-container:hover {
+  border-color: var(--page-text);
 }
 #edit-page > div:last-child .section-container .select-btn {
   position: absolute;

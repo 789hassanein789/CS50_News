@@ -55,7 +55,6 @@ const {
 	Subscript,
 	Superscript,
 	TextTransformation,
-	Title,
 	TodoList,
 	Underline,
 	WordCount
@@ -175,7 +174,6 @@ const editorConfig = {
 		Subscript,
 		Superscript,
 		TextTransformation,
-		Title,
 		TodoList,
 		Underline,
 		WordCount
@@ -399,7 +397,7 @@ if (editImg && editImg) {
 				dataTransfer.items.add(file);
 				input.files = dataTransfer.files;
 			})
-			.catch(error => console.error("Error loading image:", error));
+		.catch(error => console.error("Error loading image:", error));
 	}
 }
 

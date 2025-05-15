@@ -20,6 +20,7 @@ urlpatterns = [
         path("add/", include([
             path("", views.add_new, name="add"),
             path("<slug:slug>", views.edit_new, name="update"),
+            path("<slug:slug>/<str:cat>", views.categories, name="categories"),
             path("<slug:slug>/<str:cat>/<str:sub>", views.categories, name="categories"),
         ])),
     ])),
@@ -38,7 +39,6 @@ urlpatterns = [
     path("auth", views.index, name="auth"),
     path("auth/<str:key>", views.index, name="new-password"),
     path("tags/<str:tag>", views.tag, name="tags"),
-    path("password/reset/key/<str:key>", views.reset, name="password_reset"),
     path("<str:cat>/", include([
         path("", views.index, name="cat_index"),
         path("<str:sub>", views.index, name="cat_index"),

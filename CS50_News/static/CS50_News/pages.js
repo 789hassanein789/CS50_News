@@ -36,7 +36,7 @@ createLinks.forEach(link => {
     link.addEventListener('click', () => {
         if (link.dataset.num)
         selectLinks.forEach(selectlink => {
-            selectlink.setAttribute('href', `${selectlink.getAttribute('href')}?position=${link.dataset.num}`)
+            selectlink.setAttribute('href', `${selectlink.getAttribute('href')}&position=${link.dataset.num}`)
         })
         show('edit-page')
     })

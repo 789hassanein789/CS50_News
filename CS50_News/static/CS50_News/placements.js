@@ -14,6 +14,10 @@ const nextLink = document.querySelector('#next-link')
 const previousLink = document.querySelector('#previous-link')
 const newsDiplay = document.querySelector('#news-display')
 const numPages = document.querySelectorAll('.number-items')
+const searchForm = document.querySelector('#top-search-form')
+const searchInput = searchForm.querySelector('.top-search-input')
+const displayText = document.querySelector('.search-info-container > div')
+const paginationList = document.querySelector('.pagination')
 let darkMode = localStorage.getItem('darkmode');
 let currentPage = 1
 
@@ -55,7 +59,15 @@ backBtn.addEventListener('click', () => {
 })
 
 paginationLinks.forEach(link => {
-    link.addEventListener('click', (e) => pagination(e))
+    link.addEventListener('click', (e) => {
+        const p = e.currentTarget.dataset.p
+        search(p)
+    })
+})
+
+searchForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+    search(1)
 })
 
 function show(pageName) {
@@ -67,83 +79,7 @@ function show(pageName) {
     pageToSee.classList.remove('d-none')
 }
 
-function pagination(e) {
-    const p = e.currentTarget.dataset.p
-    fetch(`/staff/page/placements/only?p=${p}`, {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(res => res.json())
-    .then(result => {
-        console.log(result)
-        newsDiplay.innerHTML = ""
-        currentPage = parseInt(result.current_page)
-        const news = result.news
-        news.forEach(article => {
-            const link = document.createElement("a")
-            link.classList.add("h-card")
-            link.dataset.id = `${article.id}`
-            link.draggable = false
-            link.dataset.id = article.id
-            const category = article.category.replace('_', ' ')
-            link.innerHTML = `
-                    <div class="h-card-main-image-div">
-                        <div class="h-card-sub-image-div">
-                            <img src="${article.image}" class="h-card-image" draggable="false">
-                        </div>
-                    </div>
-                    <div class="h-card-content">
-                        <h4 class="headline">${article.headline}</h4>
-                        <div class="sub-headline-div">
-                            <h6 class="sub-headline">${article.sub_headline}</h6>
-                        </div>
-                        <div class="x-secondary-div side-secondary">
-                            <span>${article.timestamp}</span>
-                            <div></div>
-                            <span>${category}</span>
-                        </div>
-                    </div>
-                `
-            newsDiplay.appendChild(link)
-        })
-        const links = document.querySelectorAll('.news-search .h-card');
-        links.forEach(link => {
-            link.addEventListener('click', clickLink)
-        })
-        document.querySelectorAll('.pagination .active').forEach(active => {
-            active.classList.remove('active')
-        })
-        document.querySelector(`.pagination-link-${currentPage}`).parentElement.classList.add('active')
-        paginationLinks.forEach(link => {
-            link.classList.remove('active')
-            if (link.classList.contains(`.pagination-link-${currentPage}`)) {
-                link.classList.add('active')
-            }
-        })
-        nextLink.dataset.p = parseInt(currentPage) + 1
-        if (result.next) {
-            nextLink.parentElement.classList.remove('d-none')
-        }
-        else {
-            nextLink.parentElement.classList.add('d-none')
-        }
-        previousLink.dataset.p = parseInt(currentPage) - 1
-        if (result.previous) {
-            previousLink.parentElement.classList.remove('d-none')
-        }
-        else {
-            previousLink.parentElement.classList.add('d-none')
-        }
-        numPages.forEach(item => item.classList.add('d-none'))
-        for (let i = currentPage - 5; i <= currentPage + 5; i++) {
-            const item = document.querySelector(`.page-item-${i}`)
-            if (item) {
-                item.classList.remove("d-none")
-            }
-        }
-    })
-}
+
 
 function clickLink() {
     const selected = document.querySelector(`#placements-page [data-num='${sessionStorage.getItem('selected-placement')}']`)
@@ -244,5 +180,175 @@ if (scrollDiv) {
                 e.preventDefault()
             }
         })
+    })
+}
+
+function pagination(e) {
+    let fetchUrl = `/staff/page/placements/only?p=${p}&q=${searchInput.value}`
+    console.log(fetchUrl)
+    fetch(fetchUrl, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(res => res.json())
+    .then(result => {
+        console.log(result)
+        newsDiplay.innerHTML = ""
+        currentPage = parseInt(result.current_page)
+        const news = result.news
+        news.forEach(article => {
+            const link = document.createElement("a")
+            link.classList.add("h-card")
+            link.dataset.id = `${article.id}`
+            link.draggable = false
+            link.dataset.id = article.id
+            const category = article.category.replace('_', ' ')
+            link.innerHTML = `
+                    <div class="h-card-main-image-div">
+                        <div class="h-card-sub-image-div">
+                            <img src="${article.image}" class="h-card-image" draggable="false">
+                        </div>
+                    </div>
+                    <div class="h-card-content">
+                        <h4 class="headline">${article.headline}</h4>
+                        <div class="sub-headline-div">
+                            <h6 class="sub-headline">${article.sub_headline}</h6>
+                        </div>
+                        <div class="x-secondary-div side-secondary">
+                            <span>${article.timestamp}</span>
+                            <div></div>
+                            <span>${category}</span>
+                        </div>
+                    </div>
+                `
+            newsDiplay.appendChild(link)
+        })
+        const links = document.querySelectorAll('.news-search .h-card');
+        links.forEach(link => {
+            link.addEventListener('click', clickLink)
+        })
+        document.querySelectorAll('.pagination .active').forEach(active => {
+            active.classList.remove('active')
+        })
+        document.querySelector(`.pagination-link-${currentPage}`).parentElement.classList.add('active')
+        paginationLinks.forEach(link => {
+            link.classList.remove('active')
+            if (link.classList.contains(`.pagination-link-${currentPage}`)) {
+                link.classList.add('active')
+            }
+        })
+        nextLink.dataset.p = parseInt(currentPage) + 1
+        if (result.next) {
+            nextLink.parentElement.classList.remove('d-none')
+        }
+        else {
+            nextLink.parentElement.classList.add('d-none')
+        }
+        previousLink.dataset.p = parseInt(currentPage) - 1
+        if (result.previous) {
+            previousLink.parentElement.classList.remove('d-none')
+        }
+        else {
+            previousLink.parentElement.classList.add('d-none')
+        }
+        if (result.num_pages == 1) {
+            paginationList.classList.add('d-none')
+            displayText.textContent = ''
+        }
+        else {
+            numPages.forEach(item => item.classList.add('d-none'))
+            for (let i = currentPage - 5; i <= currentPage + 5; i++) {
+                const item = document.querySelector(`.page-item-${i}`)
+                if (item && i <= result.num_pages) {
+                    item.classList.remove("d-none")
+                }
+            }
+            displayText.textContent = `displaying ${result.start}-${result.end} results out of ${result.count}`
+        }
+    })
+}
+
+function search(p) {
+    const searchFormData = new FormData(searchForm)
+    fetch(`?q=${searchFormData.get('q')}&p=${p}&page=search-page`, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(res => res.json())
+    .then(result => {
+        console.log(result)
+        newsDiplay.innerHTML = ""
+        currentPage = parseInt(result.current_page)
+        const news = result.news
+        news.forEach(article => {
+            const link = document.createElement("a")
+            link.classList.add("h-card")
+            link.dataset.id = `${article.id}`
+            link.draggable = false
+            link.dataset.id = article.id
+            const category = article.category.replace('_', ' ')
+            link.innerHTML = `
+                    <div class="h-card-main-image-div">
+                        <div class="h-card-sub-image-div">
+                            <img src="${article.image}" class="h-card-image" draggable="false">
+                        </div>
+                    </div>
+                    <div class="h-card-content">
+                        <h4 class="headline">${article.headline}</h4>
+                        <div class="sub-headline-div">
+                            <h6 class="sub-headline">${article.sub_headline}</h6>
+                        </div>
+                        <div class="x-secondary-div side-secondary">
+                            <span>${article.timestamp}</span>
+                            <div></div>
+                            <span>${category}</span>
+                        </div>
+                    </div>
+                `
+            newsDiplay.appendChild(link)
+        })
+        const links = document.querySelectorAll('.news-search .h-card');
+        links.forEach(link => {
+            link.addEventListener('click', clickLink)
+        })
+        document.querySelectorAll('.pagination .active').forEach(active => {
+            active.classList.remove('active')
+        })
+        document.querySelector(`.pagination-link-${currentPage}`).parentElement.classList.add('active')
+        paginationLinks.forEach(link => {
+            link.classList.remove('active')
+            if (link.classList.contains(`.pagination-link-${currentPage}`)) {
+                link.classList.add('active')
+            }
+        })
+        nextLink.dataset.p = parseInt(currentPage) + 1
+        if (result.next) {
+            nextLink.parentElement.classList.remove('d-none')
+        }
+        else {
+            nextLink.parentElement.classList.add('d-none')
+        }
+        previousLink.dataset.p = parseInt(currentPage) - 1
+        if (result.previous) {
+            previousLink.parentElement.classList.remove('d-none')
+        }
+        else {
+            previousLink.parentElement.classList.add('d-none')
+        }
+        console.log(result.num_pages)
+        if (result.num_pages == 1) {
+            numPages.forEach(item => item.classList.add('d-none'))
+            displayText.textContent = ''
+        }
+        else {
+            for (let i = currentPage - 5; i <= currentPage + 5; i++) {
+                const item = document.querySelector(`.page-item-${i}`)
+                if (item && i <= result.num_pages) item.classList.remove("d-none")
+            }
+            displayText.textContent = `displaying ${result.start}-${result.end} results out of ${result.count}`
+        }
+        
     })
 }

@@ -59,7 +59,6 @@
                             <label for="{{v}}-radio" class="category-radio">{{v}}</label>
                         {% endfor %}
                     </div>
-                    <input type="hidden" name="page" value="search-page">
                     <input type="hidden" name="p" value="1">
                 </form>
                 <div class="light-seperator"></div>
@@ -104,7 +103,7 @@
                     </a>
                 </li>
                 {% for i in news.paginator.page_range %}
-                    <li class="page-item page-item-{{i}} number-items {% if i == request.GET.p|add:'0' %} active {% endif %} {% if i == request.GET.p|add:'-5' or i == request.GET.p|add:'-4' or i == request.GET.p|add:'-3' or i == request.GET.p|add:'-2' or i == request.GET.p|add:'-1' or i == request.GET.p|add:'0' or i == request.GET.p|add:'1' or i == request.GET.p|add:'2' or i == request.GET.p|add:'3' or i == request.GET.p|add:'4' or i == request.GET.p|add:'5' %} {% else %} d-none {% endif %}"><a class="page-link pagination-link pagination-link-{{i}}" data-p="{{i}}">{{i}}</a></li>
+                    <li class="page-item page-item-{{i}} number-items {% if i == request.GET.p|add:'0' %} active {% endif %}{% if i != request.GET.p|add:'-5' and i != request.GET.p|add:'-4' and i != request.GET.p|add:'-3' and i != request.GET.p|add:'-2' and i != request.GET.p|add:'-1' and i != request.GET.p|add:'0' and i != request.GET.p|add:'1' and i != request.GET.p|add:'2' and i != request.GET.p|add:'3' and i != request.GET.p|add:'4' and i != request.GET.p|add:'5' %} d-none {% endif %}"><a class="page-link pagination-link pagination-link-{{i}}" data-p="{{i}}">{{i}}</a></li>
                 {% endfor %}
                 <li class="page-item {% if not news.has_next %} d-none {% endif %}">
                     <a class="page-link pagination-link" id="next-link" data-p="{{request.GET.p|add:'1'}}">
