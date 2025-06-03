@@ -2,9 +2,9 @@
 
 <section class="one-article-section right" id="right-section">
     <h3>
-        <a class="link" href="{% url 'cat_index' cat=section.articles.all.0.article.get_category_display %}">{{section.articles.all.0.article.get_category_display}}</a>
+        <a class="link" {% if section.articles.all.0.article.get_category_display %} href="{% url 'cat_index' cat=section.articles.all.0.article.get_sub_category_display %}" {% endif %}>{{section.articles.all.0.article.get_sub_category_display|change:"_ "}}</a>
     </h3>
-    <a class="article side-img-article link" href="{% url 'new' cat=section.articles.all.0.article.get_category_display sub=section.articles.all.0.article.get_sub_category_display slug=section.articles.all.0.article.slug %}">
+    <a class="article side-img-article link" {% if section.articles.all.0.article.get_category_display %} href="{% url 'new' cat=section.articles.all.0.article.get_category_display slug=section.articles.all.0.article.slug %}"  {% endif %}>
         <div class="content">
             <h6 class="content-heading">{{section.articles.all.0.article.headline}}</h6>
             <p>{{section.articles.all.0.article.sub_headline}}</p>

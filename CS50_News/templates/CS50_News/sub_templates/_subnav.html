@@ -2,9 +2,9 @@
 
 {% if subs %}
     <nav id="sub_nav">
-        {% for key, value in subs.items %}
-            <a href="{% url 'cat_index' cat=parent sub=value %}" class="nav-link">
-                <li class="list-group-item" data-target="{{value}}"  id="sub-nav-{{value}}" >{{ value|change:"_ " }}</li>
+        {% for sub in subs %}
+            <a href="{% url 'cat_index' cat=sub.parent.slug sub=sub.slug %}" class="nav-link">
+                <li class="list-group-item" data-target="{{sub.name}}"  id="sub-nav-{{sub.name}}" >{{ sub.name|change:"_ " }}</li>
             </a>
         {% endfor %}
     </nav>

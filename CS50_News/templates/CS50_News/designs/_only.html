@@ -1,50 +1,48 @@
 {% load change %}
 {% load static %}
 
+{% with articles=section.articles.all %}
+
 <section id="only-section-design">
-    {% if section.id %}
-        {% if section.title %}
-            <input type="text" class="t-input" name="title" value="{{section.title}}" placeholder="Section Title">
-        {% endif %}
-        <div class="only-div">
-            {% for placement in section.articles.all %}
-            <a class="article tn link" data-num="{{forloop.counter0}}">
-                <input type="hidden" value="{{placement.article.id}}" name="{{forloop.counter0}}">
-                <div class="img">
-                    <img src="{{placement.article.image.url}}" alt="">
-                </div>
-                <div class="content">
-                    <h6 class="content-heading">{{placement.article.headline}}</h6>
-                    <p>{{placement.article.sub_headline}}</p>
-                    <div class="secondary-div">
-                        <span>{{placement.article.timestamp|timesince|safe}}</span>
-                        <div></div>
-                        <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
+    <input type="text" class="t-input" name="title" value="{% if section.title %}{{section.title}}{% endif %}" placeholder="Section Title">
+    <div class="only-div">
+    {% custom_range 0 2 as col %}
+    {% for i in col %}
+        {% with article=articles|position:i %}
+            {% if article %}
+                <a class="article tn link" data-num="{{forloop.counter0}}">
+                    <input type="hidden" value="{{article.article.id}}" name="{{forloop.counter0}}">
+                    <div class="img">
+                        <img src="{{article.article.image.url}}" alt="">
                     </div>
-                </div>
-            </a>
-        {% endfor %}
-        </div>
-    {% else %}
-        <h3 class="section-heading only-section-heading">Section Title</h3>
-        <div class="only-div">
-        {% for i in '01'|make_list %}
-            <a class="tn link article" data-chosen="" data-num="{{i}}">
-                <input type="hidden" value="" name="{{i}}">
-                <div class="img">
-                    <img src="{% static 'CS50_News/test-img.png' %}" alt="">
-                </div>
-                <div class="content">
-                    <h6 class="content-heading">headline</h6>
-                    <p>sub headline</p>
-                    <div class="secondary-div">
-                        <span>1d ago</span>
-                        <div></div> 
-                        <span>category</span>
+                    <div class="content">
+                        <h6 class="content-heading">{{article.article.headline}}</h6>
+                        <p>{{article.article.sub_headline}}</p>
+                        <div class="secondary-div">
+                            <span>{{article.article.timestamp|timesince|safe}}</span>
+                            <div></div>
+                            <span>{{article.article.get_sub_category_display|change:"_ "}}</span>
+                        </div>
                     </div>
-                </div>
-            </a>
-        {% endfor %}
-        </div>
-    {% endif %}
+                </a>
+            {% else %}
+                <a class="tn link article" data-chosen="" data-num="{{forloop.counter0}}">
+                    <input type="hidden" value="" name="{{forloop.counter0}}">
+                    <div class="img">
+                        <img src="{% static 'CS50_News/test-img.png' %}" alt="">
+                    </div>
+                    <div class="content">
+                        <h6 class="content-heading">headline</h6>
+                        <p>sub headline</p>
+                        <div class="secondary-div">
+                            <span>1d ago</span>
+                            <div></div> 
+                            <span>category</span>
+                        </div>
+                    </div>
+                </a>
+            {% endif %}
+        {% endwith %}
+    {% endfor %}
 </section>
+{% endwith %}

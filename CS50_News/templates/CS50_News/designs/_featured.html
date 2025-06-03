@@ -1,216 +1,223 @@
 {% load change %}
 {% load static %}
 
+{% with articles=section.articles.all %}
+
 <section id="featured-section-design">
-    {% if section.id %}
-        {% if section.title %}
-            <input type="text" class="t-input" name="title" value="{{section.title}}" placeholder="Section Title">
-        {% endif %}
-        <div class="Featured">
-            <div class="column-section">
-                {% for placement in section.articles.all|slice:":4" %}
-                    {% if forloop.first %}
-                        <h4 class="Featured-sub_heading">{{placement.article.get_category_display}}</h4>
-                        <a class="article main link">
-                            <div class="img">
-                                <img src="{{placement.article.image.url}}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">{{placement.article.headline}}</h6>
-                                <p>{{placement.article.sub_headline}}</p>
-                                <div class="secondary-div">
-                                    <span>{{placement.article.timestamp|timesince|safe}}</span>
-                                    <div></div>
-                                    <span>{{placement.article.get_sub_category_display}}</span>
-                                </div>
-                            </div>
-                        </a>
-                    {% else %}
-                            <a class="article link column-side-new">
-                                <div>
-                                    <h6>{{placement.article.headline}}</h6>
-                                    <div class="secondary-div">
-                                        <span>{{placement.article.timestamp|timesince|safe}}</span>
-                                        <div></div>
-                                        <span>{{placement.article.get_sub_category_display}}</span>
-                                    </div>
-                                </div>
-                            </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <div class="column-section">
-                {% for placement in section.articles.all|slice:"4:8" %}
-                    {% if forloop.first %}
-                        <h4 class="Featured-sub_heading">{{placement.article.get_category_display}}</h4>
-                        <a class="article main link">
-                            <div class="img">
-                                <img src="{{placement.article.image.url}}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">{{placement.article.headline}}</h6>
-                                <p>{{placement.article.sub_headline}}</p>
-                                <div class="secondary-div">
-                                    <span>{{placement.article.timestamp|timesince|safe}}</span>
-                                    <div></div>
-                                    <span>{{placement.article.get_sub_category_display}}</span>
-                                </div>
-                            </div>
-                        </a>
-                    {% else %}
-                            <a class="article link column-side-new">
-                                <div>
-                                    <h6>{{placement.article.headline}}</h6>
-                                    <div class="secondary-div">
-                                        <span>{{placement.article.timestamp|timesince|safe}}</span>
-                                        <div></div>
-                                        <span>{{placement.article.get_sub_category_display}}</span>
-                                    </div>
-                                </div>
-                            </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <div class="column-section">
-                {% for placement in section.articles.all|slice:"8:" %}
-                    {% if forloop.first %}
-                        <h4 class="Featured-sub_heading">{{placement.article.get_category_display}}</h4>
-                        <a class="article main link">
-                            <div class="img">
-                                <img src="{{placement.article.image.url}}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">{{placement.article.headline}}</h6>
-                                <p>{{placement.article.sub_headline}}</p>
-                                <div class="secondary-div">
-                                    <span>{{placement.article.timestamp|timesince|safe}}</span>
-                                    <div></div>
-                                    <span>{{placement.article.get_sub_category_display}}</span>
-                                </div>
-                            </div>
-                        </a>
-                    {% else %}
-                            <a class="article link column-side-new">
-                                <div>
-                                    <h6>{{placement.article.headline}}</h6>
-                                    <div class="secondary-div">
-                                        <span>{{placement.article.timestamp|timesince|safe}}</span>
-                                        <div></div>
-                                        <span>{{placement.article.get_sub_category_display}}</span>
-                                    </div>
-                                </div>
-                            </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    {% else %}
-        <h3 class="section-heading featured-section-heading">Section Title</h3>
-        <div class="Featured">
-            <div class="column-section">
-                <h4 class="Featured-sub_heading" id="category-1">Category</h4>
-                {% for i in '0123'|make_list %}
-                    {% if forloop.first %}
-                        <a class="main link article" data-chosen="" data-num="{{i}}">
-                            <input type="hidden" value="" name="{{i}}">
-                            <div class="img">
-                                <img src="{% static 'CS50_News/test-img.png' %}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">headline</h6>
-                                <p>sub headline</p>
-                                <div class="secondary-div">
-                                    <span>1d ago</span>
-                                    <div></div> 
-                                    <span>category</span>
-                                </div>
-                            </div>
-                        </a>
-                    {% else %}
-                        <a class="link column-side-new article" data-chosen="" data-num="{{i}}">
-                            <input type="hidden" value="" name="{{i}}">
-                            <div class="content">
-                                <h6 class="content-heading">headline</h6>
-                                <p>sub headline</p>
-                                <div class="secondary-div side-secondary">
-                                    <span>1d ago</span>
-                                    <div></div> 
-                                    <span>category</span>
-                                </div>
-                            </div>
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <div class="column-section">
-                <h4 class="Featured-sub_heading" id="category-2">Category</h4>
-                {% for i in '4567'|make_list %}
-                    {% if forloop.first %}
-                        <a class="main link article" data-chosen="" data-num="{{i}}">
-                            <input type="hidden" value="" name="{{i}}">
-                            <div class="img">
-                                <img src="{% static 'CS50_News/test-img.png' %}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">headline</h6>
-                                <p>sub headline</p>
-                                <div class="secondary-div">
-                                    <span>1d ago</span>
-                                    <div></div> 
-                                    <span>category</span>
-                                </div>
-                            </div>
-                        </a>
-                    {% else %}
-                        <a class="link column-side-new article" data-chosen="" data-num="{{i}}">
-                            <input type="hidden" value="" name="{{i}}">
-                            <div class="content">
-                                <h6 class="content-heading">headline</h6>
-                                <p>sub headline</p>
-                                <div class="secondary-div side-secondary">
-                                    <span>1d ago</span>
-                                    <div></div> 
-                                    <span>category</span>
-                                </div>
-                            </div>
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <div class="column-section">
-                <h4 class="Featured-sub_heading" id="category-3">Category</h4>
-                {% for i in '8 9 10 11'|create_list %}
-                    {% if forloop.first %}
-                        <a class="main link article" data-chosen="" data-num="{{i}}">
-                            <input type="hidden" value="" name="{{i}}">
-                            <div class="img">
-                                <img src="{% static 'CS50_News/test-img.png' %}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">headline</h6>
-                                <p>sub headline</p>
-                                <div class="secondary-div">
-                                    <span>1d ago</span>
-                                    <div></div> 
-                                    <span>category</span>
-                                </div>
-                            </div>
-                        </a>
-                    {% else %}
-                        <a class="link column-side-new article" data-chosen="" data-num="{{i}}">
-                            <input type="hidden" value="" name="{{i}}">
-                            <div class="content">
-                                <h6 class="content-heading">headline</h6>
-                                <p>sub headline</p>
-                                <div class="secondary-div side-secondary">
-                                    <span>1d ago</span>
-                                    <div></div> 
-                                    <span>category</span>
-                                </div>
-                            </div>
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
+    {% if section.title %}
+        <input type="text" class="t-input" name="title" value="{{section.title}}" placeholder="Section Title">
     {% endif %}
+    <div class="Featured">
+        <div class="column-section">
+            {% custom_range 0 4 as col1 %}
+            {% for i in col1 %}
+                {% with placement=articles|position:i %}
+                    {% if forloop.first %}
+                        {% if placement %}
+                            <h4 class="Featured-sub_heading">{{placement.article.get_sub_category_display}}</h4>
+                            <a class="article main link" data-num="{{forloop.counter0}}">
+                                <input type="hidden" value="" name="{{forloop.counter0}}">
+                                <div class="img">
+                                    <img src="{{placement.article.image.url}}" alt="">
+                                </div>
+                                <div class="content">
+                                    <h6 class="content-heading">{{placement.article.headline}}</h6>
+                                    <p>{{placement.article.sub_headline}}</p>
+                                    <div class="secondary-div">
+                                        <span>{{placement.article.timestamp|timesince|safe}}</span>
+                                        <div></div>
+                                        <span>{{placement.article.get_sub_category_display}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% else %}
+                            <h4 class="Featured-sub_heading">Category</h4>
+                            <a class="main link article" data-num="{{forloop.counter0}}">
+                                <input type="hidden" value="" name="{{forloop.counter0}}">
+                                <div class="img">
+                                    <img src="{% static 'CS50_News/test-img.png' %}" alt="">
+                                </div>
+                                <div class="content">
+                                    <h6 class="content-heading">headline</h6>
+                                    <p>sub headline</p>
+                                    <div class="secondary-div">
+                                        <span>1d ago</span>
+                                        <div></div> 
+                                        <span>category</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% else %}
+                            <a class="article link column-side-new" data-num="{{forloop.counter0}}">
+                                <input type="hidden" value="" name="{{forloop.counter0}}">
+                                {% if placement %}
+                                <div>
+                                    <h6>{{placement.article.headline}}</h6>
+                                    <div class="secondary-div">
+                                        <span>{{placement.article.timestamp|timesince|safe}}</span>
+                                        <div></div>
+                                        <span>{{placement.article.get_sub_category_display}}</span>
+                                    </div>
+                                </div>
+                                {% else %}
+                                    <div class="content">
+                                        <h6 class="content-heading">headline</h6>
+                                        <p>sub headline</p>
+                                        <div class="secondary-div side-secondary">
+                                            <span>1d ago</span>
+                                            <div></div> 
+                                            <span>category</span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </a>
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+        <div class="column-section">
+            {% custom_range 4 8 as col2 %}
+            {% for i in col2 %}
+                {% with placement=articles|position:i %}
+                    {% if forloop.first %}
+                        {% if placement %}
+                            <h4 class="Featured-sub_heading">{{placement.article.get_sub_category_display}}</h4>
+                            <a class="article main link" data-num="{{forloop.counter0|add:'4'}}">
+                                <input type="hidden" value="" name="{{forloop.counter0|add:'4'}}">
+                                <div class="img">
+                                    <img src="{{placement.article.image.url}}" alt="">
+                                </div>
+                                <div class="content">
+                                    <h6 class="content-heading">{{placement.article.headline}}</h6>
+                                    <p>{{placement.article.sub_headline}}</p>
+                                    <div class="secondary-div">
+                                        <span>{{placement.article.timestamp|timesince|safe}}</span>
+                                        <div></div>
+                                        <span>{{placement.article.get_sub_category_display}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% else %}
+                            <h4 class="Featured-sub_heading">Category</h4>
+                            <a class="main link article" data-num="{{forloop.counter0|add:'4'}}">
+                                <input type="hidden" value="" name="{{forloop.counter0|add:'4'}}">
+                                <div class="img">
+                                    <img src="{% static 'CS50_News/test-img.png' %}" alt="">
+                                </div>
+                                <div class="content">
+                                    <h6 class="content-heading">headline</h6>
+                                    <p>sub headline</p>
+                                    <div class="secondary-div">
+                                        <span>1d ago</span>
+                                        <div></div> 
+                                        <span>category</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        {% if placement %}
+                            <a class="article link column-side-new" data-num="{{forloop.counter0|add:'4'}}">
+                                <input type="hidden" value="" name="{{forloop.counter0|add:'4'}}">
+                                <div>
+                                    <h6>{{placement.article.headline}}</h6>
+                                    <div class="secondary-div">
+                                        <span>{{placement.article.timestamp|timesince|safe}}</span>
+                                        <div></div>
+                                        <span>{{placement.article.get_sub_category_display}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% else %}
+                            <a class="link column-side-new article" data-num="{{forloop.counter0|add:'4'}}">
+                                <input type="hidden" value="" name="{{forloop.counter0|add:'4'}}">
+                                <div class="content">
+                                    <h6 class="content-heading">headline</h6>
+                                    <p>sub headline</p>
+                                    <div class="secondary-div side-secondary">
+                                        <span>1d ago</span>
+                                        <div></div> 
+                                        <span>category</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+        <div class="column-section">
+            {% custom_range 8 12 as col3 %}
+            {% for i in col3 %}
+                {% with placement=articles|position:i %}
+                    {% if forloop.first %}
+                        {% if placement %}
+                            <h4 class="Featured-sub_heading">{{placement.article.get_sub_category_display}}</h4>
+                            <a class="article main link" data-num="{{forloop.counter0|add:'8'}}">
+                                <input type="hidden" value="" name="{{forloop.counter0|add:'8'}}">
+                                <div class="img">
+                                    <img src="{{placement.article.image.url}}" alt="">
+                                </div>
+                                <div class="content">
+                                    <h6 class="content-heading">{{placement.article.headline}}</h6>
+                                    <p>{{placement.article.sub_headline}}</p>
+                                    <div class="secondary-div">
+                                        <span>{{placement.article.timestamp|timesince|safe}}</span>
+                                        <div></div>
+                                        <span>{{placement.article.get_sub_category_display}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% else %}
+                            <h4 class="Featured-sub_heading">Category</h4>
+                            <a class="main link article" data-num="{{forloop.counter0|add:'8'}}">
+                                <input type="hidden" value="" name="{{forloop.counter0|add:'8'}}">
+                                <div class="img">
+                                    <img src="{% static 'CS50_News/test-img.png' %}" alt="">
+                                </div>
+                                <div class="content">
+                                    <h6 class="content-heading">headline</h6>
+                                    <p>sub headline</p>
+                                    <div class="secondary-div">
+                                        <span>1d ago</span>
+                                        <div></div> 
+                                        <span>category</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        {% if placement %}
+                            <a class="article link column-side-new" data-num="{{forloop.counter0|add:'8'}}">
+                                <input type="hidden" value="" name="{{forloop.counter0|add:'8'}}">
+                                <div>
+                                    <h6>{{placement.article.headline}}</h6>
+                                    <div class="secondary-div">
+                                        <span>{{placement.article.timestamp|timesince|safe}}</span>
+                                        <div></div>
+                                        <span>{{placement.article.get_sub_category_display}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% else %}
+                            <a class="link column-side-new article" data-num="{{forloop.counter0|add:'8'}}">
+                                <input type="hidden" value="" name="{{forloop.counter0|add:'8'}}">
+                                <div class="content">
+                                    <h6 class="content-heading">headline</h6>
+                                    <p>sub headline</p>
+                                    <div class="secondary-div side-secondary">
+                                        <span>1d ago</span>
+                                        <div></div> 
+                                        <span>category</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
 </section>
+{% endwith %}

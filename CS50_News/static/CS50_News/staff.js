@@ -103,7 +103,6 @@ links.forEach(link => {
         else {
             fetchUrl = `/staff/add/${link.dataset.slug}/${link.dataset.cat}`
         }
-        console.log(fetchUrl)
         fetch(fetchUrl, {
                 method: 'POST',
                 headers: {

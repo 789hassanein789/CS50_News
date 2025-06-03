@@ -24,7 +24,7 @@
     --page-text: hsl(0, 0%, 100%);
     --page-secondary: #e7e7e7;
     --icon-color: #727272;
-    --bg-hover: #393939;
+    --bg-hover: #525252;
     --opacity: 0.5;
 }
 
@@ -585,13 +585,15 @@ li.nav-dd-item:hover::after {
   gap: 1rem;
 }
 
-.category-radio-container label {
+.category-radio-container button {
   font-size: 1.25em;
   cursor: pointer;
+  border: none;
+  background-color: transparent;
   user-select: none;
 }
 
-.category-radio-container input[type="radio"]:checked+label {
+.category-radio-container .checked {
   border-bottom: 2px solid red;
   font-weight: 600;
 }

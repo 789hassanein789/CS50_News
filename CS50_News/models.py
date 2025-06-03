@@ -44,6 +44,9 @@ class New(models.Model):
             "GO": "Golf",
             "AT": "Athletics",
             "CY": "Cycling",
+            "DA": "Darts",
+            "BB": "Basketball",
+            "RU": "Rugby",
         },
         "B": {
             "B": "Business"
@@ -51,11 +54,10 @@ class New(models.Model):
         "I": {
             "TECH": "Technology",
             "S&HE": "Science_&_Health",
-            "FU": "Future",
-            "CL": "Climate",
         },
         "C": {
             "CU": "Culture",
+            "SO": "Stories",
             "BOOK": "Books",
             "ST": "Style",
             "TV": "Film_&_TV",
@@ -65,19 +67,19 @@ class New(models.Model):
         },
         "T": {
             "DE": "Destinations",
-            "FOOD": "Food_&_Drink",
+            "FOOD": "Food",
             "AD": "Adventures",
         },
         "E": {
             "NW": "Natural_Wonders",
-            "WE&C": "Weather_&_Climate",
+            "FU": "Future",
+            "CL": "Climate",
         }
     }
     headline = models.CharField(max_length=100)
     sub_headline = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="images", default="images/test-img.jpg")
+    image = models.ImageField(upload_to="images", default="images/test-img.png")
     content = models.TextField()
-    views = models.IntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=50, choices=CATEGORYS, null=True, blank=True)
     sub_category = models.CharField(max_length=50, choices=SUB_CATEGORIES, null=True, blank=True)
@@ -97,17 +99,17 @@ class New(models.Model):
                 return f"{value[2:4]}&nbspminutes&nbspago"
             return f"{value[0]}&nbsphrs&nbspago"
             
-        
-
-
-    
 class Page(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(default="", unique=True)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
+    position = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["position"]
 
 class Section(models.Model):
     SECTIONS = {

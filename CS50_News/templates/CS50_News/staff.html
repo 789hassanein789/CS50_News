@@ -14,7 +14,12 @@
                     +
                 </a>
                 {% for new in news %}
-                    <a class="created link" draggable="false">
+                    <form action="{% url 'delete-new' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{new.id}}" name="id">
+                        <button class="btn btn-outline-danger">delete</button>
+                    </form>
+                    <a class="created link" draggable="false" href="{% url 'new' cat=new.get_category_display sub=new.get_sub_category_display slug=new.slug %}">
                         <div class="img">
                             <img src="{{new.image.url}}" alt="" draggable="false">
                         </div>
@@ -40,19 +45,45 @@
                     </div>
                 {% endfor %}
             </div>
+            <nav>
+                <ul class="pagination">
+                    {% if news.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?np={{news.previous_page_number}}&up={{request.GET.up}}&q={{request.GET.q}}" aria-label="Previous">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for i in news.paginator.page_range %}
+                        {% if i == request.GET.np|add:'-5' or i == request.GET.np|add:'-4' or i == request.GET.np|add:'-3' or i == request.GET.np|add:'-2' or i == request.GET.np|add:'-1' or i == request.GET.np|add:'0' or i == request.GET.np|add:'1' or i == request.GET.np|add:'2' or i == request.GET.np|add:'3' or i == request.GET.np|add:'4' or i == request.GET.np|add:'5' %}
+                            <i class="page-item {% if request.GET.np|add:'0' == i %} active {% endif %}" aria-current="page"><a class="page-link" href="?np={{i}}&up={{request.GET.up}}&q={{request.GET.q}}">{{i}}</a></i>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if news.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?np={{news.next_page_number}}&up={{request.GET.up}}&q={{request.GET.q}}" aria-label="Next">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
         <div id="user-control">
             <div id="user-search">
                 <form action="{% url 'staff' %}" method="get">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="q" placeholder="search" autocomplete="off">
+                        <input type="text" class="form-control" name="q" placeholder="search" autocomplete="off" value="{{request.GET.q}}">
                         <button class="btn btn-outline-secondary search-button" type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-search" fill="currentColor" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                             </svg>
                         </button>
                     </div>
-                    <input type="hidden" name="p" value="1">
+                    <input type="hidden" name="up" value="{{request.GET.up}}">
+                    <input type="hidden" name="np" value="{{request.GET.np}}">
                 </form>
             </div>
             <form action="{% url 'user-management' %}" method="post" id="user-management-form">
@@ -118,13 +149,13 @@
                     <ul class="pagination">
                         {% if users.has_previous or users.has_next %}
                             {% if users.has_previous %}
-                                <li class="page-item"><a class="page-link" href="?p={{users.previous_page_number}}">Previous</a></li>
-                                <li class="page-item"><a class="page-link" href="?p={{users.previous_page_number}}">{{users.previous_page_number}}</a></li>
+                                <li class="page-item"><a class="page-link" href="?up={{users.previous_page_number}}&np={{request.GET.np}}&q={{request.GET.q}}">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="?up={{users.previous_page_number}}&np={{request.GET.np}}&q={{request.GET.q}}">{{users.previous_page_number}}</a></li>
                             {% endif %}
-                                <li class="page-item"><a class="page-link" href="">{{request.GET.p}}</a></li>
+                                <li class="page-item"><a class="page-link" href="">{{request.GET.up}}</a></li>
                             {% if users.has_next %}
-                                <li class="page-item"><a class="page-link" href="?p={{users.next_page_number}}">{{users.next_page_number}}</a></li>
-                                <li class="page-item"><a class="page-link" href="?p={{users.next_page_number}}">Next</a></li>
+                                <li class="page-item"><a class="page-link" href="?up={{users.next_page_number}}&np={{request.GET.np}}&q={{request.GET.q}}">{{users.next_page_number}}</a></li>
+                                <li class="page-item"><a class="page-link" href="?up={{users.next_page_number}}&np={{request.GET.np}}&q={{request.GET.q}}">Next</a></li>
                             {% endif %}
                         {% endif %}
                     </ul>
@@ -144,7 +175,7 @@
                             {% for i in '01'|make_list %}
                                 <div class="tn link article">
                                     <div class="img">
-                                        <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                                        <img src="{% static 'CS50_News/test-img.png' %}" alt="">
                                     </div>
                                     <div class="content">
                                         <h6 class="content-heading">headline</h6>
@@ -166,7 +197,7 @@
                             <div class="side-img-article link article" data-chosen="" data-num="0">
                                 <input type="hidden" value="" name="0">
                                 <div class="img">
-                                    <img src="{% static 'CS50_News/cover/test-img.jpg' %}" alt="">
+                                    <img src="{% static 'CS50_News/test-img.png' %}" alt="">
                                 </div>
                                 <div class="content">
                                     <h6 class="content-heading">headline</h6>

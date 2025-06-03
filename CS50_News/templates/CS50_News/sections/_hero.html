@@ -1,12 +1,14 @@
 {% load change %}
 
+{% with articles=section.articles.all %}
+
 <section id="hero-section" data-id="{{section.id}}">
     {% if section.title %}
         <h3 class="hero-section-heading">{{section.title}}</h3>
     {% endif %}
     <div class="main-container">
         <div class="left-side">
-            <a data-id="{{section.articles.all.0.article.id}}" data-num="{{forloop.counter}}" class="side-img-article link article" href="{% url 'new' cat=section.articles.all.0.article.get_category_display sub=section.articles.all.0.article.get_sub_category_display slug=section.articles.all.0.article.slug %}">
+            <a data-id="{{section.articles.all.0.article.id}}" data-num="{{forloop.counter}}" class="side-img-article link article" href="{% url 'new' cat=section.articles.all.0.article.get_category_display slug=section.articles.all.0.article.slug %}">
                 <div class="content">
                     <h6 class="content-heading">{{section.articles.all.0.article.headline}}</h6>
                     <p>{{section.articles.all.0.article.sub_headline}}</p>
@@ -24,7 +26,7 @@
             <div class="bottom">
                 <div class="only-div">
                     {% for placement in section.articles.all|slice:"1:3" %}
-                        <a data-id="{{placement.article.id}}" data-num="2{{forloop.counter}}" class="tn link article" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                        <a data-id="{{placement.article.id}}" data-num="2{{forloop.counter}}" class="tn link article" href="{% url 'new' cat=placement.article.get_category_display sub=placementg %}">
                             <div class="img">
                                 <img src="{{placement.article.image.url}}" alt="">
                             </div>
@@ -42,7 +44,7 @@
                 </div>
                 <div class="news-div">
                     {% for placement in section.articles.all|slice:"3:7" %}
-                        <a data-id="{{placement.article.id}}" data-num="3{{forloop.counter}}" class="new-container link article" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                        <a data-id="{{placement.article.id}}" data-num="3{{forloop.counter}}" class="new-container link article" href="{% url 'new' cat=placement.article.get_category_display sub=placementg %}">
                             <div class="new-image">
                                 <img src="{{placement.article.image.url}}" alt="">
                             </div>
@@ -60,15 +62,28 @@
                 </div>
             </div>
         </div>
-        <div class="column-section">
-            {% for placement in section.articles.all|slice:"7:" %}
-                {% if forloop.first %}
-                        <a data-id="{{placement.article.id}}" data-num="4{{forloop.counter}}" class="main article" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                            <div class="img">
-                                <img src="{{placement.article.image.url}}" alt="">
-                            </div>
-                            <div class="content">
-                                <h6 class="content-heading">{{placement.article.headline}}</h6>
+        {% if section.articles.all|index:"7" %}
+            <div class="column-section">
+                {% for placement in section.articles.all|slice:"7:" %}
+                    {% if forloop.first %}
+                            <a data-id="{{placement.article.id}}" data-num="4{{forloop.counter}}" class="main article" href="{% url 'new' cat=placement.article.get_category_display sub=placementg %}">
+                                <div class="img">
+                                    <img src="{{placement.article.image.url}}" alt="">
+                                </div>
+                                <div class="content">
+                                    <h6 class="content-heading">{{placement.article.headline}}</h6>
+                                    <p>{{placement.article.sub_headline}}</p>
+                                    <div class="secondary-div">
+                                        <span>{{placement.article.timestamp|timesince|safe}}</span>
+                                        <div></div>
+                                        <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                    {% else %}
+                        <a data-id="{{placement.article.id}}" data-num="4{{forloop.counter}}" class="link article column-side-new" href="{% url 'new' cat=placement.article.get_category_display sub=placementg %}">
+                            <div>
+                                <h6>{{placement.article.headline}}</h6>
                                 <p>{{placement.article.sub_headline}}</p>
                                 <div class="secondary-div">
                                     <span>{{placement.article.timestamp|timesince|safe}}</span>
@@ -77,22 +92,12 @@
                                 </div>
                             </div>
                         </a>
-                {% else %}
-                    <a data-id="{{placement.article.id}}" data-num="4{{forloop.counter}}" class="link article column-side-new" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                        <div>
-                            <h6>{{placement.article.headline}}</h6>
-                            <p>{{placement.article.sub_headline}}</p>
-                            <div class="secondary-div">
-                                <span>{{placement.article.timestamp|timesince|safe}}</span>
-                                <div></div>
-                                <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
-                            </div>
-                        </div>
-                    </a>
-                {% endif %}
-            {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 </section>
 
 <div class="bold-seperator"></div>
+{% endwith %}

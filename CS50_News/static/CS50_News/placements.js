@@ -183,95 +183,9 @@ if (scrollDiv) {
     })
 }
 
-function pagination(e) {
-    let fetchUrl = `/staff/page/placements/only?p=${p}&q=${searchInput.value}`
-    console.log(fetchUrl)
-    fetch(fetchUrl, {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(res => res.json())
-    .then(result => {
-        console.log(result)
-        newsDiplay.innerHTML = ""
-        currentPage = parseInt(result.current_page)
-        const news = result.news
-        news.forEach(article => {
-            const link = document.createElement("a")
-            link.classList.add("h-card")
-            link.dataset.id = `${article.id}`
-            link.draggable = false
-            link.dataset.id = article.id
-            const category = article.category.replace('_', ' ')
-            link.innerHTML = `
-                    <div class="h-card-main-image-div">
-                        <div class="h-card-sub-image-div">
-                            <img src="${article.image}" class="h-card-image" draggable="false">
-                        </div>
-                    </div>
-                    <div class="h-card-content">
-                        <h4 class="headline">${article.headline}</h4>
-                        <div class="sub-headline-div">
-                            <h6 class="sub-headline">${article.sub_headline}</h6>
-                        </div>
-                        <div class="x-secondary-div side-secondary">
-                            <span>${article.timestamp}</span>
-                            <div></div>
-                            <span>${category}</span>
-                        </div>
-                    </div>
-                `
-            newsDiplay.appendChild(link)
-        })
-        const links = document.querySelectorAll('.news-search .h-card');
-        links.forEach(link => {
-            link.addEventListener('click', clickLink)
-        })
-        document.querySelectorAll('.pagination .active').forEach(active => {
-            active.classList.remove('active')
-        })
-        document.querySelector(`.pagination-link-${currentPage}`).parentElement.classList.add('active')
-        paginationLinks.forEach(link => {
-            link.classList.remove('active')
-            if (link.classList.contains(`.pagination-link-${currentPage}`)) {
-                link.classList.add('active')
-            }
-        })
-        nextLink.dataset.p = parseInt(currentPage) + 1
-        if (result.next) {
-            nextLink.parentElement.classList.remove('d-none')
-        }
-        else {
-            nextLink.parentElement.classList.add('d-none')
-        }
-        previousLink.dataset.p = parseInt(currentPage) - 1
-        if (result.previous) {
-            previousLink.parentElement.classList.remove('d-none')
-        }
-        else {
-            previousLink.parentElement.classList.add('d-none')
-        }
-        if (result.num_pages == 1) {
-            paginationList.classList.add('d-none')
-            displayText.textContent = ''
-        }
-        else {
-            numPages.forEach(item => item.classList.add('d-none'))
-            for (let i = currentPage - 5; i <= currentPage + 5; i++) {
-                const item = document.querySelector(`.page-item-${i}`)
-                if (item && i <= result.num_pages) {
-                    item.classList.remove("d-none")
-                }
-            }
-            displayText.textContent = `displaying ${result.start}-${result.end} results out of ${result.count}`
-        }
-    })
-}
-
 function search(p) {
     const searchFormData = new FormData(searchForm)
-    fetch(`?q=${searchFormData.get('q')}&p=${p}&page=search-page`, {
+    fetch(`?q=${searchFormData.get('q')}&p=${p}&page=search-page&cat=${searchFormData.get('cat')}`, {
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
         }
@@ -288,7 +202,7 @@ function search(p) {
             link.dataset.id = `${article.id}`
             link.draggable = false
             link.dataset.id = article.id
-            const category = article.category.replace('_', ' ')
+            const subCategory = article.sub.replace('_', ' ')
             link.innerHTML = `
                     <div class="h-card-main-image-div">
                         <div class="h-card-sub-image-div">
@@ -303,7 +217,7 @@ function search(p) {
                         <div class="x-secondary-div side-secondary">
                             <span>${article.timestamp}</span>
                             <div></div>
-                            <span>${category}</span>
+                            <span>${subCategory}</span>
                         </div>
                     </div>
                 `
@@ -337,9 +251,8 @@ function search(p) {
         else {
             previousLink.parentElement.classList.add('d-none')
         }
-        console.log(result.num_pages)
+        numPages.forEach(item => item.classList.add('d-none'))
         if (result.num_pages == 1) {
-            numPages.forEach(item => item.classList.add('d-none'))
             displayText.textContent = ''
         }
         else {
@@ -349,6 +262,5 @@ function search(p) {
             }
             displayText.textContent = `displaying ${result.start}-${result.end} results out of ${result.count}`
         }
-        
     })
 }

@@ -1,3 +1,5 @@
+{% load change %}
+
 <footer>
     <div class="footer-column-container">
         <div class="footer-column">
@@ -41,36 +43,43 @@
             </a>
         </div>
         <div class="footer-column last">
-            <a class="main-link nav-link" href="{% url 'cat_index' cat='News' %}">
+            <a class="main-link" href="{% url 'cat_index' cat='News' %}">
                 <li class="list-group-item" data-target="News">News</li>
             </a>
-            <a class="footer-link nav-link" herf="{% url 'cat_index' cat='Ukraine-Russia_war' %}">
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' sub='World' %}">
+                <li class="list-group-item" data-target="World">World</li>
+            </a>
+            <a class="footer-link nav-link" herf="{% url 'cat_index' cat='News' sub='Ukraine-Russia_war' %}">
                 <li class="list-group-item" data-target="Ukraine-Russia_war">Ukraine-Russia War</li>
             </a>
-            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Iraq' %}">
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' sub='Iraq' %}">
                 <li class="list-group-item" data-target="Iraq">Iraq</li>
             </a>
-            <a class="footer-link nav-link" href="{% url 'cat_index' cat='US_&_Canada' %}">
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' sub='US_&_Canada' %}">
                 <li class="list-group-item" data-target="US_&_Canada">US_&_Canada</li>
             </a>
-            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Middle_East' %}">
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' sub='Middle_East' %}">
                 <li class="list-group-item" data-target="Middle_East">Middle_East</li>
             </a>
-            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Europe' %}">
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' sub='Europe' %}">
                 <li class="list-group-item" data-target="Europe">Europe</li>
             </a>
-            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Asia' %}">
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' sub='Asia' %}">
                 <li class="list-group-item" data-target="Asia">Asia</li>
             </a>
-            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Africa' %}">
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' sub='Africa' %}">
                 <li class="list-group-item" data-target="Africa">Africa</li>
             </a>
-            <a class="footer-link nav-link" href="{% url 'cat_index' cat='Australia' %}">
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' sub='Australia' %}">
                 <li class="list-group-item" data-target="Australia">Australia</li>
             </a>
-            <a class="footer-link nav-link" href="{% url 'cat_index' cat='>Latin_America' %}">
-                <li class="list-group-item" data-target="Latin_America">Latin_America</li>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' sub='Latine_America' %}">
+                <li class="list-group-item" data-target="Latine_America">Latine_America</li>
             </a>
+            <a class="footer-link nav-link" href="{% url 'cat_index' cat='News' sub='Politics' %}">
+                <li class="list-group-item" data-target="Politics">Politics</li>
+            </a>
+            
         </div>
     </div>
     <div class="footer-main">

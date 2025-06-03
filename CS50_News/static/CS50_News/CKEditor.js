@@ -6,7 +6,6 @@ const {
 	AutoLink,
 	Autosave,
 	BalloonToolbar,
-	Base64UploadAdapter,
 	BlockQuote,
 	Bold,
 	Bookmark,
@@ -17,10 +16,13 @@ const {
 	FontColor,
 	FontFamily,
 	FontSize,
+	Fullscreen,
+	GeneralHtmlSupport,
 	Heading,
 	HorizontalLine,
 	ImageBlock,
 	ImageCaption,
+	ImageEditing,
 	ImageInline,
 	ImageInsert,
 	ImageInsertViaUrl,
@@ -29,6 +31,7 @@ const {
 	ImageTextAlternative,
 	ImageToolbar,
 	ImageUpload,
+	ImageUtils,
 	Indent,
 	IndentBlock,
 	Italic,
@@ -44,6 +47,7 @@ const {
 	PasteFromMarkdownExperimental,
 	PasteFromOffice,
 	RemoveFormat,
+	SimpleUploadAdapter,
 	SpecialCharacters,
 	SpecialCharactersArrows,
 	SpecialCharactersCurrency,
@@ -54,38 +58,12 @@ const {
 	Strikethrough,
 	Subscript,
 	Superscript,
+	TextPartLanguage,
 	TextTransformation,
 	TodoList,
 	Underline,
 	WordCount
 } = window.CKEDITOR;
-
-const label = document.querySelector('#label');
-const input = document.querySelector('#img-input');
-const imgText = document.querySelector('#img-text');
-const ul = document.querySelector('ul');
-const tagsInput = document.querySelector('#tags-input');
-const suggestionsList = document.querySelector('.suggestions');
-const allInputs = document.querySelectorAll('input');
-const overlay = document.querySelector('.overlay');
-const customImg = document.querySelector('.custom-img');
-const downloadBtn = document.querySelector('.popup-btn');
-let customCropper = "";
-let fileName = "";
-const form = document.querySelector('#init-form');
-const continueBtn = document.querySelector('.continue-btn');
-const editorForm = document.querySelector('#editor-form');
-const errors = document.querySelectorAll('.error');
-const tagsError = document.querySelector('.tags-input-error');
-const radioBtns = document.querySelectorAll('.btn-check')
-const select = document.querySelector('#sub_category')
-const suggestionsTags = suggestionsList.querySelectorAll('li')
-const cancelBtn = overlay.querySelector('.cancel-btn')
-const editImg = document.getElementById('new-img-input') 
-const closeTags = document.querySelectorAll('.chosed-tags .fa-x')
-const deleteNew = document.querySelector('#delete-new')
-const backBtn = document.querySelector('.back-btn');
-let chosedTags;
 
 const LICENSE_KEY =
 	'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NjU0OTc1OTksImp0aSI6IjdkMGEwMGZiLTg4MDgtNDY5Ny1iNGRiLWE1NWVlNTM3ZTk1YSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiXSwiZmVhdHVyZXMiOlsiRFJVUCIsIkJPWCJdLCJ2YyI6IjViYzQ1NGRlIn0.qAXewM_0tIkfmP-suZ4gsghbq68kLUHTvs5KP5OF-c6zE-EyagjaAWzVNImbYnj3fsp5XcU9d5vWE-rcGY8PTQ';
@@ -93,6 +71,9 @@ const LICENSE_KEY =
 const editorConfig = {
 	toolbar: {
 		items: [
+			'undo',
+			'redo',
+			'|',
 			'heading',
 			'|',
 			'fontSize',
@@ -125,7 +106,6 @@ const editorConfig = {
 		AutoLink,
 		Autosave,
 		BalloonToolbar,
-		Base64UploadAdapter,
 		BlockQuote,
 		Bold,
 		Bookmark,
@@ -136,10 +116,13 @@ const editorConfig = {
 		FontColor,
 		FontFamily,
 		FontSize,
+		Fullscreen,
+		GeneralHtmlSupport,
 		Heading,
 		HorizontalLine,
 		ImageBlock,
 		ImageCaption,
+		ImageEditing,
 		ImageInline,
 		ImageInsert,
 		ImageInsertViaUrl,
@@ -148,6 +131,7 @@ const editorConfig = {
 		ImageTextAlternative,
 		ImageToolbar,
 		ImageUpload,
+		ImageUtils,
 		Indent,
 		IndentBlock,
 		Italic,
@@ -163,6 +147,7 @@ const editorConfig = {
 		PasteFromMarkdownExperimental,
 		PasteFromOffice,
 		RemoveFormat,
+		SimpleUploadAdapter,
 		SpecialCharacters,
 		SpecialCharactersArrows,
 		SpecialCharactersCurrency,
@@ -173,6 +158,7 @@ const editorConfig = {
 		Strikethrough,
 		Subscript,
 		Superscript,
+		TextPartLanguage,
 		TextTransformation,
 		TodoList,
 		Underline,
@@ -185,6 +171,16 @@ const editorConfig = {
 	fontSize: {
 		options: [10, 12, 14, 'default', 18, 20, 22],
 		supportAllValues: true
+	},
+	fullscreen: {
+		onEnterCallback: container =>
+			container.classList.add(
+				'editor-container',
+				'editor-container_document-editor',
+				'editor-container_include-word-count',
+				'editor-container_include-fullscreen',
+				'main-container'
+			)
 	},
 	heading: {
 		options: [
@@ -231,6 +227,16 @@ const editorConfig = {
 			}
 		]
 	},
+	htmlSupport: {
+		allow: [
+			{
+				name: /^.*$/,
+				styles: true,
+				attributes: true,
+				classes: true
+			}
+		]
+	},
 	image: {
 		toolbar: [
 			'toggleImageCaption',
@@ -274,9 +280,6 @@ const editorConfig = {
 			}
 		]
 	},
-	menuBar: {
-		isVisible: true
-	},
 	placeholder: 'Type or paste your content here!'
 };
 
@@ -292,6 +295,33 @@ DecoupledEditor.create(document.querySelector('#editor'), editorConfig).then(new
 
 	return newEditor;
 });
+
+const label = document.querySelector('#label');
+const input = document.querySelector('#img-input');
+const imgText = document.querySelector('#img-text');
+const ul = document.querySelector('ul');
+const tagsInput = document.querySelector('#tags-input');
+const suggestionsList = document.querySelector('.suggestions');
+const allInputs = document.querySelectorAll('input');
+const overlay = document.querySelector('.overlay');
+const customImg = document.querySelector('.custom-img');
+const downloadBtn = document.querySelector('.popup-btn');
+let customCropper = "";
+let fileName = "";
+const form = document.querySelector('#init-form');
+const continueBtn = document.querySelector('.continue-btn');
+const editorForm = document.querySelector('#editor-form');
+const errors = document.querySelectorAll('.error');
+const tagsError = document.querySelector('.tags-input-error');
+const radioBtns = document.querySelectorAll('.btn-check')
+const select = document.querySelector('#sub_category')
+const suggestionsTags = suggestionsList.querySelectorAll('li')
+const cancelBtn = overlay.querySelector('.cancel-btn')
+const editImg = document.getElementById('new-img-input') 
+const closeTags = document.querySelectorAll('.chosed-tags .fa-x')
+const deleteNew = document.querySelector('#delete-new')
+const backBtn = document.querySelector('.back-btn');
+let chosedTags;
 
 const availableTags = [
     'israil-gaza war', 'ukraine-russia war', 'iraq', 'us & canada', 'middle east', 'europe', 'asia', 'africa', 'australia', 'latine America',
@@ -318,7 +348,6 @@ label.addEventListener('drop', (e) => {
     uploadImage()
 })
 
-//TODO: replace the datalist with a custom list, problem not with inputfield.
 document.querySelectorAll('datalist option').forEach(option => {
 	option.addEventListener('click', addTag)
 })
@@ -326,13 +355,7 @@ document.querySelectorAll('datalist option').forEach(option => {
 tagsInput.addEventListener('keyup', addTag)
 
 tagsInput.addEventListener('input', suggestions)
-/*
-tagsInput.addEventListener('blur', () => {
-    setTimeout(() => {
-        suggestionsList.classList.add('d-none')
-    }, 100);
-});
-*/
+
 allInputs.forEach(input => {
     input.addEventListener('focus', () => {
         const alert = document.querySelector('.alert')
@@ -356,16 +379,6 @@ form.addEventListener('submit', (e) => e.preventDefault())
 
 radioBtns.forEach(btn => {
 	btn.addEventListener('click', radioSelect)
-	if (btn.checked) {
-		console.log(btn)
-		if (btn.value !== "Business") {
-			const selectedRadio = select.querySelectorAll(`.${btn.id[0]}`)
-			selectedRadio.forEach(radio => {
-				radio.classList.remove('d-none')
-			})
-			select.firstElementChild.classList.remove('d-none')
-		}
-	}
 })
 
 suggestionsTags.forEach(li => {
@@ -413,7 +426,6 @@ backBtn.addEventListener('click', () => {
 })
 
 function uploadImage() {
-	console.log('hi')
 	let imgURL = URL.createObjectURL(input.files[0]);
     let img = new Image()
     img.src = imgURL
@@ -447,7 +459,6 @@ function enterAddTag(e) {
 function addTag(e) {
 	if (e.key == 'Enter') {
 		console.log('addTag')
-		suggestionsList.classList.add('d-none')
 		let tag = e.target.value.replace(/\s+/g, ' ');
 		if (tag.length > 1 && !tags.includes(tag)) {
 			tag.split(',').forEach(tag => {
@@ -485,37 +496,18 @@ function removeTag(element, tag) {
 
 // TODO:
 function suggestions() {
-	console.log('suggestions')
 	tagsError.classList.add('d-none')
 	suggestionsTags.forEach(tag => {
 		tag.classList.add('d-none')
 	})
     const query = this.value.trim().toLowerCase();
-    suggestionsList.classList.add('d-none')
 	suggestionsList.classList.remove('d-none')
     if (query) {
 		suggestionsTags.forEach(tag => {
-			if (tag.firstChild.textContent.includes(query) && !tags.includes(tag.firstChild.textContent)) {
+			if (tag.firstChild.textContent.toLowerCase().includes(query) && !tags.includes(tag.firstChild.textContent)) {
 				tag.classList.remove('d-none')
 			}
 		})
-		/*
-		.filter(tag => tag.includes(query) && !tags.includes(tag));
-
-        filteredTags.forEach(tag => {
-			tag.classList.remove('d-none')
-        const li = document.createElement('li');
-        li.textContent = tag;
-        li.classList.add('list-group-item', 'list-group-item-action')
-        li.addEventListener('click', () => {
-            createTag(tag)
-            suggestionsList.classList.add('d-none')
-            tagsInput.value = '';
-        });
-        suggestionsList.appendChild(li);
-		
-        });
-		*/
     }
 };
 
@@ -550,17 +542,12 @@ function radioSelect(e) {
 		option.classList.add('d-none')
 	})
 	select.selectedIndex = 0
-	if (e.target.id !== "Business") {
-		const selectedRadio = select.querySelectorAll(`.${e.target.id[0]}`)
-		selectedRadio.forEach(radio => {
-			radio.classList.remove('d-none')
-		})
-		select.firstElementChild.classList.remove('d-none')
-		select.disabled = false
-	}
-	else {
-		select.disabled = true
-	}
+	const selectedRadio = select.querySelectorAll(`.${e.target.id[0]}`)
+	selectedRadio.forEach(radio => {
+		radio.classList.remove('d-none')
+	})
+	select.firstElementChild.classList.remove('d-none')
+	select.disabled = false
 }
 
 let initialData;
@@ -604,15 +591,12 @@ function initSubmit() {
 		let body = new FormData(form)
 		if (customCropper) {
 			customCropper.getCroppedCanvas().toBlob((blob) => {
-				body.append('blob', blob)
+				body.append('blob', blob, 'cropped.jpg')
 			})
 		}
-		console.log(tags)
 		body.append('tags', tags)
-		const ps = document.querySelectorAll('ul p');
 		form.classList.add('d-none')
 		editorForm.classList.remove('d-none')
-		document.body.classList.add('overflow-y-hidden');
 		globalThis.scrollTo({top: 0, left: 0, behavior: 'smooth'})
 		return body
 	}

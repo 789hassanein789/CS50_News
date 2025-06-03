@@ -1,25 +1,33 @@
 {% load change %}
 
+{% with articles=section.articles.all %}
+
 <section class="news-section" id="news-section">
     {% if section.title %}
         <h3 class="news-section-heading">{{section.title}}</h3>
     {% endif %}
     <div class="news-div">
-        {% for placement in section.articles.all %}
-            <a class="article new-container link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                <div class="new-image">
-                    <img src="{{placement.article.image.url}}" alt="">
-                </div>
-                <div class="content">
-                    <h6 class="content-heading">{{placement.article.headline}}</h6>
-                    <p>{{placement.article.sub_headline}}</p>
-                    <div class="secondary-div">
-                        <span>{{placement.article.timestamp|timesince|safe}}</span>
-                        <div></div>
-                        <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
-                    </div>
-                </div>
-            </a>
+        {% custom_range 0 8 as col1 %}
+        {% for i in col1 %}
+            {% with placement=articles|position:i %}
+                {% if placement %}
+                    <a class="article new-container link" href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}">
+                        <div class="new-image">
+                            <img src="{{placement.article.image.url}}" alt="">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">{{placement.article.headline}}</h6>
+                            <p>{{placement.article.sub_headline}}</p>
+                            <div class="secondary-div">
+                                <span>{{placement.article.timestamp|timesince|safe}}</span>
+                                <div></div>
+                                <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endwith %}
         {% endfor %}
     </div>
 </section>
+{% endwith %}

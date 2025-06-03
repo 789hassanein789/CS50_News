@@ -1,5 +1,7 @@
 {% load change %}
 
+{% with articles=section.articles.all %}
+
 <section class="scroll-section" id="scroll-section">
     <div id="scroll-heading">
         {% if section.title %}
@@ -11,23 +13,29 @@
         </div>
     </div>
     <div class="scroll-div" data-mouse-position="0" data-percentage="0" data-new="0">
-        {% for placement in section.articles.all %}
-            <a class="new-container link article" data-id="{{placement.article.id}}" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" draggable="false">
-                <div class="new-image">
-                    <img src="{{placement.article.image.url}}" alt="" draggable="false">
-                </div>
-                <div class="content">
-                    <h6 class="content-heading">{{placement.article.headline}}</h6>
-                    <p>{{placement.article.sub_headline}}</p>
-                    <div class="secondary-div">
-                        <span>{{placement.article.timestamp|timesince|safe}}</span>
-                        <div></div>
-                        <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
-                    </div>
-                </div>
-            </a>
+        {% custom_range 0 8 as col1 %}
+        {% for i in col1 %}
+            {% with placement=articles|position:i %}
+                {% if placement %}
+                    <a class="new-container link article" data-id="{{placement.article.id}}" href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}" draggable="false">
+                        <div class="new-image">
+                            <img src="{{placement.article.image.url}}" alt="" draggable="false">
+                        </div>
+                        <div class="content">
+                            <h6 class="content-heading">{{placement.article.headline}}</h6>
+                            <p>{{placement.article.sub_headline}}</p>
+                            <div class="secondary-div">
+                                <span>{{placement.article.timestamp|timesince|safe}}</span>
+                                <div></div>
+                                <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endwith %}
         {% endfor %}
     </div>
 </section>
 
 <div class="light-seperator"></div>
+{% endwith %}

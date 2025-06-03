@@ -1,15 +1,20 @@
 {% load change %}
 {% load static %}
+
+{% with articles=section.articles.all %}
  
 <section id="trending-section-design">
-    {% if section.id %}
-        {% if section.title %}
-            <input type="text" class="t-input" name="title" value="{{section.title}}" placeholder="Section Title">
-        {% endif %}
-        <div>
-            {% for placement in section.articles.all %}
+    {% if section.title %}
+        <input type="text" class="t-input" name="title" value="{{section.title}}" placeholder="Section Title">
+    {% endif %}
+    <div>
+    {% custom_range 0 10 as col1 %}
+    {% for i in col1 %}
+        {% with placement=articles|position:i %}
+            {% if placement %}
                 <div class="trend">
-                    <a class="article link">
+                    <a class="article link" data-num="{{forloop.counter0}}">
+                    <input type="hidden" value="" name="{{forloop.counter0}}">
                         <span>
                             {{forloop.counter}}
                         </span>
@@ -18,15 +23,10 @@
                         </h6>
                     </a>
                 </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <h3 class="section-heading trending-section-heading">Section Title</h3>
-        <div>
-            {% for placement in '0123456789'|make_list %}
+            {% else %}
                 <div class="trend">
-                    <a class="link article" data-chosen="" data-num="{{i}}">
-                        <input type="hidden" value="" name="{{i}}">
+                    <a class="link article" data-chosen="" data-num="{{forloop.counter0}}">
+                        <input type="hidden" value="" name="{{forloop.counter0}}">
                         <span>
                             {{forloop.counter}}
                         </span>
@@ -35,7 +35,9 @@
                         </h6>
                     </a>
                 </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+            {% endif %}
+        {% endwith %}
+    {% endfor %}
+    </div>
 </section>
+{% endwith %}

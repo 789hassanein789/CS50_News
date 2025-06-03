@@ -80,7 +80,7 @@
 							{% for cat_name, cat_dics in subs.items %}
 								{% for key, value in cat_dics.items %}
 									{% if value == new.get_sub_category_display %}
-										<option value="{{value}}" class="{{cat_name}} d-none" selected >{{value|change:"_ "}}</option>
+										<option value="{{value}}" class="{{cat_name}} d-none" selected>{{value|change:"_ "}}</option>
 									{% else %}
 										<option value="{{value}}" class="{{cat_name}} d-none">{{value|change:"_ "}}</option>
 									{% endif %}
@@ -112,22 +112,26 @@
 			<button class="continue-btn" type="button">Continue</button>
         </form>
 		<form class="main-container d-none" method="post" id="editor-form">
-			<div class="top-btns">
-				<button class="publish-btn">publish</button>
-				<button class="icon-btn back-btn" type="button">
-					<i class="fa-solid fa-arrow-right fa-xl"></i>
-				</button>
-			</div>
-				
-			<div class="editor-container editor-container_document-editor editor-container_include-word-count" id="editor-container">
-				<div class="editor-container__menu-bar" id="editor-menu-bar"></div>
-				<div class="editor-container__toolbar" id="editor-toolbar"></div>
-				<div class="editor-container__editor-wrapper">
-					<div class="editor-container__editor">
-						<div id="editor">{% if new %} {{new.content}} {% endif %}</div>
+			<div class="main-container">
+				<div class="editor-container editor-container_document-editor editor-container_include-word-count editor-container_include-fullscreen" id="editor-container">
+					<div class="editor-container_header">
+						<div class="editor-container__menu-bar" id="editor-menu-bar">
+							<div class="top-btns">
+								<button class="publish-btn">publish</button>
+								<button class="icon-btn back-btn" type="button">
+									<i class="fa-solid fa-arrow-right fa-lg"></i>
+								</button>
+							</div>
+						</div>
+						<div class="editor-container__toolbar" id="editor-toolbar"></div>
 					</div>
+					<div class="editor-container__editor-wrapper">
+						<div class="editor-container__editor">
+							<div id="editor">{% if new %} {{new.content}} {% endif %}</div>
+						</div>
+					</div>
+					<div class="editor_container__word-count" id="editor-word-count"></div>
 				</div>
-				<div class="editor_container__word-count" id="editor-word-count"></div>
 			</div>
 		</form>
 		<div class="overlay d-none">
@@ -143,8 +147,8 @@
 				</div>
 			</div>
 		</div>
-		<script src="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.umd.js" crossorigin></script>
-		<script src="{% static 'CS50_News/CKEditor.js' %}"></script>
+		<script src="https://cdn.ckeditor.com/ckeditor5/45.1.0/ckeditor5.umd.js" crossorigin></script>
+		<script src="{% static 'CS50_News/CKEditor.js' %}" type="module"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 		<script src="https://kit.fontawesome.com/a8cedb277e.js" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>

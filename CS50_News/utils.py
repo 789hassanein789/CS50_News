@@ -1,4 +1,4 @@
-from .models import New
+from .models import New, Page
 from re import sub
 
 def Rescore(news):
@@ -29,3 +29,10 @@ def slugify(string):
     s = sub(r'[\s_-]+', '-', s)
     s = sub(r'^-+|-+$', '', s)
     return s
+
+def pages_positions(position, parent=None):
+    if Page.objects.filter(position=str(position), parent=parent).exists():
+        pages_positions(position + 1, parent)
+        for page in Page.objects.filter(position=position, parent=parent):
+            page.position += 1
+            page.save()

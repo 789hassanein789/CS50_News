@@ -267,13 +267,15 @@
   display: flex;
   justify-content: end;
   gap: 1rem;
-  margin: 0.75rem;
+  padding: 0.25rem;
+  border-bottom: 1px solid #ccced1;
+  background-color: white;
 }
 .top-btns .icon-btn {
   background-color: transparent;
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
 }
 .top-btns .icon-btn:hover {
@@ -284,8 +286,8 @@
   color: white;
   border: none;
   border-radius: 20px;
-  width: 90px;
-  height: 40px;
+  width: 75px;
+  height: 25px;
 }
 
 .icon-div {

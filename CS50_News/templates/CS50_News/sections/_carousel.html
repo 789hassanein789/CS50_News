@@ -1,5 +1,7 @@
 {% load change %}
 
+{% with articles=section.articles.all %}
+
 <section class="main-container carousel-section" id="carousel-section">
     <div class="carousel-div">
         <div id="carousel" class="carousel slide" data-bs-ride="carousel">
@@ -12,7 +14,7 @@
             <div class="carousel-inner">
                 {% for placement in section.articles.all|slice:":4" %}
                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <a class="article link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+                        <a class="article link" href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}">
                             <img src="{{placement.article.image.url}}" class="d-block w-100 slide-img" alt="...">
                             <div class="carousel-caption">
                                 <h5>{{placement.article.headline}}</h5>
@@ -34,7 +36,7 @@
     </div>
     <div class="side-div">
         {% for placement in section.articles.all|slice:"4:" %}
-            <a class="article side-new link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
+            <a class="article side-new link" href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}">
                 <div class="side-new-image-div">
                     <img src="{{placement.article.image.url}}" alt="">
                 </div>
@@ -52,3 +54,4 @@
 </section>
 
 <div class="bold-seperator"></div>
+{% endwith %}

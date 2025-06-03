@@ -1,106 +1,86 @@
 {% load change %}
 {% load static %}
 
+{% with articles=section.articles.all %}
+
 <section class="main-container" id="carousel-section-design">
-    {% if section.id %}
-        <div class="carousel-div">
-            <div id="carousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    <button type="button" data-bs-target="#carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                </div>
-                <div class="carousel-inner">
-                    {% for placement in section.articles.all|slice:":4" %}
+    <div class="carousel-div">
+        <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            </div>
+            <div class="carousel-inner">
+                {% custom_range 0 4 as col1 %}
+                {% for i in col1 %}
+                    {% with placement=articles|position:i %}
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
                             <a class="article link" data-num="{{forloop.counter0}}">
-                                <img src="{{placement.article.image.url}}" class="d-block w-100 slide-img" alt="...">
-                                <div class="carousel-caption">
-                                    <h5>{{placement.article.headline}}</h5>
-                                    <p>{{placement.article.sub_headline}}</p>
-                                </div>
+                                <input type="hidden" value="" name="{{forloop.counter0}}">
+                                {% if placement %}
+                                    <img src="{{placement.article.image.url}}" class="d-block w-100 slide-img" alt="...">
+                                    <div class="carousel-caption">
+                                        <h5>{{placement.article.headline}}</h5>
+                                        <p>{{placement.article.sub_headline}}</p>
+                                    </div>
+                                {% else %}
+                                    <img src="{% static 'CS50_News/test-img.png' %}" class="d-block w-100" alt="...">
+                                    <div class="carousel-caption">
+                                        <h5>headline</h5>
+                                        <p>sub headline</p>
+                                    </div>
+                                {% endif %}
                             </a>
                         </div>
-                    {% endfor %}
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
+                    {% endwith %}
+                {% endfor %}
             </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
-        <div class="side-div">
-            {% for placement in section.articles.all|slice:"4:8" %}
+    </div>
+    <div class="side-div">
+        {% custom_range 4 8 as col2 %}
+            {% for i in col2 %}
+            {% with placement=articles|position:i %}
                 <a class="article side-new link" data-num="{{forloop.counter0|add:'4'}}">
-                    <div class="side-new-image-div">
-                        <img src="{{placement.article.image.url}}" alt="">
-                    </div>
-                    <div class="side-new-text">
-                        <h6 class="main-text">{{placement.article.headline}}</h6>
-                        <div class="secondary-div side-secondary">
-                            <span>{{placement.article.timestamp|timesince|safe}}</span>
-                            <div></div>
-                            <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
+                    <input type="hidden" value="" name="{{forloop.counter0|add:'4'}}">
+                    {% if article %}
+                        <div class="side-new-image-div">
+                            <img src="{{placement.article.image.url}}" alt="">
                         </div>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="carousel-div">
-            <div id="edit-carousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#edit-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#edit-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#edit-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    <button type="button" data-bs-target="#edit-carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                </div>
-                <div class="carousel-inner">
-                    {% for i in '0123'|make_list %}
-                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <a class="link article" data-num="{{i}}">
-                            <input type="hidden" value="" name="{{i}}">
-                            <img src="{% static 'CS50_News/test-img.png' %}" class="d-block w-100" alt="...">
-                            <div class="carousel-caption">
-                                <h5>headline</h5>
-                                <p>sub headline</p>
+                        <div class="side-new-text">
+                            <h6 class="main-text">{{placement.article.headline}}</h6>
+                            <div class="secondary-div side-secondary">
+                                <span>{{placement.article.timestamp|timesince|safe}}</span>
+                                <div></div>
+                                <span>{{placement.article.get_sub_category_display|change:"_ "}}</span>
                             </div>
-                        </a>
-                    </div>
-                    {% endfor %}
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#edit-carousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#edit-carousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
-        <div class="side-div">
-            {% for i in '4567'|make_list %}
-                <a class="side-new link article article-{{i}}" data-num="{{i}}">
-                    <input type="hidden" value="" name="{{i}}">
-                    <div class="side-new-image-div">
-                        <img src="{% static 'CS50_News/test-img.png' %}" alt="">
-                    </div>
-                    <div class="side-new-text">
-                        <h6 class="content-heading">headline</h6>
-                        <div class="secondary-div">
-                            <span>1d ago</span>
-                            <div></div> 
-                            <span>category</span>
                         </div>
-                    </div>
+                    {% else %}
+                        <div class="side-new-image-div">
+                            <img src="{% static 'CS50_News/test-img.png' %}" alt="">
+                        </div>
+                        <div class="side-new-text">
+                            <h6 class="content-heading">headline</h6>
+                            <div class="secondary-div">
+                                <span>1d ago</span>
+                                <div></div> 
+                                <span>category</span>
+                            </div>
+                        </div>
+                    {% endif %}
                 </a>
-            {% endfor %}
-        </div>
-    {% endif %}
+            {% endwith %}
+        {% endfor %}
+    </div>
 </section>
+{% endwith %}

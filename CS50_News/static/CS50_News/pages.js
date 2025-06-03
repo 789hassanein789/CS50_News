@@ -14,6 +14,13 @@ const selectLinks = document.querySelectorAll('.select-link')
 const createBtns = document.querySelectorAll(".create-btn")
 const cancelBtn = document.querySelector('#cancel-btn')
 const overlay = document.querySelector('.overlay')
+const deleteLinks = document.querySelectorAll('.delete-link')
+const deleteForm = document.querySelectorAll('#delete-form')
+const pageCreate = document.querySelectorAll('.add-link')
+const parentInput = document.querySelector('#parent-hidden')
+const positionInput = document.querySelector('#position-hidden')
+const deleteInput = document.querySelector('#delete-hidden')
+const cancelBtns = document.querySelectorAll('.cancel-btn')
 let placeholders;
 
 // dark mode
@@ -52,8 +59,33 @@ createBtns.forEach(btn => {
     })
 })
 
-// cancel delete section
-cancelBtn.addEventListener('click', overlay.classList.add('d-none'))
+deleteLinks.forEach(link => {
+    link.addEventListener("click", () => {
+        deleteInput.value = link.dataset.slug
+        overlay.classList.remove("d-none")
+        showForm("page-delete")
+    })
+})
+
+pageCreate.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (btn.dataset.parent) {
+            parentInput.value = btn.dataset.parent
+        }
+        else {
+            parentInput.value = ''
+        }
+        positionInput.value = btn.dataset.position
+        overlay.classList.remove('d-none')
+        showForm('create')
+    })
+})
+
+cancelBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        overlay.classList.add('d-none')
+    })
+})
 
 function show(pageName) {
     pages.forEach(page => {
@@ -121,6 +153,14 @@ function editDesign(e) {
     }
     placementsBtn.addEventListener('click', editSection)
     show('placements-page')
+}
+
+function showForm(name) {
+    document.querySelectorAll('.popup-form').forEach(form => {
+        form.classList.add('d-none')
+    })
+    document.querySelector(`#${name}-form`).classList.remove('d-none')
+    console.log(document.querySelector(`#${name}-form`))
 }
 
 const scrollDiv = document.querySelector('.scroll-div')

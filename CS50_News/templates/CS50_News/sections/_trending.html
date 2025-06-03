@@ -1,23 +1,31 @@
 {% load change %}
 
+{% with articles=section.articles.all %}
+
 <section class="trending" id="trending-section">
     {% if section.title %}
         <h3 class="trending-section-heading">{{section.title}}</h3>
     {% endif %}
     <div>
-        {% for placement in section.articles.all %}
-            <div class="trend">
-                <a class="article link" href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}">
-                    <span>
-                        {{forloop.counter}}
-                    </span>
-                    <h6>
-                        {{placement.article.headline}}
-                    </h6>
-                </a>
-            </div>
+        {% custom_range 0 10 as col1 %}
+        {% for i in col1 %}
+            {% with placement=articles|position:i %}
+                {% if placement %}
+                    <div class="trend">
+                        <a class="article link" href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}">
+                            <span>
+                                {{forloop.counter}}
+                            </span>
+                            <h6>
+                                {{placement.article.headline}}
+                            </h6>
+                        </a>
+                    </div>
+                {% endif %}
+            {% endwith %}
         {% endfor %}
     </div>
 </section>
 
 <div class="light-seperator"></div>
+{% endwith %}

@@ -270,6 +270,34 @@ table .sub-dropdown {
   overflow-x: hidden;
 }
 
+#main-page .page-create {
+  border: 1px solid var(--page-secondary);
+  color: var(--page-secondary);
+  border-radius: 5px;
+  width: 2.5rem;
+  margin: 4px 0;
+  background-color: transparent;
+  vertical-align: middle;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#main-page #sub_nav .list-group-item {
+  display: flex;
+  align-items: center;
+  padding: 0 0.25rem;
+}
+#main-page #sub_nav .list-group-item > p {
+  margin: 0;
+}
+#main-page #sub_nav .icon-btn {
+  width: 1rem;
+  border-radius: 0;
+}
+#main-page .dropdown-menu {
+  --bs-dropdown-min-width: 0;
+}
 #main-page .page-layout .create-btn {
   width: calc(100% - 2rem);
   margin: 0 1rem;
@@ -386,6 +414,13 @@ table .sub-dropdown {
   overflow: hidden;
 }
 
+.overlay #delete-btn:hover {
+  color: var(--elements-background);
+}
+.overlay .cancel-btn {
+  border: 2px solid var(--page-text);
+}
+
 #placements-page > div {
   display: flex;
   justify-content: space-between;
@@ -398,18 +433,6 @@ table .sub-dropdown {
   display: flex;
   justify-content: end;
   margin: 1rem;
-}
-
-.icon-btn {
-  width: 2.4rem;
-  height: 2.4rem;
-  background: none;
-  border: none;
-  border-radius: 1.2rem;
-  color: var(--page-text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .icon-btn:hover {

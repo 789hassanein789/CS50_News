@@ -1,12 +1,7 @@
 <nav id="navbar">
     <ul id="navbar-ul">
-        <a class="nav-link" href="{% url 'index' %}"><li class="p-2" data-target="Home" id="nav-Home">Home</li></a>
-        <a class="nav-link" href="{% url 'cat_index' cat='News' %}"><li class="p-2" data-target="News" id="nav-News">News</li></a>
-        <a class="nav-link" href="{% url 'cat_index' cat='Sport' %}"><li class="p-2" data-target="Sport"  id="nav-Sport">Sport</li></a>
-        <a class="nav-link" href="{% url 'cat_index' cat='Business' %}"><li class="p-2" data-target="Business" id="nav-Business">Business</li></a>
-        <a class="nav-link" href="{% url 'cat_index' cat='Innovation' %}"><li class="p-2" data-target="Innovation" id="nav-Innovation">Innovation</li></a>
-        <a class="nav-link" href="{% url 'cat_index' cat='Culture' %}"><li class="p-2" data-target="Culture" id="nav-Culture">Culture</li></a>
-        <a class="nav-link" href="{% url 'cat_index' cat='Travel' %}"><li class="p-2" data-target="Travel" id="nav-Travel">Travel</li></a>
-        <a class="nav-link" href="{% url 'cat_index' cat='Earth' %}"><li class="p-2" data-target="Earth" id="nav-Earth">Earth</li></a>
+        {% for cat in cats %}
+            <a class="nav-link" href="{% url 'cat_index' cat=cat.slug %}"><li class="p-2" data-target="{{cat.name}}" id="nav-{{cat.name}}">{{cat.name}}</li></a>
+        {% endfor %}
     </ul>
 </nav>

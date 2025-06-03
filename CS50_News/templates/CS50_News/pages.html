@@ -20,28 +20,42 @@
 		<link rel="stylesheet" href="{% static 'CS50_News/new.css' %}">
 	</head>
 	<body id="pages-body">
-
 		<div class="page" id="main-page">
 			<header>
 				<nav id="navbar">
 					<ul id="navbar-ul">
-						<a class="nav-link" href="{% url 'page' %}"><li class="p-2" data-target="Home" id="nav-Home">Home</li></a>
-						<a class="nav-link" href="{% url 'page' cat='News' %}"><li class="p-2" data-target="News" id="nav-News">News</li></a>
-						<a class="nav-link" href="{% url 'page' cat='Sport' %}"><li class="p-2" data-target="Sport"  id="nav-Sport">Sport</li></a>
-						<a class="nav-link" href="{% url 'page' cat='Business' %}"><li class="p-2" data-target="Business" id="nav-Business">Business</li></a>
-						<a class="nav-link" href="{% url 'page' cat='Innovation' %}"><li class="p-2" data-target="Innovation" id="nav-Innovation">Innovation</li></a>
-						<a class="nav-link" href="{% url 'page' cat='Culture' %}"><li class="p-2" data-target="Culture" id="nav-Culture">Culture</li></a>
-						<a class="nav-link" href="{% url 'page' cat='Travel' %}"><li class="p-2" data-target="Travel" id="nav-Travel">Travel</li></a>
-						<a class="nav-link" href="{% url 'page' cat='Earth' %}"><li class="p-2" data-target="Earth" id="nav-Earth">Earth</li></a>
+						{% for cat in cats %}
+							<a class="nav-link" href="{% url 'page' cat=cat.slug %}"><li class="p-2" data-target="{{cat.name}}" id="nav-{{cat.name}}">{{cat.name}}</li></a>
+							<button class="icon-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+								<i class="fa-solid fa-ellipsis-vertical"></i>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a class="dropdown-item add-link" data-position="{{cat.position|add:1}}"><i class="fa-plus fa-solid fa-sm"></i></a></li>
+								<li><a class="dropdown-item delete-link" data-slug="{{cat.slug}}"><i class="fa-trash fa-solid fa-sm"></i></a></li>
+							</ul>
+							{% if forloop.last %}
+								<a class="page-create add-link" data-position="{{cat.position|add:1}}">+</a>
+							{% endif %}
+						{% endfor %}
 					</ul>
 				</nav>
 			</header>
 			{% if subs %}
 				<nav id="sub_nav">
-					{% for key, value in subs.items %}
-						<a href="{% url 'page' cat=parent sub=value %}" class="nav-link">
-							<li class="list-group-item" data-target="{{value}}"  id="sub-nav-{{value}}" >{{ value|change:"_ " }}</li>
+					{% for sub in subs %}
+						<a href="{% url 'page' cat=sub.parent.slug sub=sub.slug %}" class="nav-link">
+							<li class="list-group-item" data-target="{{sub.name}}"  id="sub-nav-{{sub.name}}"><p>{{ sub.name|change:"_ " }}</p></li>
 						</a>
+						<button class="icon-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+							<i class="fa-solid fa-ellipsis-vertical fa-sm"></i>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a class="dropdown-item add-link" data-parent="{{sub.parent.slug}}" data-position="{{sub.position|add:1}}"><i class="fa-plus fa-solid fa-sm"></i></a></li>
+							<li><a class="dropdown-item delete-link" data-slug="{{sub.slug}}"><i class="fa-trash fa-solid fa-sm"></i></a></li>
+						</ul>
+						{% if forloop.last %}
+							<a class="page-create add-link" data-parent="{{sub.parent.slug}}" data-position="{{sub.position|add:1}}">+</a>
+						{% endif %}
 					{% endfor %}
 				</nav>
 			{% endif %}
@@ -105,19 +119,37 @@
 		<div class="overlay d-none">
 			<div class="popup">
 				<div class="popup-block">
-					<form action="{% url 'delete_section' id=0 %}" method="post" class="popup-form" id="delete-form">
+					<form action="{% url 'page' %}" method="post" class="popup-form d-none" id="page-delete-form">
 						{% csrf_token %}
+						<input type="hidden" name="method" value="delete">
+						<input type="hidden" name="name" id="delete-hidden">
 						<p class="fs-4 fw-bold m-0">Are you sure?</p>
-						<p>deleting this section will delete all the article placements on it.</p>
+						<p>deleting this page will delete all the article placements in it.</p>
 						<button class="popup-btn" id="delete-btn">
-							Yes, delete this section
+							Yes, delete this page
 						</button>
-						<button class="popup-btn" type="button" id="cancel-btn">
+						<button class="popup-btn cancel-btn" type="button">
 							No, I'll keep it
 						</button>
 						{% if error %}
 							<p class="error-p">{{error}}</p>
 						{% endif %}
+					</form>
+					<form action="{% url 'page' %}" method="post" class="popup-form" id="create-form">
+						{% csrf_token %}
+						<input type="hidden" name="position" id="position-hidden">
+						<input type="hidden" name="parent" id="parent-hidden">
+						<p class="fs-3 fw-bold m-0">Please enter the new page name</p>
+						<div class="popup-input-div">
+							<input type="text" name="name" class="popup-input" autocomplete="off" placeholder="" id="page-name-input">
+							<label for="page-name-input" class="popup-label">Name</label>
+						</div>
+						<button class="popup-btn continue-btn">
+							Create
+						</button>
+						<button class="popup-btn cancel-btn" type="button">
+							Cancel
+						</button>
 					</form>
 				</div>
 			</div>

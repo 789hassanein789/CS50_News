@@ -1,5 +1,7 @@
 {% load change %}
 
+{% with articles=section.articles.all %}
+
 <section class="featured-section" id="featured-section">
     {% if section.title %}
         <h3 class="Featured-section-heading">{{section.title}}</h3>
@@ -8,8 +10,8 @@
         <div class="column-section">
             {% for placement in section.articles.all|slice:":4" %}
                 {% if forloop.first %}
-                    <h4 class="Featured-sub_heading">{{placement.article.get_category_display}}</h4>
-                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article main link">
+                    <h4 class="Featured-sub_heading">{{placement.article.get_sub_category_display|change:"_ "}}</h4>
+                    <a href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}" class="article main link">
                         <div class="img">
                             <img src="{{placement.article.image.url}}" alt="">
                         </div>
@@ -24,7 +26,7 @@
                         </div>
                     </a>
                 {% else %}
-                        <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article link column-side-new">
+                        <a href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}" class="article link column-side-new">
                             <div>
                                 <h6>{{placement.article.headline}}</h6>
                                 <div class="secondary-div">
@@ -40,8 +42,8 @@
         <div class="column-section">
             {% for placement in section.articles.all|slice:"4:8" %}
                 {% if forloop.first %}
-                    <h4 class="Featured-sub_heading">{{placement.article.get_category_display}}</h4>
-                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article main link">
+                    <h4 class="Featured-sub_heading">{{placement.article.get_sub_category_display|change:"_ "}}</h4>
+                    <a href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}" class="article main link">
                         <div class="img">
                             <img src="{{placement.article.image.url}}" alt="">
                         </div>
@@ -56,7 +58,7 @@
                         </div>
                     </a>
                 {% else %}
-                        <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article link column-side-new">
+                        <a href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}" class="article link column-side-new">
                             <div>
                                 <h6>{{placement.article.headline}}</h6>
                                 <div class="secondary-div">
@@ -72,8 +74,8 @@
         <div class="column-section">
             {% for placement in section.articles.all|slice:"8:" %}
                 {% if forloop.first %}
-                    <h4 class="Featured-sub_heading">{{placement.article.get_category_display}}</h4>
-                    <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article main link">
+                    <h4 class="Featured-sub_heading">{{placement.article.get_sub_category_display|change:"_ "}}</h4>
+                    <a href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}" class="article main link">
                         <div class="img">
                             <img src="{{placement.article.image.url}}" alt="">
                         </div>
@@ -88,7 +90,7 @@
                         </div>
                     </a>
                 {% else %}
-                        <a href="{% url 'new' cat=placement.article.get_category_display sub=placement.article.get_sub_category_display slug=placement.article.slug %}" class="article link column-side-new">
+                        <a href="{% url 'new' cat=placement.article.get_category_display slug=placement.article.slug %}" class="article link column-side-new">
                             <div>
                                 <h6>{{placement.article.headline}}</h6>
                                 <div class="secondary-div">
@@ -105,3 +107,4 @@
 </section>
 
 <div class="light-seperator"></div>
+{% endwith %}

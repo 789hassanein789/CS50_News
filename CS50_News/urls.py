@@ -41,8 +41,8 @@ urlpatterns = [
     path("tags/<str:tag>", views.tag, name="tags"),
     path("<str:cat>/", include([
         path("", views.index, name="cat_index"),
+        path("articles/<slug:slug>", views.new, name="new"),
         path("<str:sub>", views.index, name="cat_index"),
-        path("<str:sub>/<slug:slug>", views.new, name="new"),
     ])),
 ]
 

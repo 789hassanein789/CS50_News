@@ -2,14 +2,12 @@
   --page-background: #fff;
   --page-text: #121212;
   --page-secondary: #b6b6b6;
-  --bg-hover: #f4f4f4;
 }
 
 .dark-mode {
   --page-background: #272727;
   --page-text: #dee2e6;
   --page-secondary: #414141;
-  --bg-hover: #d9d9d9;
 }
 
 .heading {

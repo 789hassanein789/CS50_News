@@ -12,7 +12,7 @@
             {% if tag %}
                 <h2 id="main-tag">{{tag}}</h2>
             {% else %}
-                <form action="{% url 'search' %}" class="top-search-form">
+                <form action="{% url 'search' %}" class="top-search-form" id="top-search-form">
                     <div class="top-search-div">
                         <input autocomplete="off" type="text" class="top-search-input" name="q" value={{request.GET.q}}>
                         <button class="top-search-btn">
@@ -22,11 +22,9 @@
                         </button>
                     </div>
                     <div class="category-radio-container">
-                        <input type="radio" name="cat" class="d-none" value="" id="everything-radio" {% if not request.GET.cat %} checked {% endif %}>
-                        <label for="everything-radio" class="category-radio">Everything</label>
+                        <button value="" name="cat" class="{% if not request.GET.cat %} checked{% endif %}">Everything</button>
                         {% for v in categories %}
-                            <input type="radio" name="cat" class="d-none" value="{{v}}" id="{{v}}-radio" {% if v == request.GET.cat %} checked {% endif %}>
-                            <label for="{{v}}-radio" class="category-radio">{{v}}</label>
+                            <button value="{{v}}" name="cat" class="{% if v == request.GET.cat %} checked{% endif %}">{{v}}</button>
                         {% endfor %}
                     </div>
                     <input type="hidden" name="p" value="1">
